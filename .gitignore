@@ -1,0 +1,37 @@
+# Rust
+target/
+**/*.rs.bk
+Cargo.lock
+
+# Anchor / Solana
+.anchor/
+test-ledger/
+*.so
+deploy/
+
+# Node.js
+node_modules/
+dist/
+*.js.map
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build artifacts
+build/
+out/
