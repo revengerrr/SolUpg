@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">UPG — Universal Payment Gateway</h1>
+  <h1 align="center">SolUPG — Solana Universal Payment Gateway</h1>
   <p align="center">
     A decentralized, open-source payment gateway built on Solana blockchain.<br/>
     Enabling universal, instant, and cross-token payments globally.
@@ -17,9 +17,9 @@
 
 ---
 
-## What is UPG?
+## What is SolUPG?
 
-**Universal Payment Gateway (UPG)** is a decentralized payment infrastructure built on the [Solana](https://solana.com) blockchain. Inspired by national payment gateway systems like Indonesia's GPN and India's UPI, UPG brings the same concept to the global crypto ecosystem — a single, unified network that connects wallets, merchants, and payment providers with instant settlement.
+**Solana Universal Payment Gateway (SolUPG)** is a decentralized payment infrastructure built on the [Solana](https://solana.com) blockchain. Inspired by national payment gateway systems like Indonesia's GPN and India's UPI, SolUPG brings the same concept to the global crypto ecosystem — a single, unified network that connects wallets, merchants, and payment providers with instant settlement.
 
 ### The Problem
 
@@ -30,7 +30,7 @@
 
 ### The Solution
 
-UPG provides:
+SolUPG provides:
 - **One gateway** to route payments across any SPL token on Solana.
 - **Instant settlement** — powered by Solana's sub-second finality.
 - **Auto-swap** — payers use any token; merchants receive their preferred token.
@@ -132,12 +132,12 @@ UPG provides:
 ## Project Structure
 
 ```
-upg/
+solupg/
 ├── programs/                  # Solana on-chain programs (Rust/Anchor)
-│   ├── upg-escrow/            # Escrow program
-│   ├── upg-payment/           # Core payment program
-│   ├── upg-splitter/          # Fee splitting program
-│   └── upg-swap/              # Token swap integration
+│   ├── solupg-escrow/         # Escrow program
+│   ├── solupg-payment/        # Core payment program
+│   ├── solupg-splitter/       # Fee splitting program
+│   └── solupg-swap/           # Token swap integration
 ├── services/                  # Off-chain backend services
 │   ├── routing-engine/        # Central payment switch
 │   ├── api-gateway/           # REST/gRPC API
@@ -169,8 +169,8 @@ upg/
 
 ```bash
 # Clone the repository
-git clone https://github.com/revengerrr/upg.git
-cd upg
+git clone https://github.com/revengerrr/solupg.git
+cd solupg
 
 # More setup instructions coming in Phase 1...
 ```

@@ -8,13 +8,13 @@
 
 ## Objective
 
-Build the core Solana smart contracts (programs) that handle all on-chain payment logic. These programs form the trustless foundation of UPG — all fund movements, escrow, swaps, and fee distributions happen here.
+Build the core Solana smart contracts (programs) that handle all on-chain payment logic. These programs form the trustless foundation of SolUPG — all fund movements, escrow, swaps, and fee distributions happen here.
 
 ---
 
 ## Programs to Build
 
-### 1. `upg-payment` — Core Payment Program
+### 1. `solupg-payment` — Core Payment Program
 
 **Purpose**: Execute direct SPL token transfers with payment metadata.
 
@@ -35,7 +35,7 @@ Build the core Solana smart contracts (programs) that handle all on-chain paymen
 
 ---
 
-### 2. `upg-escrow` — Escrow Program
+### 2. `solupg-escrow` — Escrow Program
 
 **Purpose**: Hold funds in a trustless escrow until conditions are met.
 
@@ -58,7 +58,7 @@ Build the core Solana smart contracts (programs) that handle all on-chain paymen
 
 ---
 
-### 3. `upg-splitter` — Fee Splitting Program
+### 3. `solupg-splitter` — Fee Splitting Program
 
 **Purpose**: Distribute a payment across multiple recipients with configurable ratios.
 
@@ -78,7 +78,7 @@ Build the core Solana smart contracts (programs) that handle all on-chain paymen
 
 ---
 
-### 4. `upg-swap` — Token Swap Integration
+### 4. `solupg-swap` — Token Swap Integration
 
 **Purpose**: Enable cross-token payments by integrating with DEX aggregators.
 
@@ -122,10 +122,10 @@ Payer (Token A) → Jupiter Swap → Token B → Recipient
 
 ## Deliverables Checklist
 
-- [ ] `upg-payment` program with full test coverage
-- [ ] `upg-escrow` program with full test coverage
-- [ ] `upg-splitter` program with full test coverage
-- [ ] `upg-swap` program with Jupiter integration
+- [ ] `solupg-payment` program with full test coverage
+- [ ] `solupg-escrow` program with full test coverage
+- [ ] `solupg-splitter` program with full test coverage
+- [ ] `solupg-swap` program with Jupiter integration
 - [ ] IDL (Interface Description Language) files for all programs
 - [ ] TypeScript client bindings auto-generated from IDL
 - [ ] Devnet deployment of all programs

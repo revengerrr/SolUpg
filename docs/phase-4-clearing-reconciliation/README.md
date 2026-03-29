@@ -16,7 +16,7 @@ Build the off-chain clearing engine that indexes on-chain transactions, maintain
 
 ### 1. Transaction Indexer
 
-**Purpose**: Listen to Solana blockchain events emitted by UPG programs and store them in a queryable database.
+**Purpose**: Listen to Solana blockchain events emitted by SolUPG programs and store them in a queryable database.
 
 **Data Sources**:
 - Solana RPC WebSocket subscriptions (program log events)
@@ -26,7 +26,7 @@ Build the off-chain clearing engine that indexes on-chain transactions, maintain
 | Field | Description |
 |-------|-------------|
 | `tx_signature` | Solana transaction signature |
-| `payment_id` | UPG payment identifier |
+| `payment_id` | SolUPG payment identifier |
 | `payer` | Payer wallet address |
 | `recipient` | Recipient wallet address |
 | `amount` | Payment amount (raw + human-readable) |

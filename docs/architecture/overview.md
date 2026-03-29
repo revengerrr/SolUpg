@@ -1,4 +1,4 @@
-# UPG Architecture Overview
+# SolUPG Architecture Overview
 
 ## System Design Principles
 
@@ -48,13 +48,13 @@
 ```
 Payment Request
     │
-    ├── Same token? ──→ Direct transfer via upg-payment program
+    ├── Same token? ──→ Direct transfer via solupg-payment program
     │
-    ├── Different token? ──→ Route through upg-swap (Jupiter aggregator)
+    ├── Different token? ──→ Route through solupg-swap (Jupiter aggregator)
     │
-    ├── Escrow needed? ──→ Route through upg-escrow program
+    ├── Escrow needed? ──→ Route through solupg-escrow program
     │
-    └── Fee split needed? ──→ Include upg-splitter in transaction
+    └── Fee split needed? ──→ Include solupg-splitter in transaction
 ```
 
 ---
@@ -83,10 +83,10 @@ Merchant ID → { wallet, preferred_token, fee_config, metadata }
 
 | Program | Description |
 |---------|-------------|
-| `upg-payment` | Core payment instruction: transfer SPL tokens with metadata |
-| `upg-escrow` | Lock funds in escrow with release conditions (time, approval) |
-| `upg-swap` | Cross-token payment via Jupiter/Raydium integration |
-| `upg-splitter` | Distribute payment across multiple recipients (fee sharing) |
+| `solupg-payment` | Core payment instruction: transfer SPL tokens with metadata |
+| `solupg-escrow` | Lock funds in escrow with release conditions (time, approval) |
+| `solupg-swap` | Cross-token payment via Jupiter/Raydium integration |
+| `solupg-splitter` | Distribute payment across multiple recipients (fee sharing) |
 
 **Key Design Decisions**:
 - All programs are upgradeable (via Anchor upgrade authority) during development, frozen on mainnet.

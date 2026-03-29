@@ -8,7 +8,7 @@
 
 ## Objective
 
-Implement real-time transaction monitoring, fraud detection, AML/CFT compliance, and system observability to make UPG production-ready for regulated environments.
+Implement real-time transaction monitoring, fraud detection, AML/CFT compliance, and system observability to make SolUPG production-ready for regulated environments.
 
 ---
 

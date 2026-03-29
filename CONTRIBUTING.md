@@ -1,6 +1,6 @@
-# Contributing to UPG
+# Contributing to SolUPG
 
-Thank you for your interest in contributing to the Universal Payment Gateway! This document provides guidelines and instructions for contributing.
+Thank you for your interest in contributing to the Solana Universal Payment Gateway! This document provides guidelines and instructions for contributing.
 
 ---
 
@@ -14,7 +14,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 
 ### Reporting Bugs
 
-1. Check [existing issues](https://github.com/revengerrr/upg/issues) to avoid duplicates.
+1. Check [existing issues](https://github.com/revengerrr/solupg/issues) to avoid duplicates.
 2. Open a new issue with:
    - Clear title describing the bug
    - Steps to reproduce
@@ -24,7 +24,7 @@ By participating in this project, you agree to maintain a respectful and inclusi
 ### Suggesting Features
 
 1. Open a GitHub issue with the `enhancement` label.
-2. Describe the feature, its use case, and why it benefits UPG.
+2. Describe the feature, its use case, and why it benefits SolUPG.
 
 ### Submitting Code
 
@@ -97,8 +97,8 @@ chore: maintenance tasks
 
 ```bash
 # Clone the repo
-git clone https://github.com/revengerrr/upg.git
-cd upg
+git clone https://github.com/revengerrr/solupg.git
+cd solupg
 
 # Build on-chain programs
 anchor build
@@ -123,4 +123,4 @@ anchor test
 
 ## Questions?
 
-Open a [Discussion](https://github.com/revengerrr/upg/discussions) on GitHub or reach out to the maintainers.
+Open a [Discussion](https://github.com/revengerrr/solupg/discussions) on GitHub or reach out to the maintainers.

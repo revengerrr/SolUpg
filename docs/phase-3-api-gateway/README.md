@@ -8,7 +8,7 @@
 
 ## Objective
 
-Build the public-facing API Gateway and merchant SDKs that allow external developers, merchants, and dApps to integrate with UPG.
+Build the public-facing API Gateway and merchant SDKs that allow external developers, merchants, and dApps to integrate with SolUPG.
 
 ---
 
@@ -71,15 +71,15 @@ Single entry point for all external requests. Handles authentication, rate limit
 ### TypeScript SDK
 
 ```typescript
-import { UPG } from '@upg/sdk';
+import { SolUPG } from '@solupg/sdk';
 
-const upg = new UPG({
-  apiKey: 'upg_live_...',
+const solupg = new SolUPG({
+  apiKey: 'solupg_live_...',
   network: 'mainnet-beta',
 });
 
 // Create a payment
-const payment = await upg.payments.create({
+const payment = await solupg.payments.create({
   amount: 10_000_000, // 10 USDC (6 decimals)
   token: 'USDC',
   recipient: '@merchant_coffee',
@@ -87,10 +87,10 @@ const payment = await upg.payments.create({
 });
 
 // Check payment status
-const status = await upg.payments.get(payment.id);
+const status = await solupg.payments.get(payment.id);
 
 // Listen for payment events
-upg.on('payment.completed', (event) => {
+solupg.on('payment.completed', (event) => {
   console.log('Payment received:', event.paymentId);
 });
 ```
@@ -98,18 +98,18 @@ upg.on('payment.completed', (event) => {
 ### Python SDK
 
 ```python
-from upg import UPG
+from solupg import SolUPG
 
-upg = UPG(api_key="upg_live_...")
+solupg = SolUPG(api_key="solupg_live_...")
 
-payment = upg.payments.create(
+payment = solupg.payments.create(
     amount=10_000_000,
     token="USDC",
     recipient="@merchant_coffee",
     metadata={"order_id": "ORD-001"},
 )
 
-status = upg.payments.get(payment.id)
+status = solupg.payments.get(payment.id)
 ```
 
 ---

@@ -8,7 +8,7 @@
 
 ## Objective
 
-Build the central payment switch (Routing Engine) and the Directory Service that together form the "brain" of UPG. The Routing Engine determines how to execute each payment, while the Directory Service resolves human-readable aliases to wallet addresses.
+Build the central payment switch (Routing Engine) and the Directory Service that together form the "brain" of SolUPG. The Routing Engine determines how to execute each payment, while the Directory Service resolves human-readable aliases to wallet addresses.
 
 ---
 
