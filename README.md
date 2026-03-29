@@ -177,9 +177,33 @@ cd solupg
 
 ---
 
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [Architecture Overview](./docs/architecture/overview.md) | System design and layer breakdown |
+| [Development Status](./docs/development/CURRENT_STATUS.md) | Live development progress |
+| [Changelog](./CHANGELOG.md) | Version history and changes |
+| [Documentation Guide](./docs/DOCUMENTATION_GUIDE.md) | How to maintain docs |
+
+### Phase Documentation
+
+| Phase | Documentation |
+|-------|---------------|
+| Phase 1 | [On-Chain Programs](./docs/phase-1-onchain-programs/README.md) |
+| Phase 2 | [Routing Engine & Directory](./docs/phase-2-routing-engine/README.md) |
+| Phase 3 | [API Gateway & SDK](./docs/phase-3-api-gateway/README.md) |
+| Phase 4 | [Clearing & Reconciliation](./docs/phase-4-clearing-reconciliation/README.md) |
+| Phase 5 | [Compliance & Monitoring](./docs/phase-5-compliance-monitoring/README.md) |
+| Phase 6 | [Testing & Deployment](./docs/phase-6-testing-deployment/README.md) |
+
+---
+
 ## Contributing
 
 We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md) for details on our code of conduct, development process, and how to submit pull requests.
+
+> **Note**: Every contribution must include documentation updates. See [Documentation Guide](./docs/DOCUMENTATION_GUIDE.md).
 
 ---
 

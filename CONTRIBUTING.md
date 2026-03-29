@@ -112,12 +112,43 @@ anchor test
 
 ---
 
+## Documentation Requirements
+
+> **IMPORTANT**: Every PR must include documentation updates. No exceptions.
+
+See the full [Documentation Guide](./docs/DOCUMENTATION_GUIDE.md) for details.
+
+### Mandatory Updates
+
+| File | When to Update |
+|------|----------------|
+| `CHANGELOG.md` | **Every PR** — Add entry under `[Unreleased]` |
+| `docs/development/CURRENT_STATUS.md` | When completing tasks or making progress |
+| Phase README (`docs/phase-*/README.md`) | When adding/changing features in that phase |
+| `README.md` | When adding user-facing features |
+| `docs/architecture/overview.md` | When changing system architecture |
+
+### Documentation Checklist (Required for PR)
+
+Before submitting a PR, verify:
+
+- [ ] `CHANGELOG.md` updated with changes
+- [ ] `docs/development/CURRENT_STATUS.md` reflects new progress
+- [ ] Relevant phase README updated (if feature/behavior changed)
+- [ ] Code comments added for public functions
+- [ ] `README.md` updated (if user-facing change)
+
+---
+
 ## Pull Request Process
 
 1. Ensure all tests pass.
-2. Update documentation if your change affects public APIs.
-3. Request review from at least one maintainer.
-4. Squash commits before merging (or maintainer will squash-merge).
+2. **Update all required documentation** (see checklist above).
+3. Fill out the PR template completely.
+4. Request review from at least one maintainer.
+5. Squash commits before merging (or maintainer will squash-merge).
+
+PRs without documentation updates will be requested to add them before merge.
 
 ---
 
