@@ -16,12 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Apache 2.0 license
 - Contributing guidelines
 - **Documentation System**
-  - `CHANGELOG.md` — Version tracking
-  - `docs/DOCUMENTATION_GUIDE.md` — Documentation maintenance guide
-  - `docs/development/CURRENT_STATUS.md` — Live development status
-  - `.github/PULL_REQUEST_TEMPLATE.md` — PR template with doc checklist
-  - `.github/ISSUE_TEMPLATE/bug_report.md` — Bug report template
-  - `.github/ISSUE_TEMPLATE/feature_request.md` — Feature request template
+  - `CHANGELOG.md`: Version tracking
+  - `docs/DOCUMENTATION_GUIDE.md`: Documentation maintenance guide
+  - `docs/development/CURRENT_STATUS.md`: Live development status
+  - `.github/PULL_REQUEST_TEMPLATE.md`: PR template with doc checklist
+  - `.github/ISSUE_TEMPLATE/bug_report.md`: Bug report template
+  - `.github/ISSUE_TEMPLATE/feature_request.md`: Feature request template
 - Updated `CONTRIBUTING.md` with mandatory documentation requirements
 - Updated `README.md` with documentation links
 
@@ -40,13 +40,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Folder structure for programs, services, SDK, and tests
 
 - **Documentation**
-  - `docs/architecture/overview.md` — System architecture deep-dive
-  - `docs/phase-1-onchain-programs/` — On-chain program specifications
-  - `docs/phase-2-routing-engine/` — Routing engine & directory service specs
-  - `docs/phase-3-api-gateway/` — API gateway & SDK specs
-  - `docs/phase-4-clearing-reconciliation/` — Clearing & reconciliation specs
-  - `docs/phase-5-compliance-monitoring/` — Compliance & monitoring specs
-  - `docs/phase-6-testing-deployment/` — Testing & deployment specs
+  - `docs/architecture/overview.md`: System architecture deep-dive
+  - `docs/phase-1-onchain-programs/`: On-chain program specifications
+  - `docs/phase-2-routing-engine/`: Routing engine & directory service specs
+  - `docs/phase-3-api-gateway/`: API gateway & SDK specs
+  - `docs/phase-4-clearing-reconciliation/`: Clearing & reconciliation specs
+  - `docs/phase-5-compliance-monitoring/`: Compliance & monitoring specs
+  - `docs/phase-6-testing-deployment/`: Testing & deployment specs
 
 - **Open Source**
   - Apache 2.0 License
@@ -66,9 +66,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Upcoming
 
 ### Phase 1 (Next)
-- [ ] `solupg-payment` — Core payment program
-- [ ] `solupg-escrow` — Escrow program
-- [ ] `solupg-splitter` — Fee splitting program
-- [ ] `solupg-swap` — Token swap integration
+- [ ] `solupg-payment`: Core payment program
+- [ ] `solupg-escrow`: Escrow program
+- [ ] `solupg-splitter`: Fee splitting program
+- [ ] `solupg-swap`: Token swap integration
 
 See [Phase 1 Documentation](./docs/phase-1-onchain-programs/README.md) for details.

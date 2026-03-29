@@ -122,7 +122,7 @@ See the full [Documentation Guide](./docs/DOCUMENTATION_GUIDE.md) for details.
 
 | File | When to Update |
 |------|----------------|
-| `CHANGELOG.md` | **Every PR** — Add entry under `[Unreleased]` |
+| `CHANGELOG.md` | **Every PR**: Add entry under `[Unreleased]` |
 | `docs/development/CURRENT_STATUS.md` | When completing tasks or making progress |
 | Phase README (`docs/phase-*/README.md`) | When adding/changing features in that phase |
 | `README.md` | When adding user-facing features |

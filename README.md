@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">SolUPG — Solana Universal Payment Gateway</h1>
+  <h1 align="center">SolUPG: Solana Universal Payment Gateway</h1>
   <p align="center">
     A decentralized, open-source payment gateway built on Solana blockchain.<br/>
     Enabling universal, instant, and cross-token payments globally.
@@ -19,7 +19,7 @@
 
 ## What is SolUPG?
 
-**Solana Universal Payment Gateway (SolUPG)** is a decentralized payment infrastructure built on the [Solana](https://solana.com) blockchain. Inspired by national payment gateway systems like Indonesia's GPN and India's UPI, SolUPG brings the same concept to the global crypto ecosystem — a single, unified network that connects wallets, merchants, and payment providers with instant settlement.
+**Solana Universal Payment Gateway (SolUPG)** is a decentralized payment infrastructure built on the [Solana](https://solana.com) blockchain. Inspired by national payment gateway systems like Indonesia's GPN and India's UPI, SolUPG brings the same concept to the global crypto ecosystem: a single, unified network that connects wallets, merchants, and payment providers with instant settlement.
 
 ### The Problem
 
@@ -32,10 +32,10 @@
 
 SolUPG provides:
 - **One gateway** to route payments across any SPL token on Solana.
-- **Instant settlement** — powered by Solana's sub-second finality.
-- **Auto-swap** — payers use any token; merchants receive their preferred token.
-- **Universal addressing** — send payments via alias (email, username, phone) instead of wallet addresses.
-- **Open standard** — anyone can integrate, no permission needed.
+- **Instant settlement**: powered by Solana's sub-second finality.
+- **Auto-swap**: payers use any token; merchants receive their preferred token.
+- **Universal addressing**: send payments via alias (email, username, phone) instead of wallet addresses.
+- **Open standard**: anyone can integrate, no permission needed.
 
 ---
 
@@ -209,7 +209,7 @@ We welcome contributions! Please read our [Contributing Guide](./CONTRIBUTING.md
 
 ## License
 
-This project is licensed under the **Apache License 2.0** — see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the **Apache License 2.0**. See the [LICENSE](./LICENSE) file for details.
 
 ---
 

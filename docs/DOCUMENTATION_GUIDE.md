@@ -98,11 +98,11 @@ Each phase has a deliverables checklist. Mark items as complete:
 
 When adding a new feature, document:
 
-1. **What** — What does it do?
-2. **Why** — Why was it added?
-3. **How** — How to use it (code example)
-4. **API** — Function signatures, parameters, return values
-5. **Events** — On-chain events emitted (if applicable)
+1. **What**: What does it do?
+2. **Why**: Why was it added?
+3. **How**: How to use it (code example)
+4. **API**: Function signatures, parameters, return values
+5. **Events**: On-chain events emitted (if applicable)
 
 ### Code Comments
 

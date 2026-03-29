@@ -45,10 +45,10 @@
 | Deploy to devnet | ⏳ Pending | - | - |
 
 **Status Legend**:
-- ⏳ Pending — Not started
-- 🔄 In Progress — Currently being worked on
-- ✅ Done — Completed and tested
-- 🚫 Blocked — Blocked by dependency/issue
+- ⏳ Pending: Not started
+- 🔄 In Progress: Currently being worked on
+- ✅ Done: Completed and tested
+- 🚫 Blocked: Blocked by dependency/issue
 
 ---
 

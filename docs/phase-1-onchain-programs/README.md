@@ -8,13 +8,13 @@
 
 ## Objective
 
-Build the core Solana smart contracts (programs) that handle all on-chain payment logic. These programs form the trustless foundation of SolUPG — all fund movements, escrow, swaps, and fee distributions happen here.
+Build the core Solana smart contracts (programs) that handle all on-chain payment logic. These programs form the trustless foundation of SolUPG. All fund movements, escrow, swaps, and fee distributions happen here.
 
 ---
 
 ## Programs to Build
 
-### 1. `solupg-payment` — Core Payment Program
+### 1. `solupg-payment` (Core Payment Program)
 
 **Purpose**: Execute direct SPL token transfers with payment metadata.
 
@@ -35,7 +35,7 @@ Build the core Solana smart contracts (programs) that handle all on-chain paymen
 
 ---
 
-### 2. `solupg-escrow` — Escrow Program
+### 2. `solupg-escrow` (Escrow Program)
 
 **Purpose**: Hold funds in a trustless escrow until conditions are met.
 
@@ -52,13 +52,13 @@ Build the core Solana smart contracts (programs) that handle all on-chain paymen
 - `EscrowVault` PDA: token account holding escrowed funds
 
 **Release Conditions**:
-- `TimeBasedRelease` — auto-release after timestamp
-- `AuthorityApproval` — release by designated authority
-- `MutualApproval` — both parties must approve
+- `TimeBasedRelease`: auto-release after timestamp
+- `AuthorityApproval`: release by designated authority
+- `MutualApproval`: both parties must approve
 
 ---
 
-### 3. `solupg-splitter` — Fee Splitting Program
+### 3. `solupg-splitter` (Fee Splitting Program)
 
 **Purpose**: Distribute a payment across multiple recipients with configurable ratios.
 
@@ -78,7 +78,7 @@ Build the core Solana smart contracts (programs) that handle all on-chain paymen
 
 ---
 
-### 4. `solupg-swap` — Token Swap Integration
+### 4. `solupg-swap` (Token Swap Integration)
 
 **Purpose**: Enable cross-token payments by integrating with DEX aggregators.
 

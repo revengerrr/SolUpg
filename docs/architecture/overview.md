@@ -2,11 +2,11 @@
 
 ## System Design Principles
 
-1. **Decentralization First** — Core payment logic lives on-chain (Solana programs). Off-chain services handle routing, caching, and UX optimization only.
-2. **Token Agnostic** — Any SPL token can be used for payments. Auto-swap ensures merchants receive their preferred token.
-3. **Instant Settlement** — Solana's ~400ms block time means payments settle in under a second.
-4. **Permissionless** — Anyone can integrate as a merchant or payment provider via the open SDK/API.
-5. **Modular** — Each layer is independently deployable and replaceable.
+1. **Decentralization First**: Core payment logic lives on-chain (Solana programs). Off-chain services handle routing, caching, and UX optimization only.
+2. **Token Agnostic**: Any SPL token can be used for payments. Auto-swap ensures merchants receive their preferred token.
+3. **Instant Settlement**: Solana's ~400ms block time means payments settle in under a second.
+4. **Permissionless**: Anyone can integrate as a merchant or payment provider via the open SDK/API.
+5. **Modular**: Each layer is independently deployable and replaceable.
 
 ---
 
