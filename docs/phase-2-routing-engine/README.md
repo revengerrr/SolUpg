@@ -8,7 +8,7 @@
 
 ## Objective
 
-Build the central payment switch (Routing Engine) and the Directory Service that together form the "brain" of SolUPG. The Routing Engine determines how to execute each payment, while the Directory Service resolves human-readable aliases to wallet addresses.
+Build the central payment switch (Routing Engine) and the Directory Service that together form the "brain" of SolUPG. The Routing Engine determines how to execute each payment, while the Directory Service manages **Verified Payment Identities**: OTP-verified email/phone-to-wallet bindings and merchant payment profiles (preferred token, fee split config). For `.sol` domain resolution, SolUPG integrates with Solana Name Service (SNS) rather than duplicating what already exists on-chain.
 
 ---
 
@@ -66,7 +66,9 @@ Payment Intent (from API Gateway)
 ## Component 2: Directory Service
 
 ### Purpose
-Maps human-readable identifiers to Solana wallet addresses, enabling payments like "send 10 USDC to @alice" instead of requiring raw public keys.
+Stores **Verified Payment Identities** — the combination of a verified identifier (email or phone) and a payment profile (wallet, preferred token, fee config). This enables payments like "send 10 USDC to alice@example.com" and ensures the recipient receives it in their preferred token with the correct fee split applied.
+
+For crypto-native identifiers (e.g. `alice.sol`), the Directory Service delegates to **Solana Name Service (SNS)** — SolUPG does not re-implement what SNS already solves on-chain.
 
 ### Data Model
 ```

@@ -1,7 +1,6 @@
 # Rust
 target/
 **/*.rs.bk
-Cargo.lock
 
 # Anchor / Solana
 .anchor/
@@ -28,6 +27,9 @@ dist/
 # OS
 .DS_Store
 Thumbs.db
+
+# Claude Code
+.claude/
 
 # Logs
 *.log

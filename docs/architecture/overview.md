@@ -61,17 +61,20 @@ Payment Request
 
 ### Layer 3A: Directory Service
 
-**Purpose**: Human-readable alias resolution to Solana wallet addresses.
+**Purpose**: Verified Payment Identity — stores email/phone-to-wallet bindings with OTP verification, alongside merchant payment profiles (preferred token, fee split config, webhook). This goes beyond simple alias resolution: it is a payment routing profile store.
+
+**What this is NOT**: A replacement for `.sol` domains (Solana Name Service). SNS already solves username → wallet for crypto-native users. SolUPG integrates with SNS for `.sol` lookups and adds what SNS lacks: email/phone binding, identity verification, and payment-specific metadata.
 
 **Data Model**:
 ```
-Alias (email/phone/username) → Wallet Address (Solana pubkey)
-Merchant ID → { wallet, preferred_token, fee_config, metadata }
+Email/Phone (OTP-verified) → Wallet Address (Solana pubkey)
+.sol domain              → resolved via SNS (read-only integration)
+Merchant ID              → { wallet, preferred_token, fee_config, webhook_url, kyc_status }
 ```
 
 **Technology**: PostgreSQL (persistent store), Redis (lookup cache)
 
-**Security**: Aliases are verified via email/SMS OTP before linking.
+**Security**: Email/phone aliases are verified via OTP before linking. Raw PII is encrypted at rest.
 
 ---
 

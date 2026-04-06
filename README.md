@@ -34,7 +34,7 @@ SolUPG provides:
 - **One gateway** to route payments across any SPL token on Solana.
 - **Instant settlement**: powered by Solana's sub-second finality.
 - **Auto-swap**: payers use any token; merchants receive their preferred token.
-- **Universal addressing**: send payments via alias (email, username, phone) instead of wallet addresses.
+- **Verified Payment Identity**: link email or phone number to a wallet with OTP verification, complete with payment preferences (preferred token, fee split config). For crypto-native users, integrates with existing `.sol` domains via Solana Name Service.
 - **Open standard**: anyone can integrate, no permission needed.
 
 ---
@@ -90,7 +90,7 @@ SolUPG provides:
 | **Fee Splitting** | Automatic fee distribution to all parties | 🔲 Phase 1 |
 | **Auto-Swap** | Integrated DEX aggregation (Jupiter) | 🔲 Phase 1 |
 | **Payment Routing** | Intelligent transaction routing engine | 🔲 Phase 2 |
-| **Directory Service** | Alias-to-wallet address resolution | 🔲 Phase 2 |
+| **Directory Service** | Verified Payment Identity: email/phone → wallet + payment profile (preferred token, fee config). Integrates with `.sol` domains for crypto-native users. | 🔲 Phase 2 |
 | **REST/gRPC API** | Merchant-facing API gateway | 🔲 Phase 3 |
 | **TypeScript SDK** | Easy integration for web/Node.js apps | 🔲 Phase 3 |
 | **Reconciliation** | Off-chain clearing and reporting | 🔲 Phase 4 |
