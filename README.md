@@ -85,12 +85,12 @@ SolUPG provides:
 
 | Feature | Description | Status |
 |---------|-------------|--------|
-| **On-Chain Escrow** | Secure fund holding until conditions are met | 🔲 Phase 1 |
-| **Multi-Token Payments** | Accept any SPL token, receive your preferred one | 🔲 Phase 1 |
-| **Fee Splitting** | Automatic fee distribution to all parties | 🔲 Phase 1 |
-| **Auto-Swap** | Integrated DEX aggregation (Jupiter) | 🔲 Phase 1 |
-| **Payment Routing** | Intelligent transaction routing engine | 🔲 Phase 2 |
-| **Directory Service** | Verified Payment Identity: email/phone → wallet + payment profile (preferred token, fee config). Integrates with `.sol` domains for crypto-native users. | 🔲 Phase 2 |
+| **On-Chain Escrow** | Secure fund holding until conditions are met | ✅ Phase 1 |
+| **Multi-Token Payments** | Accept any SPL token, receive your preferred one | ✅ Phase 1 |
+| **Fee Splitting** | Automatic fee distribution to all parties | ✅ Phase 1 |
+| **Auto-Swap** | Integrated DEX aggregation (Jupiter) | ✅ Phase 1 |
+| **Payment Routing** | Intelligent transaction routing engine | 🟡 Phase 2 |
+| **Directory Service** | Verified Payment Identity: email/phone → wallet + payment profile (preferred token, fee config). Integrates with `.sol` domains for crypto-native users. | 🟡 Phase 2 |
 | **REST/gRPC API** | Merchant-facing API gateway | 🔲 Phase 3 |
 | **TypeScript SDK** | Easy integration for web/Node.js apps | 🔲 Phase 3 |
 | **Reconciliation** | Off-chain clearing and reporting | 🔲 Phase 4 |
@@ -118,8 +118,8 @@ SolUPG provides:
 
 | Phase | Description | Duration | Status |
 |-------|-------------|----------|--------|
-| **Phase 1** | On-Chain Programs (Escrow, Payment, Splitter, Swap) | 4-6 weeks | 🔲 Not Started |
-| **Phase 2** | Routing Engine + Directory Service | 3-4 weeks | 🔲 Not Started |
+| **Phase 1** | On-Chain Programs (Escrow, Payment, Splitter, Swap) | 4-6 weeks | ✅ Complete |
+| **Phase 2** | Routing Engine + Directory Service | 3-4 weeks | 🟡 In Progress |
 | **Phase 3** | API Gateway + Merchant SDK | 2-3 weeks | 🔲 Not Started |
 | **Phase 4** | Clearing, Reconciliation & Dashboard | 3-4 weeks | 🔲 Not Started |
 | **Phase 5** | Compliance & Monitoring | 2-3 weeks | 🔲 Not Started |
@@ -169,10 +169,17 @@ solupg/
 
 ```bash
 # Clone the repository
-git clone https://github.com/revengerrr/solupg.git
-cd solupg
+git clone https://github.com/revengerrr/SolUpg.git
+cd SolUpg
 
-# More setup instructions coming in Phase 1...
+# Build on-chain programs (Phase 1)
+anchor build
+anchor test
+
+# Build off-chain services (Phase 2)
+cd services
+cargo build
+cargo test
 ```
 
 ---
