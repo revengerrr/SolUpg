@@ -53,6 +53,7 @@ mod tests {
             escrow_expiry: None,
             split_config_pda: None,
             slippage_bps,
+            remaining_accounts: vec![],
         }
     }
 

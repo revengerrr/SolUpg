@@ -30,7 +30,7 @@ async fn main() -> anyhow::Result<()> {
         .connect(&database_url)
         .await?;
 
-    sqlx::migrate!("./migrations")
+    sqlx::migrate!("../migrations")
         .run(&pool)
         .await?;
 
@@ -44,6 +44,7 @@ async fn main() -> anyhow::Result<()> {
     let app = Router::new()
         .nest("/aliases", routes::alias_routes())
         .nest("/merchants", routes::merchant_routes())
+        .nest("/verify", routes::verification_routes())
         .route("/health", axum::routing::get(|| async { "ok" }))
         .layer(TraceLayer::new_for_http())
         .layer(CorsLayer::permissive())

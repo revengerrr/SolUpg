@@ -18,7 +18,7 @@ pub struct Merchant {
 
 #[derive(Debug, Deserialize)]
 pub struct CreateMerchantRequest {
-    pub merchant_id: String,
+    pub merchant_id: Option<String>,
     pub name: String,
     pub wallet_address: String,
     pub preferred_token: Option<String>,

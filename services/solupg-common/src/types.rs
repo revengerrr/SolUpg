@@ -87,11 +87,14 @@ pub struct PaymentRoute {
     pub split_config_pda: Option<Pubkey>,
     /// Slippage
     pub slippage_bps: u16,
+    /// Additional accounts for split recipients (ATAs resolved at build time)
+    #[serde(default)]
+    pub remaining_accounts: Vec<Pubkey>,
 }
 
 /// Status of a payment intent in the system.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, sqlx::Type)]
-#[sqlx(type_name = "text", rename_all = "snake_case")]
+#[sqlx(type_name = "VARCHAR", rename_all = "snake_case")]
 pub enum IntentStatus {
     Pending,
     Processing,

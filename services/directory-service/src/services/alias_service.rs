@@ -19,8 +19,8 @@ pub async fn create_alias(
 
     let alias = sqlx::query_as::<_, Alias>(
         r#"
-        INSERT INTO aliases (id, alias_type, alias_value, wallet_address, verified, created_at, updated_at)
-        VALUES ($1, $2, $3, $4, false, NOW(), NOW())
+        INSERT INTO aliases (id, alias_type, alias_value, wallet_address, preferred_token, verified, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5, false, NOW(), NOW())
         RETURNING *
         "#,
     )
@@ -28,6 +28,7 @@ pub async fn create_alias(
     .bind(&req.alias_type)
     .bind(&req.alias_value)
     .bind(&req.wallet_address)
+    .bind(&req.preferred_token)
     .fetch_one(pool)
     .await
     .map_err(|e| match e {

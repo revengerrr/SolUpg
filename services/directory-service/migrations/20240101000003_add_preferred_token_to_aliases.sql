@@ -1,0 +1,1 @@
+ALTER TABLE aliases ADD COLUMN IF NOT EXISTS preferred_token VARCHAR(64);

@@ -36,7 +36,7 @@ async fn main() -> anyhow::Result<()> {
         .connect(&database_url)
         .await?;
 
-    sqlx::migrate!("./migrations")
+    sqlx::migrate!("../migrations")
         .run(&pool)
         .await?;
 

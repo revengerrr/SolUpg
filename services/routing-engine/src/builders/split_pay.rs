@@ -10,11 +10,11 @@ const TOKEN_PROGRAM_ID: Pubkey = solana_sdk::pubkey!("TokenkegQfeZyiNwAJbNbGKPFX
 
 /// Build a SplitPay transaction: executeSplit.
 ///
-/// NOTE: In production, the routing engine would first fetch the SplitConfig
-/// account on-chain to discover the recipients vector and build the
-/// remaining_accounts. For now, we build a placeholder that assumes the
-/// split_config_pda is provided and recipient accounts will be resolved
-/// at submission time.
+/// The `remaining_accounts` field on `PaymentRoute` supplies recipient ATAs
+/// discovered by the caller (e.g. by fetching the SplitConfig account
+/// on-chain).  When empty, the transaction is still well-formed but will
+/// fail on-chain because the program expects at least one recipient ATA
+/// in remaining_accounts.
 pub fn build(route: &PaymentRoute) -> Result<Transaction, AppError> {
     let program_id = solupg_common::program_ids::splitter_program_id();
 
@@ -27,22 +27,65 @@ pub fn build(route: &PaymentRoute) -> Result<Transaction, AppError> {
     let mut data = Vec::new();
     data.extend_from_slice(&route.amount.to_le_bytes());
 
-    let accounts = vec![
+    let mut accounts = vec![
         AccountMeta::new(route.payer, true),                // sender
         AccountMeta::new_readonly(split_config_pda, false), // split_config
         AccountMeta::new(sender_token_account, false),      // sender_token_account
         AccountMeta::new_readonly(TOKEN_PROGRAM_ID, false), // token_program
     ];
 
-    // TODO: In production, fetch SplitConfig on-chain to get recipients,
-    // then append each recipient's ATA as remaining_accounts.
-    // For now the transaction is built without remaining_accounts and will
-    // need them injected before signing.
+    // Append recipient ATAs as remaining_accounts
+    for ata in &route.remaining_accounts {
+        accounts.push(AccountMeta::new(*ata, false));
+    }
 
     let ix = anchor_instruction(program_id, "execute_split", data, accounts);
 
     let tx = Transaction::new_with_payer(&[ix], Some(&route.payer));
     Ok(tx)
+}
+
+/// Fetch a SplitConfig account on-chain and return the recipient wallet
+/// addresses stored inside it.
+///
+/// The on-chain layout (after 8-byte Anchor discriminator):
+///   authority: Pubkey (32)
+///   token_mint: Pubkey (32)
+///   recipients: Vec<SplitRecipient>  (4-byte len + entries)
+///     each entry: wallet: Pubkey (32), share_bps: u16 (2)
+pub fn fetch_split_recipients(
+    client: &solana_client::rpc_client::RpcClient,
+    split_config_pda: &Pubkey,
+    mint: &Pubkey,
+) -> Result<Vec<Pubkey>, AppError> {
+    let account = client.get_account(split_config_pda)
+        .map_err(|e| AppError::SolanaRpc(format!("failed to fetch SplitConfig: {e}")))?;
+
+    let data = &account.data;
+    // Skip: 8 (discriminator) + 32 (authority) + 32 (token_mint) = 72
+    if data.len() < 76 {
+        return Err(AppError::Internal("SplitConfig account data too short".into()));
+    }
+
+    let recipient_count = u32::from_le_bytes(
+        data[72..76].try_into().unwrap()
+    ) as usize;
+
+    let mut recipients = Vec::with_capacity(recipient_count);
+    let mut offset = 76;
+    for _ in 0..recipient_count {
+        if offset + 34 > data.len() {
+            return Err(AppError::Internal("SplitConfig data truncated".into()));
+        }
+        let wallet = Pubkey::try_from(&data[offset..offset + 32])
+            .map_err(|_| AppError::Internal("invalid pubkey in SplitConfig".into()))?;
+        // Derive ATA for this recipient
+        let ata = spl_associated_token_account(&wallet, mint);
+        recipients.push(ata);
+        offset += 34; // 32 (pubkey) + 2 (share_bps)
+    }
+
+    Ok(recipients)
 }
 
 fn spl_associated_token_account(wallet: &Pubkey, mint: &Pubkey) -> Pubkey {
@@ -74,6 +117,7 @@ mod tests {
             escrow_expiry: None,
             split_config_pda: Some(Pubkey::new_from_array([4u8; 32])),
             slippage_bps: 100,
+            remaining_accounts: vec![],
         }
     }
 

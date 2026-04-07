@@ -8,6 +8,9 @@ pub async fn create_merchant(
     pool: &PgPool,
     req: CreateMerchantRequest,
 ) -> Result<Merchant, AppError> {
+    let merchant_id = req.merchant_id.unwrap_or_else(|| {
+        format!("MER-{}", &Uuid::new_v4().to_string()[..8])
+    });
     let merchant = sqlx::query_as::<_, Merchant>(
         r#"
         INSERT INTO merchants (id, merchant_id, name, wallet_address, preferred_token, split_config, webhook_url, kyc_status, created_at, updated_at)
@@ -16,7 +19,7 @@ pub async fn create_merchant(
         "#,
     )
     .bind(Uuid::new_v4())
-    .bind(&req.merchant_id)
+    .bind(&merchant_id)
     .bind(&req.name)
     .bind(&req.wallet_address)
     .bind(&req.preferred_token)

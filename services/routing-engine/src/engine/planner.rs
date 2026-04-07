@@ -57,6 +57,7 @@ pub fn plan_route(
         escrow_expiry: intent.escrow_expiry,
         split_config_pda,
         slippage_bps: intent.slippage_bps.unwrap_or(100), // default 1%
+        remaining_accounts: vec![], // populated later by builder if needed
     })
 }
 
