@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "solupg-common",
+    "directory-service",
+    "routing-engine",
+]
+resolver = "2"

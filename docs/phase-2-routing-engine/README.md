@@ -1,6 +1,6 @@
 # Phase 2: Routing Engine & Directory Service
 
-> **Status**: 🔲 Not Started
+> **Status**: 🟡 In Progress (scaffold + core logic complete, compiling)
 > **Estimated Duration**: 3-4 weeks
 > **Dependencies**: Phase 1 (On-Chain Programs)
 
