@@ -89,8 +89,8 @@ SolUPG provides:
 | **Multi-Token Payments** | Accept any SPL token, receive your preferred one | ✅ Phase 1 |
 | **Fee Splitting** | Automatic fee distribution to all parties | ✅ Phase 1 |
 | **Auto-Swap** | Integrated DEX aggregation (Jupiter) | ✅ Phase 1 |
-| **Payment Routing** | Intelligent transaction routing engine | 🟡 Phase 2 |
-| **Directory Service** | Verified Payment Identity: email/phone → wallet + payment profile (preferred token, fee config). Integrates with `.sol` domains for crypto-native users. | 🟡 Phase 2 |
+| **Payment Routing** | Intelligent transaction routing engine | ✅ Phase 2 |
+| **Directory Service** | Verified Payment Identity: email/phone → wallet + payment profile (preferred token, fee config). Integrates with `.sol` domains for crypto-native users. | ✅ Phase 2 |
 | **REST/gRPC API** | Merchant-facing API gateway | 🔲 Phase 3 |
 | **TypeScript SDK** | Easy integration for web/Node.js apps | 🔲 Phase 3 |
 | **Reconciliation** | Off-chain clearing and reporting | 🔲 Phase 4 |
@@ -119,7 +119,7 @@ SolUPG provides:
 | Phase | Description | Duration | Status |
 |-------|-------------|----------|--------|
 | **Phase 1** | On-Chain Programs (Escrow, Payment, Splitter, Swap) | 4-6 weeks | ✅ Complete |
-| **Phase 2** | Routing Engine + Directory Service | 3-4 weeks | 🟡 In Progress |
+| **Phase 2** | Routing Engine + Directory Service | 3-4 weeks | ✅ Complete |
 | **Phase 3** | API Gateway + Merchant SDK | 2-3 weeks | 🔲 Not Started |
 | **Phase 4** | Clearing, Reconciliation & Dashboard | 3-4 weeks | 🔲 Not Started |
 | **Phase 5** | Compliance & Monitoring | 2-3 weeks | 🔲 Not Started |
@@ -138,12 +138,15 @@ solupg/
 │   ├── solupg-payment/        # Core payment program
 │   ├── solupg-splitter/       # Fee splitting program
 │   └── solupg-swap/           # Token swap integration
-├── services/                  # Off-chain backend services
-│   ├── routing-engine/        # Central payment switch
-│   ├── api-gateway/           # REST/gRPC API
-│   ├── directory-service/     # Alias resolution service
-│   ├── clearing-engine/       # Reconciliation & reporting
-│   └── monitoring/            # Fraud detection & metrics
+├── services/                  # Off-chain backend services (Rust/Axum)
+│   ├── routing-engine/        # Central payment switch (47 tests)
+│   ├── directory-service/     # Alias + merchant + OTP verification
+│   ├── solupg-common/         # Shared types, PDA helpers, config
+│   ├── api-gateway/           # REST/gRPC API (Phase 3)
+│   ├── clearing-engine/       # Reconciliation & reporting (Phase 4)
+│   ├── monitoring/            # Fraud detection & metrics (Phase 5)
+│   ├── migrations/            # Shared database migrations
+│   └── docker-compose.yml     # PostgreSQL 16 + Redis 7
 ├── sdk/                       # Client SDKs
 │   ├── typescript/            # TypeScript/JavaScript SDK
 │   └── python/                # Python SDK
@@ -165,7 +168,7 @@ solupg/
 
 ## Getting Started
 
-> **Prerequisites**: Rust, Solana CLI, Anchor Framework, Node.js 18+
+> **Prerequisites**: Rust, Solana CLI, Anchor Framework, Node.js 18+, Docker
 
 ```bash
 # Clone the repository
@@ -176,10 +179,20 @@ cd SolUpg
 anchor build
 anchor test
 
-# Build off-chain services (Phase 2)
+# Start infrastructure (Phase 2)
 cd services
+docker compose up -d          # PostgreSQL + Redis
+
+# Build and test off-chain services
 cargo build
-cargo test
+cargo test                    # 47 unit tests
+
+# Run services
+cargo run -p directory-service   # Port 3001
+cargo run -p routing-engine      # Port 3000
+
+# Integration test (requires solana-test-validator)
+cargo test --test integration_test -- --ignored
 ```
 
 ---
