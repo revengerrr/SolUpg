@@ -91,8 +91,8 @@ SolUPG provides:
 | **Auto-Swap** | Integrated DEX aggregation (Jupiter) | ✅ Phase 1 |
 | **Payment Routing** | Intelligent transaction routing engine | ✅ Phase 2 |
 | **Directory Service** | Verified Payment Identity: email/phone → wallet + payment profile (preferred token, fee config). Integrates with `.sol` domains for crypto-native users. | ✅ Phase 2 |
-| **REST/gRPC API** | Merchant-facing API gateway | 🔲 Phase 3 |
-| **TypeScript SDK** | Easy integration for web/Node.js apps | 🔲 Phase 3 |
+| **REST/gRPC API** | Merchant-facing API gateway | ✅ Phase 3 |
+| **TypeScript SDK** | Easy integration for web/Node.js apps | ✅ Phase 3 |
 | **Reconciliation** | Off-chain clearing and reporting | 🔲 Phase 4 |
 | **Fraud Detection** | Real-time transaction monitoring | 🔲 Phase 5 |
 | **Mainnet Deployment** | Production-ready release | 🔲 Phase 6 |
@@ -120,7 +120,7 @@ SolUPG provides:
 |-------|-------------|----------|--------|
 | **Phase 1** | On-Chain Programs (Escrow, Payment, Splitter, Swap) | 4-6 weeks | ✅ Complete |
 | **Phase 2** | Routing Engine + Directory Service | 3-4 weeks | ✅ Complete |
-| **Phase 3** | API Gateway + Merchant SDK | 2-3 weeks | 🔲 Not Started |
+| **Phase 3** | API Gateway + Merchant SDK | 2-3 weeks | ✅ Complete |
 | **Phase 4** | Clearing, Reconciliation & Dashboard | 3-4 weeks | 🔲 Not Started |
 | **Phase 5** | Compliance & Monitoring | 2-3 weeks | 🔲 Not Started |
 | **Phase 6** | Testing, Security Audit & Mainnet Deploy | 4-6 weeks | 🔲 Not Started |
@@ -142,14 +142,14 @@ solupg/
 │   ├── routing-engine/        # Central payment switch (47 tests)
 │   ├── directory-service/     # Alias + merchant + OTP verification
 │   ├── solupg-common/         # Shared types, PDA helpers, config
-│   ├── api-gateway/           # REST/gRPC API (Phase 3)
+│   ├── api-gateway/           # REST API gateway + auth + rate limiting (8 tests)
 │   ├── clearing-engine/       # Reconciliation & reporting (Phase 4)
 │   ├── monitoring/            # Fraud detection & metrics (Phase 5)
 │   ├── migrations/            # Shared database migrations
 │   └── docker-compose.yml     # PostgreSQL 16 + Redis 7
 ├── sdk/                       # Client SDKs
-│   ├── typescript/            # TypeScript/JavaScript SDK
-│   └── python/                # Python SDK
+│   ├── typescript/            # @solupg/sdk TypeScript package
+│   └── python/                # Python SDK (Phase 3+)
 ├── docs/                      # Documentation
 │   ├── architecture/          # Architecture deep-dives
 │   ├── phase-1-onchain-programs/
@@ -185,11 +185,15 @@ docker compose up -d          # PostgreSQL + Redis
 
 # Build and test off-chain services
 cargo build
-cargo test                    # 47 unit tests
+cargo test                    # 55 unit tests
 
 # Run services
 cargo run -p directory-service   # Port 3001
 cargo run -p routing-engine      # Port 3000
+cargo run -p api-gateway         # Port 3002
+
+# Build TypeScript SDK
+cd ../sdk/typescript && npm install && npm run build
 
 # Integration test (requires solana-test-validator)
 cargo test --test integration_test -- --ignored

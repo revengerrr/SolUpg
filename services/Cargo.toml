@@ -3,5 +3,6 @@ members = [
     "solupg-common",
     "directory-service",
     "routing-engine",
+    "api-gateway",
 ]
 resolver = "2"

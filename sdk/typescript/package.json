@@ -1,0 +1,22 @@
+{
+  "name": "@solupg/sdk",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for SolUPG payment gateway",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test dist/tests/",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": ["solana", "payments", "solupg", "gateway"],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@solana/web3.js": "^1.95.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/node": "^20.0.0"
+  },
+  "files": ["dist/", "README.md", "LICENSE"]
+}
