@@ -1,0 +1,27 @@
+# cargo-audit configuration for SolUPG.
+# Run:  cargo audit
+#
+# Any ignored advisories must include a reason and an expiry review date.
+
+[advisories]
+ignore = [
+    # Example:
+    # "RUSTSEC-2024-0000",  # transitive dep, no fix available upstream. Review 2026-06-01.
+]
+informational_warnings = ["unmaintained", "unsound", "notice"]
+severity_threshold = "low"
+
+[database]
+path = "~/.cargo/advisory-db"
+url = "https://github.com/RustSec/advisory-db.git"
+fetch = true
+stale = false
+
+[output]
+deny = ["warnings", "unmaintained", "unsound", "yanked"]
+format = "terminal"
+quiet = false
+show_tree = true
+
+[packages]
+source = "all"

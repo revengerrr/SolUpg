@@ -6,17 +6,28 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "test": "node --test dist/tests/",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "tsc --noEmit"
   },
-  "keywords": ["solana", "payments", "solupg", "gateway"],
+  "keywords": [
+    "solana",
+    "payments",
+    "solupg",
+    "gateway"
+  ],
   "license": "Apache-2.0",
   "dependencies": {
     "@solana/web3.js": "^1.95.0"
   },
   "devDependencies": {
+    "@types/node": "^20.0.0",
     "typescript": "^5.5.0",
-    "@types/node": "^20.0.0"
+    "vitest": "^1.6.0"
   },
-  "files": ["dist/", "README.md", "LICENSE"]
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ]
 }

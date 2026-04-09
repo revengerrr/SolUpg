@@ -1,0 +1,23 @@
+[package]
+name = "integration-tests"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Cross-service end-to-end tests for SolUPG. All tests are #[ignore]'d by default — start the compose stack first, then run with --ignored."
+
+[lib]
+name = "integration_tests"
+path = "src/lib.rs"
+
+[dependencies]
+anyhow = "1"
+reqwest = { version = "0.12", features = ["json"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+solana-sdk = "2.1"
+solana-client = "2.1"
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full", "test-util", "macros"] }

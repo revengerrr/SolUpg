@@ -1,0 +1,94 @@
+# cargo-deny configuration for SolUPG.
+# Run locally:   cargo deny check
+# Run in CI:     .github/workflows/security.yml
+
+[graph]
+all-features = false
+no-default-features = false
+
+[output]
+feature-depth = 1
+
+# ---------------------------------------------------------------------------
+# Advisory database (RustSec)
+# ---------------------------------------------------------------------------
+[advisories]
+version = 2
+db-path = "~/.cargo/advisory-db"
+db-urls = ["https://github.com/rustsec/advisory-db"]
+yanked = "deny"
+ignore = [
+    # "RUSTSEC-YYYY-NNNN",  # <reason to ignore>
+]
+
+# ---------------------------------------------------------------------------
+# License allowlist — we only accept permissive SPDX identifiers.
+# ---------------------------------------------------------------------------
+[licenses]
+version = 2
+confidence-threshold = 0.93
+allow = [
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "MIT",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Unicode-DFS-2016",
+    "Unicode-3.0",
+    "Zlib",
+    "MPL-2.0",
+    "CC0-1.0",
+    "OpenSSL",
+    "BSL-1.0",
+]
+exceptions = [
+    # Pin any crates requiring a license that isn't in the global allowlist.
+    # { allow = ["OpenSSL"], crate = "ring" },
+]
+
+[[licenses.clarify]]
+crate = "ring"
+expression = "MIT AND ISC AND OpenSSL"
+license-files = [
+    { path = "LICENSE", hash = 0xbd0eed23 },
+]
+
+# ---------------------------------------------------------------------------
+# Bans — disallow unmaintained, deprecated, or duplicated dependencies.
+# ---------------------------------------------------------------------------
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+highlight = "all"
+workspace-default-features = "allow"
+external-default-features = "allow"
+
+deny = [
+    # Known problematic crates. Add to this list as they arise.
+]
+
+skip = [
+    # Crates allowed to be present in multiple versions.
+]
+
+skip-tree = [
+    # Subtrees allowed to pull multiple versions.
+]
+
+# ---------------------------------------------------------------------------
+# Sources — only pull crates from crates.io + trusted git remotes.
+# ---------------------------------------------------------------------------
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = [
+    "https://github.com/solana-labs/solana",
+    "https://github.com/coral-xyz/anchor",
+]
+
+[sources.allow-org]
+github = []
+gitlab = []
+bitbucket = []

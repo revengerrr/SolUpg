@@ -1,0 +1,138 @@
+version: 2
+updates:
+  # ---------------------------------------------------------------------------
+  # Rust: services workspace
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "cargo"
+    directory: "/services"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "04:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 10
+    groups:
+      solana:
+        patterns:
+          - "solana-*"
+          - "spl-*"
+      anchor:
+        patterns:
+          - "anchor-*"
+      tokio-ecosystem:
+        patterns:
+          - "tokio"
+          - "tokio-*"
+          - "hyper"
+          - "hyper-*"
+          - "axum"
+          - "axum-*"
+          - "tower"
+          - "tower-*"
+      serde-ecosystem:
+        patterns:
+          - "serde"
+          - "serde_*"
+      sqlx:
+        patterns:
+          - "sqlx"
+          - "sqlx-*"
+    labels:
+      - "dependencies"
+      - "rust"
+
+  # ---------------------------------------------------------------------------
+  # Rust: on-chain programs workspace
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "04:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 10
+    groups:
+      anchor:
+        patterns:
+          - "anchor-*"
+      solana:
+        patterns:
+          - "solana-*"
+          - "spl-*"
+    labels:
+      - "dependencies"
+      - "rust"
+      - "onchain"
+
+  # ---------------------------------------------------------------------------
+  # TypeScript SDK
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "npm"
+    directory: "/sdk/typescript"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "04:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    groups:
+      solana-js:
+        patterns:
+          - "@solana/*"
+      types:
+        patterns:
+          - "@types/*"
+      testing:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+    labels:
+      - "dependencies"
+      - "typescript"
+
+  # ---------------------------------------------------------------------------
+  # Root npm (Anchor test deps)
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "04:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "typescript"
+      - "anchor"
+
+  # ---------------------------------------------------------------------------
+  # GitHub Actions
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "04:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "ci"
+
+  # ---------------------------------------------------------------------------
+  # Docker (shared services Dockerfile)
+  # ---------------------------------------------------------------------------
+  - package-ecosystem: "docker"
+    directory: "/services"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "04:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "docker"

@@ -15,6 +15,15 @@
   <a href="#license">License</a>
 </p>
 
+<p align="center">
+  <!-- CI status badges (populated once workflows run on main) -->
+  <img alt="Rust CI" src="https://img.shields.io/badge/rust-ci-informational" />
+  <img alt="Anchor CI" src="https://img.shields.io/badge/anchor-ci-informational" />
+  <img alt="SDK CI" src="https://img.shields.io/badge/sdk-ci-informational" />
+  <img alt="Security" src="https://img.shields.io/badge/security-audit-informational" />
+  <img alt="Docker" src="https://img.shields.io/badge/docker-ghcr-informational" />
+</p>
+
 ---
 
 ## What is SolUPG?
@@ -95,7 +104,7 @@ SolUPG provides:
 | **TypeScript SDK** | Easy integration for web/Node.js apps | ✅ Phase 3 |
 | **Reconciliation** | Off-chain clearing and reporting | ✅ Phase 4 |
 | **Fraud Detection** | Real-time transaction monitoring | ✅ Phase 5 |
-| **Mainnet Deployment** | Production-ready release | 🔲 Phase 6 |
+| **Mainnet Deployment** | Production-ready release | 🚧 Phase 6 (Tier 1/2 shipped) |
 
 ---
 
@@ -123,7 +132,7 @@ SolUPG provides:
 | **Phase 3** | API Gateway + Merchant SDK | 2-3 weeks | ✅ Complete |
 | **Phase 4** | Clearing, Reconciliation & Dashboard | 3-4 weeks | ✅ Complete |
 | **Phase 5** | Compliance & Monitoring | 2-3 weeks | ✅ Complete |
-| **Phase 6** | Testing, Security Audit & Mainnet Deploy | 4-6 weeks | 🔲 Not Started |
+| **Phase 6** | Testing, Security Audit & Mainnet Deploy | 4-6 weeks | 🚧 In Progress (Tier 1/2 shipped) |
 
 > Detailed documentation for each phase is available in [`docs/`](./docs/).
 
@@ -197,6 +206,31 @@ cd ../sdk/typescript && npm install && npm run build
 
 # Integration test (requires solana-test-validator)
 cargo test --test integration_test -- --ignored
+```
+
+### Quickstart: Full stack via Docker Compose (Phase 6)
+
+The shared `services/Dockerfile` builds every off-chain service from the
+workspace. A single `docker compose up` brings the whole Phase 2–5 stack
+online:
+
+```bash
+cd services
+docker compose build          # builds all 5 services from the shared Dockerfile
+docker compose up -d          # postgres + redis + 5 services
+
+# Health probes
+curl http://localhost:3000/health   # routing-engine
+curl http://localhost:3001/health   # directory-service
+curl http://localhost:3002/health   # api-gateway
+curl http://localhost:3003/health   # clearing-engine
+curl http://localhost:3004/health   # monitoring
+
+# Cross-service end-to-end tests (all #[ignore]'d by default)
+cargo test -p integration-tests -- --ignored --test-threads=1
+
+# Load tests (requires k6)
+SOLUPG_API_KEY=... k6 run ../load-tests/scenarios/mixed-workflow.js
 ```
 
 ---

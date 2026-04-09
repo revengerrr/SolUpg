@@ -1,0 +1,73 @@
+codecov:
+  require_ci_to_pass: yes
+  notify:
+    wait_for_ci: yes
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...95"
+
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+        informational: false
+      services:
+        target: 80%
+        threshold: 2%
+        flags:
+          - services
+      programs:
+        target: 90%
+        threshold: 2%
+        flags:
+          - programs
+      sdk:
+        target: 70%
+        threshold: 2%
+        flags:
+          - sdk
+    patch:
+      default:
+        target: 80%
+        threshold: 5%
+
+flags:
+  services:
+    paths:
+      - services/
+    carryforward: true
+  programs:
+    paths:
+      - programs/
+    carryforward: true
+  sdk:
+    paths:
+      - sdk/
+    carryforward: true
+
+parsers:
+  gcov:
+    branch_detection:
+      conditional: yes
+      loop: yes
+      method: yes
+      macro: no
+
+comment:
+  layout: "reach,diff,flags,tree,footer"
+  behavior: default
+  require_changes: false
+  require_base: no
+  require_head: yes
+
+ignore:
+  - "**/tests/**"
+  - "**/benches/**"
+  - "**/examples/**"
+  - "services/integration-tests/**"
+  - "target/**"
+  - "node_modules/**"
+  - "**/*.md"

@@ -11,9 +11,30 @@ solupg_escrow = "CGHhZAS23gXemD87jh3CMuGUkvbbr94Rez25MH8dmVL6"
 solupg_splitter = "5aLb2o44AyWRYKMvpKiYU7PHHBzugQswRPvmhHSTuYHP"
 solupg_swap = "Cf3nY8WkFXU4hn2TqLcfshS7E3hijY2eefekg5RHsz3n"
 
+# Devnet program IDs — mirror localnet until deploy rotates them.
+# Replace after running `scripts/deploy-devnet.sh` the first time.
+[programs.devnet]
+solupg_payment = "J2ZU7W5ee6X2vV58HM4EVSwBzJRmHtvxn8cLVzzvhwxK"
+solupg_escrow = "CGHhZAS23gXemD87jh3CMuGUkvbbr94Rez25MH8dmVL6"
+solupg_splitter = "5aLb2o44AyWRYKMvpKiYU7PHHBzugQswRPvmhHSTuYHP"
+solupg_swap = "Cf3nY8WkFXU4hn2TqLcfshS7E3hijY2eefekg5RHsz3n"
+
+# Mainnet-beta program IDs — placeholders until first mainnet deploy.
+# Populate manually after `scripts/deploy-mainnet-beta.sh` and commit the
+# final IDs here. DO NOT reuse localnet/devnet IDs in production.
+[programs.mainnet]
+solupg_payment = "J2ZU7W5ee6X2vV58HM4EVSwBzJRmHtvxn8cLVzzvhwxK"
+solupg_escrow = "CGHhZAS23gXemD87jh3CMuGUkvbbr94Rez25MH8dmVL6"
+solupg_splitter = "5aLb2o44AyWRYKMvpKiYU7PHHBzugQswRPvmhHSTuYHP"
+solupg_swap = "Cf3nY8WkFXU4hn2TqLcfshS7E3hijY2eefekg5RHsz3n"
+
 [registry]
 url = "https://api.apr.dev"
 
+# Default cluster. Override per-invocation with:
+#   anchor deploy --provider.cluster devnet
+#   anchor deploy --provider.cluster mainnet
+# Or set ANCHOR_PROVIDER_URL + ANCHOR_WALLET env vars.
 [provider]
 cluster = "Localnet"
 wallet = "~/.config/solana/id.json"

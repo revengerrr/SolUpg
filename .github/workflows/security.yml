@@ -1,0 +1,107 @@
+name: security
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "**/package.json"
+      - "**/package-lock.json"
+      - "deny.toml"
+      - ".cargo/audit.toml"
+      - ".github/workflows/security.yml"
+  pull_request:
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "**/package.json"
+      - "**/package-lock.json"
+      - "deny.toml"
+      - ".cargo/audit.toml"
+      - ".github/workflows/security.yml"
+  schedule:
+    # Weekly run catches newly published advisories against pinned deps.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+env:
+  RUST_TOOLCHAIN: 1.79.0
+  NODE_VERSION: 20
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # cargo-audit — RustSec advisory DB
+  # ---------------------------------------------------------------------------
+  cargo-audit:
+    name: cargo audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+
+      - name: Install cargo-audit
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-audit
+
+      - name: Audit services workspace
+        working-directory: services
+        run: cargo audit --deny warnings
+
+      - name: Audit on-chain workspace
+        run: cargo audit --deny warnings
+
+  # ---------------------------------------------------------------------------
+  # cargo-deny — license, advisory, bans, sources
+  # ---------------------------------------------------------------------------
+  cargo-deny:
+    name: cargo deny
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+
+      - name: Install cargo-deny
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deny
+
+      - name: cargo deny (services)
+        working-directory: services
+        run: cargo deny --manifest-path Cargo.toml --config ../deny.toml check
+
+      - name: cargo deny (programs)
+        run: cargo deny --config deny.toml check
+
+  # ---------------------------------------------------------------------------
+  # npm audit — Anchor test deps + TypeScript SDK
+  # ---------------------------------------------------------------------------
+  npm-audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        workspace:
+          - "."
+          - "sdk/typescript"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: npm audit (${{ matrix.workspace }})
+        working-directory: ${{ matrix.workspace }}
+        run: npm audit --audit-level=high || (echo "::warning::npm audit found high-severity advisories"; exit 1)
