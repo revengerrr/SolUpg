@@ -94,7 +94,7 @@ SolUPG provides:
 | **REST/gRPC API** | Merchant-facing API gateway | ✅ Phase 3 |
 | **TypeScript SDK** | Easy integration for web/Node.js apps | ✅ Phase 3 |
 | **Reconciliation** | Off-chain clearing and reporting | ✅ Phase 4 |
-| **Fraud Detection** | Real-time transaction monitoring | 🔲 Phase 5 |
+| **Fraud Detection** | Real-time transaction monitoring | ✅ Phase 5 |
 | **Mainnet Deployment** | Production-ready release | 🔲 Phase 6 |
 
 ---
@@ -122,7 +122,7 @@ SolUPG provides:
 | **Phase 2** | Routing Engine + Directory Service | 3-4 weeks | ✅ Complete |
 | **Phase 3** | API Gateway + Merchant SDK | 2-3 weeks | ✅ Complete |
 | **Phase 4** | Clearing, Reconciliation & Dashboard | 3-4 weeks | ✅ Complete |
-| **Phase 5** | Compliance & Monitoring | 2-3 weeks | 🔲 Not Started |
+| **Phase 5** | Compliance & Monitoring | 2-3 weeks | ✅ Complete |
 | **Phase 6** | Testing, Security Audit & Mainnet Deploy | 4-6 weeks | 🔲 Not Started |
 
 > Detailed documentation for each phase is available in [`docs/`](./docs/).
@@ -144,7 +144,7 @@ solupg/
 │   ├── solupg-common/         # Shared types, PDA helpers, config
 │   ├── api-gateway/           # REST API gateway + auth + rate limiting (8 tests)
 │   ├── clearing-engine/       # Transaction indexer, reconciliation, dashboard API (Phase 4)
-│   ├── monitoring/            # Fraud detection & metrics (Phase 5)
+│   ├── monitoring/            # Fraud detection, audit trail, metrics, alerting (Phase 5)
 │   ├── migrations/            # Shared database migrations
 │   └── docker-compose.yml     # PostgreSQL 16 + Redis 7
 ├── sdk/                       # Client SDKs

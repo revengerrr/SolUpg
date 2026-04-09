@@ -2594,6 +2594,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "monitoring"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "axum",
+ "chrono",
+ "dotenvy",
+ "http-body-util",
+ "redis",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "solupg-common",
+ "sqlx",
+ "tokio",
+ "tower",
+ "tower-http",
+ "tracing",
+ "tracing-subscriber",
+ "uuid",
+]
+
+[[package]]
 name = "native-tls"
 version = "0.2.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
