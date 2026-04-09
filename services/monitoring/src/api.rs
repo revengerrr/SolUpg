@@ -11,9 +11,9 @@ use serde_json::json;
 use sqlx::PgPool;
 use uuid::Uuid;
 
+use crate::alerts::AlertDispatcher;
 use crate::audit::AuditTrail;
 use crate::fraud::FraudEngine;
-use crate::alerts::AlertDispatcher;
 use crate::metrics::MetricsCollector;
 use crate::models::*;
 
@@ -143,13 +143,11 @@ async fn get_alert(
     State(state): State<AppState>,
     Path(id): Path<Uuid>,
 ) -> Result<impl IntoResponse, StatusCode> {
-    let alert = sqlx::query_as::<_, FraudAlert>(
-        "SELECT * FROM fraud_alerts WHERE id = $1"
-    )
-    .bind(id)
-    .fetch_optional(&state.pool)
-    .await
-    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let alert = sqlx::query_as::<_, FraudAlert>("SELECT * FROM fraud_alerts WHERE id = $1")
+        .bind(id)
+        .fetch_optional(&state.pool)
+        .await
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     match alert {
         Some(a) => Ok(Json(json!(a))),
@@ -178,13 +176,15 @@ async fn resolve_alert(
         Some(a) => {
             // Record in audit trail
             let audit = AuditTrail::new(state.pool);
-            let _ = audit.record_admin_action(
-                &req.resolved_by,
-                "fraud_alert",
-                &id.to_string(),
-                "resolve",
-                json!({ "new_status": req.status }),
-            ).await;
+            let _ = audit
+                .record_admin_action(
+                    &req.resolved_by,
+                    "fraud_alert",
+                    &id.to_string(),
+                    "resolve",
+                    json!({ "new_status": req.status }),
+                )
+                .await;
 
             Ok(Json(json!(a)))
         }
@@ -194,9 +194,7 @@ async fn resolve_alert(
 
 // ── Rules ──
 
-async fn list_rules(
-    State(state): State<AppState>,
-) -> Result<impl IntoResponse, StatusCode> {
+async fn list_rules(State(state): State<AppState>) -> Result<impl IntoResponse, StatusCode> {
     let engine = FraudEngine::new(state.pool);
     let rules = engine
         .get_active_rules()
@@ -258,9 +256,7 @@ async fn export_audit(
 
 // ── Alert Channels ──
 
-async fn list_channels(
-    State(state): State<AppState>,
-) -> Result<impl IntoResponse, StatusCode> {
+async fn list_channels(State(state): State<AppState>) -> Result<impl IntoResponse, StatusCode> {
     let dispatcher = AlertDispatcher::new(state.pool);
     let channels = dispatcher
         .list_channels()
@@ -272,9 +268,7 @@ async fn list_channels(
 
 // ── Metrics ──
 
-async fn get_metrics(
-    State(state): State<AppState>,
-) -> Result<impl IntoResponse, StatusCode> {
+async fn get_metrics(State(state): State<AppState>) -> Result<impl IntoResponse, StatusCode> {
     let svc_metrics = state.metrics.get_service_metrics("monitoring").await;
     Ok(Json(json!(svc_metrics)))
 }

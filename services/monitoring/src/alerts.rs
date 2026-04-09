@@ -29,7 +29,8 @@ impl AlertDispatcher {
         for channel in &channels {
             match self.send_to_channel(channel, alert).await {
                 Ok(_) => {
-                    self.record_notification(alert.id, channel.id, "sent").await?;
+                    self.record_notification(alert.id, channel.id, "sent")
+                        .await?;
                     sent += 1;
                 }
                 Err(e) => {
@@ -38,7 +39,8 @@ impl AlertDispatcher {
                         error = %e,
                         "Failed to send alert notification"
                     );
-                    self.record_notification(alert.id, channel.id, "failed").await?;
+                    self.record_notification(alert.id, channel.id, "failed")
+                        .await?;
                 }
             }
         }
@@ -53,11 +55,7 @@ impl AlertDispatcher {
     }
 
     /// Send alert to a specific channel.
-    async fn send_to_channel(
-        &self,
-        channel: &AlertChannel,
-        alert: &FraudAlert,
-    ) -> Result<()> {
+    async fn send_to_channel(&self, channel: &AlertChannel, alert: &FraudAlert) -> Result<()> {
         match channel.channel_type.as_str() {
             "slack" => self.send_slack(channel, alert).await,
             "pagerduty" => self.send_pagerduty(channel, alert).await,
@@ -162,11 +160,7 @@ impl AlertDispatcher {
             }
         });
 
-        self.http_client
-            .post(url)
-            .json(&payload)
-            .send()
-            .await?;
+        self.http_client.post(url).json(&payload).send().await?;
 
         Ok(())
     }

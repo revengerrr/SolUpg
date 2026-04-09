@@ -1,8 +1,7 @@
 use axum::{
-    Router,
     extract::{Path, Query, State},
     routing::{get, post},
-    Json,
+    Json, Router,
 };
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -160,9 +159,7 @@ async fn cancel_payment(
     .bind(id)
     .fetch_optional(&state.db)
     .await?
-    .ok_or_else(|| {
-        AppError::BadRequest("payment not found or cannot be cancelled".to_string())
-    })?;
+    .ok_or_else(|| AppError::BadRequest("payment not found or cannot be cancelled".to_string()))?;
 
     Ok(Json(PaymentResponse {
         id: result.intent_id,

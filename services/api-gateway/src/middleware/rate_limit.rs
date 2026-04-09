@@ -38,10 +38,16 @@ pub async fn rate_limit_middleware(
         .await
         .map_err(|e| AppError::Redis(e))?;
 
-    let count: u64 = conn.incr(&redis_key, 1u64).await.map_err(|e| AppError::Redis(e))?;
+    let count: u64 = conn
+        .incr(&redis_key, 1u64)
+        .await
+        .map_err(|e| AppError::Redis(e))?;
 
     if count == 1 {
-        let _: () = conn.expire(&redis_key, 60).await.map_err(|e| AppError::Redis(e))?;
+        let _: () = conn
+            .expire(&redis_key, 60)
+            .await
+            .map_err(|e| AppError::Redis(e))?;
     }
 
     if count > limit {
@@ -51,10 +57,9 @@ pub async fn rate_limit_middleware(
     }
 
     let mut response = next.run(req).await;
-    response.headers_mut().insert(
-        "X-RateLimit-Limit",
-        limit.to_string().parse().unwrap(),
-    );
+    response
+        .headers_mut()
+        .insert("X-RateLimit-Limit", limit.to_string().parse().unwrap());
     response.headers_mut().insert(
         "X-RateLimit-Remaining",
         limit.saturating_sub(count).to_string().parse().unwrap(),

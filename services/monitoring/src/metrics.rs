@@ -1,9 +1,9 @@
+use crate::models::{ServiceMetrics, TransactionMetrics};
 use anyhow::Result;
 use sqlx::PgPool;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::sync::Arc;
 use std::time::Instant;
-use crate::models::{ServiceMetrics, TransactionMetrics};
 
 /// Prometheus-compatible metrics collector.
 /// Tracks request counts, latencies, and business metrics.
@@ -59,20 +59,17 @@ impl MetricsCollector {
 
     /// Get transaction-level metrics from the database.
     pub async fn get_transaction_metrics(&self) -> Result<TransactionMetrics> {
-        let (total,): (i64,) = sqlx::query_as(
-            "SELECT COUNT(*) FROM transactions_ledger"
-        )
-        .fetch_one(&self.pool)
-        .await?;
+        let (total,): (i64,) = sqlx::query_as("SELECT COUNT(*) FROM transactions_ledger")
+            .fetch_one(&self.pool)
+            .await?;
 
-        let (successful,): (i64,) = sqlx::query_as(
-            "SELECT COUNT(*) FROM transactions_ledger WHERE status = 'confirmed'"
-        )
-        .fetch_one(&self.pool)
-        .await?;
+        let (successful,): (i64,) =
+            sqlx::query_as("SELECT COUNT(*) FROM transactions_ledger WHERE status = 'confirmed'")
+                .fetch_one(&self.pool)
+                .await?;
 
         let (avg_amount,): (Option<f64>,) = sqlx::query_as(
-            "SELECT AVG(amount)::FLOAT8 FROM transactions_ledger WHERE status = 'confirmed'"
+            "SELECT AVG(amount)::FLOAT8 FROM transactions_ledger WHERE status = 'confirmed'",
         )
         .fetch_one(&self.pool)
         .await?;

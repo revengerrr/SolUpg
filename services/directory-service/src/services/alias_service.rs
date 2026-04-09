@@ -7,14 +7,15 @@ use solupg_common::error::AppError;
 
 const ALIAS_CACHE_TTL: u64 = 300; // 5 minutes
 
-pub async fn create_alias(
-    pool: &PgPool,
-    req: CreateAliasRequest,
-) -> Result<Alias, AppError> {
+pub async fn create_alias(pool: &PgPool, req: CreateAliasRequest) -> Result<Alias, AppError> {
     // Validate alias_type
     match req.alias_type.as_str() {
         "email" | "phone" | "username" => {}
-        _ => return Err(AppError::BadRequest("alias_type must be email, phone, or username".into())),
+        _ => {
+            return Err(AppError::BadRequest(
+                "alias_type must be email, phone, or username".into(),
+            ))
+        }
     }
 
     let alias = sqlx::query_as::<_, Alias>(
@@ -57,13 +58,11 @@ pub async fn resolve_alias(
     }
 
     // Query database
-    let alias = sqlx::query_as::<_, Alias>(
-        "SELECT * FROM aliases WHERE alias_value = $1",
-    )
-    .bind(alias_value)
-    .fetch_optional(pool)
-    .await?
-    .ok_or_else(|| AppError::NotFound(format!("alias '{alias_value}' not found")))?;
+    let alias = sqlx::query_as::<_, Alias>("SELECT * FROM aliases WHERE alias_value = $1")
+        .bind(alias_value)
+        .fetch_optional(pool)
+        .await?
+        .ok_or_else(|| AppError::NotFound(format!("alias '{alias_value}' not found")))?;
 
     // Cache result
     if let Ok(mut conn) = redis.get_multiplexed_async_connection().await {
@@ -87,7 +86,9 @@ pub async fn delete_alias(
         .await?;
 
     if result.rows_affected() == 0 {
-        return Err(AppError::NotFound(format!("alias '{alias_value}' not found")));
+        return Err(AppError::NotFound(format!(
+            "alias '{alias_value}' not found"
+        )));
     }
 
     // Invalidate cache

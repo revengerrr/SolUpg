@@ -75,7 +75,8 @@ impl AuditTrail {
             details,
             None,
             None,
-        ).await
+        )
+        .await
     }
 
     /// Convenience: record a merchant action.
@@ -97,7 +98,8 @@ impl AuditTrail {
             details,
             ip_address,
             None,
-        ).await
+        )
+        .await
     }
 
     /// Convenience: record an admin action.
@@ -119,7 +121,8 @@ impl AuditTrail {
             details,
             None,
             None,
-        ).await
+        )
+        .await
     }
 
     /// Query audit entries with filters.
@@ -192,11 +195,7 @@ impl AuditTrail {
     }
 
     /// Export audit entries for regulatory reporting (returns all fields).
-    pub async fn export(
-        &self,
-        from: DateTime<Utc>,
-        to: DateTime<Utc>,
-    ) -> Result<Vec<AuditEntry>> {
+    pub async fn export(&self, from: DateTime<Utc>, to: DateTime<Utc>) -> Result<Vec<AuditEntry>> {
         let entries = sqlx::query_as::<_, AuditEntry>(
             r#"
             SELECT * FROM audit_log

@@ -1,8 +1,7 @@
 use axum::{
-    Router,
     extract::{Path, State},
     routing::{get, post},
-    Json,
+    Json, Router,
 };
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -13,7 +12,10 @@ use solupg_common::error::AppError;
 pub fn webhook_routes() -> Router<AppState> {
     Router::new()
         .route("/", post(create_webhook).get(list_webhooks))
-        .route("/{id}", get(get_webhook).put(update_webhook).delete(delete_webhook))
+        .route(
+            "/{id}",
+            get(get_webhook).put(update_webhook).delete(delete_webhook),
+        )
 }
 
 #[derive(Debug, Deserialize)]

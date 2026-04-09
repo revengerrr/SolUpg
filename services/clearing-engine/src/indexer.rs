@@ -80,30 +80,30 @@ impl TransactionIndexer {
 
     /// Get the latest indexed block slot (for resuming after restart).
     pub async fn get_latest_slot(&self) -> Result<Option<i64>> {
-        let row: Option<(Option<i64>,)> = sqlx::query_as(
-            "SELECT MAX(block_slot) FROM transactions_ledger"
-        )
-        .fetch_optional(&self.pool)
-        .await?;
+        let row: Option<(Option<i64>,)> =
+            sqlx::query_as("SELECT MAX(block_slot) FROM transactions_ledger")
+                .fetch_optional(&self.pool)
+                .await?;
 
         Ok(row.and_then(|r| r.0))
     }
 
     /// Count total indexed transactions.
     pub async fn get_total_count(&self) -> Result<i64> {
-        let (count,): (i64,) = sqlx::query_as(
-            "SELECT COUNT(*) FROM transactions_ledger"
-        )
-        .fetch_one(&self.pool)
-        .await?;
+        let (count,): (i64,) = sqlx::query_as("SELECT COUNT(*) FROM transactions_ledger")
+            .fetch_one(&self.pool)
+            .await?;
 
         Ok(count)
     }
 
     /// Get transactions by payment ID.
-    pub async fn get_by_payment_id(&self, payment_id: Uuid) -> Result<Vec<crate::models::TransactionRecord>> {
+    pub async fn get_by_payment_id(
+        &self,
+        payment_id: Uuid,
+    ) -> Result<Vec<crate::models::TransactionRecord>> {
         let records = sqlx::query_as::<_, crate::models::TransactionRecord>(
-            "SELECT * FROM transactions_ledger WHERE payment_id = $1 ORDER BY block_time DESC"
+            "SELECT * FROM transactions_ledger WHERE payment_id = $1 ORDER BY block_time DESC",
         )
         .bind(payment_id)
         .fetch_all(&self.pool)

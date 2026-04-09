@@ -1,5 +1,5 @@
-mod routes;
 mod models;
+mod routes;
 mod services;
 mod state;
 
@@ -19,8 +19,8 @@ async fn main() -> anyhow::Result<()> {
 
     let database_url = std::env::var("DATABASE_URL")
         .unwrap_or_else(|_| "postgres://solupg:solupg_dev@localhost:5432/solupg".to_string());
-    let redis_url = std::env::var("REDIS_URL")
-        .unwrap_or_else(|_| "redis://localhost:6379".to_string());
+    let redis_url =
+        std::env::var("REDIS_URL").unwrap_or_else(|_| "redis://localhost:6379".to_string());
     let port: u16 = std::env::var("DIRECTORY_SERVICE_PORT")
         .unwrap_or_else(|_| "3001".to_string())
         .parse()?;
@@ -30,9 +30,7 @@ async fn main() -> anyhow::Result<()> {
         .connect(&database_url)
         .await?;
 
-    sqlx::migrate!("../migrations")
-        .run(&pool)
-        .await?;
+    sqlx::migrate!("../migrations").run(&pool).await?;
 
     let redis_client = redis::Client::open(redis_url)?;
 

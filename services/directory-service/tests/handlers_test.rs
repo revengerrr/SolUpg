@@ -46,7 +46,10 @@ fn alias_response_omits_updated_at() {
     // Public response struct should only expose created_at, not updated_at.
     let response: AliasResponse = sample_alias().into();
     let json = serde_json::to_value(&response).unwrap();
-    assert!(json.get("updated_at").is_none(), "updated_at must not be exposed on public responses");
+    assert!(
+        json.get("updated_at").is_none(),
+        "updated_at must not be exposed on public responses"
+    );
     assert!(json.get("created_at").is_some());
 }
 
@@ -124,7 +127,10 @@ fn create_merchant_request_optional_id() {
         "wallet_address": "9xQeWvG816bUx9EPjHmaT2aRzZ4vWQ9w7rGkmM2qAqQ"
     });
     let req: CreateMerchantRequest = serde_json::from_value(body).unwrap();
-    assert!(req.merchant_id.is_none(), "merchant_id is optional (auto-generated server-side)");
+    assert!(
+        req.merchant_id.is_none(),
+        "merchant_id is optional (auto-generated server-side)"
+    );
     assert_eq!(req.name, "Acme Coffee");
 }
 
@@ -157,7 +163,10 @@ fn update_merchant_request_all_fields_optional() {
 fn update_merchant_request_partial_update() {
     let body = serde_json::json!({ "webhook_url": "https://new.example.com/hook" });
     let req: UpdateMerchantRequest = serde_json::from_value(body).unwrap();
-    assert_eq!(req.webhook_url.as_deref(), Some("https://new.example.com/hook"));
+    assert_eq!(
+        req.webhook_url.as_deref(),
+        Some("https://new.example.com/hook")
+    );
     assert!(req.name.is_none());
 }
 

@@ -20,10 +20,10 @@ async fn main() -> anyhow::Result<()> {
 
     let database_url = std::env::var("DATABASE_URL")
         .unwrap_or_else(|_| "postgres://solupg:solupg_dev@localhost:5432/solupg".to_string());
-    let redis_url = std::env::var("REDIS_URL")
-        .unwrap_or_else(|_| "redis://localhost:6379".to_string());
-    let routing_engine_url = std::env::var("ROUTING_ENGINE_URL")
-        .unwrap_or_else(|_| "http://localhost:3000".to_string());
+    let redis_url =
+        std::env::var("REDIS_URL").unwrap_or_else(|_| "redis://localhost:6379".to_string());
+    let routing_engine_url =
+        std::env::var("ROUTING_ENGINE_URL").unwrap_or_else(|_| "http://localhost:3000".to_string());
     let directory_service_url = std::env::var("DIRECTORY_SERVICE_URL")
         .unwrap_or_else(|_| "http://localhost:3001".to_string());
     let jwt_secret = std::env::var("JWT_SECRET")

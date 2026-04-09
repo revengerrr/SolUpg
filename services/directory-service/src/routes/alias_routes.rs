@@ -1,8 +1,7 @@
 use axum::{
-    Router,
     extract::{Path, State},
     routing::{get, post},
-    Json,
+    Json, Router,
 };
 
 use crate::models::{AliasResponse, CreateAliasRequest};

@@ -18,13 +18,17 @@ pub fn validate_intent(intent: &PaymentIntent) -> Result<(), AppError> {
 
     if let Some(ref meta) = intent.metadata {
         if meta.len() > 256 {
-            return Err(AppError::BadRequest("metadata exceeds 256 characters".into()));
+            return Err(AppError::BadRequest(
+                "metadata exceeds 256 characters".into(),
+            ));
         }
     }
 
     if let Some(bps) = intent.slippage_bps {
         if bps > 1000 {
-            return Err(AppError::BadRequest("slippage_bps cannot exceed 1000 (10%)".into()));
+            return Err(AppError::BadRequest(
+                "slippage_bps cannot exceed 1000 (10%)".into(),
+            ));
         }
     }
 
@@ -41,7 +45,9 @@ mod tests {
         PaymentIntent {
             intent_id: Uuid::new_v4(),
             payer: "11111111111111111111111111111112".to_string(),
-            recipient: RecipientIdentifier::Wallet("TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA".to_string()),
+            recipient: RecipientIdentifier::Wallet(
+                "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA".to_string(),
+            ),
             source_token: None,
             destination_token: None,
             amount: 1_000_000,

@@ -19,11 +19,7 @@ async fn post_escrow(client: &ApiClient, body: &Value) -> anyhow::Result<Value> 
     Ok(body)
 }
 
-async fn post_escrow_action(
-    client: &ApiClient,
-    id: &str,
-    action: &str,
-) -> anyhow::Result<Value> {
+async fn post_escrow_action(client: &ApiClient, id: &str, action: &str) -> anyhow::Result<Value> {
     let url = format!("{}/v1/escrows/{id}/{action}", client.cfg.api_gateway);
     let mut builder = client.http.post(&url);
     if let Some(ref key) = client.cfg.api_key {

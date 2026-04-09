@@ -33,10 +33,16 @@ pub fn router(state: AppState) -> Router {
         // Settlement
         .route("/v1/dashboard/settlements", get(list_settlements))
         .route("/v1/dashboard/settlements/{id}", get(get_settlement))
-        .route("/v1/dashboard/settlements/{id}/csv", get(export_settlement_csv))
+        .route(
+            "/v1/dashboard/settlements/{id}/csv",
+            get(export_settlement_csv),
+        )
         // Reconciliation
         .route("/v1/dashboard/reconciliation/runs", get(list_recon_runs))
-        .route("/v1/dashboard/reconciliation/runs/{id}", get(get_recon_report))
+        .route(
+            "/v1/dashboard/reconciliation/runs/{id}",
+            get(get_recon_report),
+        )
         // Health
         .route("/health", get(health_check))
         .with_state(state)
@@ -58,7 +64,9 @@ async fn list_transactions(
     let date_range = params.date_range();
     let limit = pagination.limit() as i64;
     let offset = pagination.offset() as i64;
-    let from = date_range.from.unwrap_or_else(|| Utc::now() - Duration::days(30));
+    let from = date_range
+        .from
+        .unwrap_or_else(|| Utc::now() - Duration::days(30));
     let to = date_range.to.unwrap_or_else(Utc::now);
 
     let items: Vec<TransactionFeedItem> = sqlx::query_as(
@@ -103,13 +111,12 @@ async fn get_transaction(
     State(state): State<AppState>,
     Path(id): Path<Uuid>,
 ) -> Result<impl IntoResponse, StatusCode> {
-    let record = sqlx::query_as::<_, TransactionRecord>(
-        "SELECT * FROM transactions_ledger WHERE id = $1",
-    )
-    .bind(id)
-    .fetch_optional(&state.pool)
-    .await
-    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let record =
+        sqlx::query_as::<_, TransactionRecord>("SELECT * FROM transactions_ledger WHERE id = $1")
+            .bind(id)
+            .fetch_optional(&state.pool)
+            .await
+            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     match record {
         Some(tx) => Ok(Json(json!(tx))),
@@ -123,7 +130,9 @@ async fn revenue_analytics(
     State(state): State<AppState>,
     Query(params): Query<DateRangeParams>,
 ) -> Result<impl IntoResponse, StatusCode> {
-    let from = params.from.unwrap_or_else(|| Utc::now() - Duration::days(30));
+    let from = params
+        .from
+        .unwrap_or_else(|| Utc::now() - Duration::days(30));
     let to = params.to.unwrap_or_else(Utc::now);
 
     // Daily revenue stats
@@ -158,7 +167,9 @@ async fn token_analytics(
     State(state): State<AppState>,
     Query(params): Query<DateRangeParams>,
 ) -> Result<impl IntoResponse, StatusCode> {
-    let from = params.from.unwrap_or_else(|| Utc::now() - Duration::days(30));
+    let from = params
+        .from
+        .unwrap_or_else(|| Utc::now() - Duration::days(30));
     let to = params.to.unwrap_or_else(Utc::now);
 
     // Per-token stats
@@ -200,44 +211,38 @@ async fn token_analytics(
     })))
 }
 
-async fn summary_analytics(
-    State(state): State<AppState>,
-) -> Result<impl IntoResponse, StatusCode> {
+async fn summary_analytics(State(state): State<AppState>) -> Result<impl IntoResponse, StatusCode> {
     // Overall summary stats
-    let (total_tx,): (i64,) = sqlx::query_as(
-        "SELECT COUNT(*) FROM transactions_ledger WHERE status = 'confirmed'"
-    )
-    .fetch_one(&state.pool)
-    .await
-    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let (total_tx,): (i64,) =
+        sqlx::query_as("SELECT COUNT(*) FROM transactions_ledger WHERE status = 'confirmed'")
+            .fetch_one(&state.pool)
+            .await
+            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
-    let (total_volume,): (Option<i64>,) = sqlx::query_as(
-        "SELECT SUM(amount) FROM transactions_ledger WHERE status = 'confirmed'"
-    )
-    .fetch_one(&state.pool)
-    .await
-    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let (total_volume,): (Option<i64>,) =
+        sqlx::query_as("SELECT SUM(amount) FROM transactions_ledger WHERE status = 'confirmed'")
+            .fetch_one(&state.pool)
+            .await
+            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     let (total_fees,): (Option<i64>,) = sqlx::query_as(
-        "SELECT SUM(fee_amount) FROM transactions_ledger WHERE status = 'confirmed'"
+        "SELECT SUM(fee_amount) FROM transactions_ledger WHERE status = 'confirmed'",
     )
     .fetch_one(&state.pool)
     .await
     .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
-    let (unique_payers,): (i64,) = sqlx::query_as(
-        "SELECT COUNT(DISTINCT payer) FROM transactions_ledger"
-    )
-    .fetch_one(&state.pool)
-    .await
-    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let (unique_payers,): (i64,) =
+        sqlx::query_as("SELECT COUNT(DISTINCT payer) FROM transactions_ledger")
+            .fetch_one(&state.pool)
+            .await
+            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
-    let (unique_recipients,): (i64,) = sqlx::query_as(
-        "SELECT COUNT(DISTINCT recipient) FROM transactions_ledger"
-    )
-    .fetch_one(&state.pool)
-    .await
-    .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    let (unique_recipients,): (i64,) =
+        sqlx::query_as("SELECT COUNT(DISTINCT recipient) FROM transactions_ledger")
+            .fetch_one(&state.pool)
+            .await
+            .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
 
     Ok(Json(json!({
         "total_transactions": total_tx,
@@ -254,8 +259,7 @@ async fn list_settlements(
     State(state): State<AppState>,
     Query(params): Query<MerchantQueryParams>,
 ) -> Result<impl IntoResponse, StatusCode> {
-    let merchant_id = params.merchant_id
-        .ok_or(StatusCode::BAD_REQUEST)?;
+    let merchant_id = params.merchant_id.ok_or(StatusCode::BAD_REQUEST)?;
 
     let engine = SettlementEngine::new(state.pool);
     let batches = engine
@@ -311,7 +315,10 @@ async fn export_settlement_csv(
         StatusCode::OK,
         [
             ("content-type", "text/csv"),
-            ("content-disposition", "attachment; filename=\"settlement.csv\""),
+            (
+                "content-disposition",
+                "attachment; filename=\"settlement.csv\"",
+            ),
         ],
         csv,
     ))
@@ -319,9 +326,7 @@ async fn export_settlement_csv(
 
 // ── Reconciliation ──
 
-async fn list_recon_runs(
-    State(state): State<AppState>,
-) -> Result<impl IntoResponse, StatusCode> {
+async fn list_recon_runs(State(state): State<AppState>) -> Result<impl IntoResponse, StatusCode> {
     let engine = ReconciliationEngine::new(state.pool);
     let runs = engine
         .list_runs(50)

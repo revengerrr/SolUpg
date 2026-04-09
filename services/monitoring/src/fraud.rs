@@ -41,7 +41,9 @@ impl FraudEngine {
         }
 
         // Calculate risk score from alerts
-        let risk_score = self.calculate_risk_score(&req.wallet_address, &alerts).await?;
+        let risk_score = self
+            .calculate_risk_score(&req.wallet_address, &alerts)
+            .await?;
 
         // Determine action
         let action = match max_severity {
@@ -57,7 +59,8 @@ impl FraudEngine {
         }
 
         // Update risk score
-        self.update_risk_score(&req.wallet_address, risk_score, &alerts).await?;
+        self.update_risk_score(&req.wallet_address, risk_score, &alerts)
+            .await?;
 
         Ok(ScreeningResult {
             wallet_address: req.wallet_address.clone(),
@@ -167,7 +170,7 @@ impl FraudEngine {
         req: &ScreeningRequest,
     ) -> Result<Option<FraudAlert>> {
         let entry = sqlx::query_as::<_, SanctionEntry>(
-            "SELECT * FROM sanctions_list WHERE wallet_address = $1 AND is_active = TRUE"
+            "SELECT * FROM sanctions_list WHERE wallet_address = $1 AND is_active = TRUE",
         )
         .bind(&req.wallet_address)
         .fetch_optional(&self.pool)
@@ -312,14 +315,10 @@ impl FraudEngine {
     }
 
     /// Calculate composite risk score based on alerts and history.
-    async fn calculate_risk_score(
-        &self,
-        wallet: &str,
-        new_alerts: &[FraudAlert],
-    ) -> Result<i32> {
+    async fn calculate_risk_score(&self, wallet: &str, new_alerts: &[FraudAlert]) -> Result<i32> {
         // Get existing risk score
         let existing: Option<(i32,)> = sqlx::query_as(
-            "SELECT score FROM risk_scores WHERE wallet_address = $1 AND source = 'internal'"
+            "SELECT score FROM risk_scores WHERE wallet_address = $1 AND source = 'internal'",
         )
         .bind(wallet)
         .fetch_optional(&self.pool)
@@ -328,14 +327,15 @@ impl FraudEngine {
         let base_score = existing.map(|(s,)| s).unwrap_or(0);
 
         // Add points for each new alert
-        let alert_score: i32 = new_alerts.iter().map(|a| {
-            match a.severity.as_str() {
+        let alert_score: i32 = new_alerts
+            .iter()
+            .map(|a| match a.severity.as_str() {
                 "block" => 40,
                 "critical" => 25,
                 "warning" => 10,
                 _ => 5,
-            }
-        }).sum();
+            })
+            .sum();
 
         // Clamp to 0-100
         let score = (base_score + alert_score).min(100).max(0);
@@ -349,13 +349,16 @@ impl FraudEngine {
         score: i32,
         alerts: &[FraudAlert],
     ) -> Result<()> {
-        let factors: Vec<serde_json::Value> = alerts.iter().map(|a| {
-            json!({
-                "rule_type": a.alert_type,
-                "severity": a.severity,
-                "time": a.created_at
+        let factors: Vec<serde_json::Value> = alerts
+            .iter()
+            .map(|a| {
+                json!({
+                    "rule_type": a.alert_type,
+                    "severity": a.severity,
+                    "time": a.created_at
+                })
             })
-        }).collect();
+            .collect();
 
         sqlx::query(
             r#"
@@ -403,7 +406,7 @@ impl FraudEngine {
     /// Get all active fraud rules.
     pub async fn get_active_rules(&self) -> Result<Vec<FraudRule>> {
         let rules = sqlx::query_as::<_, FraudRule>(
-            "SELECT * FROM fraud_rules WHERE is_active = TRUE ORDER BY rule_type"
+            "SELECT * FROM fraud_rules WHERE is_active = TRUE ORDER BY rule_type",
         )
         .fetch_all(&self.pool)
         .await?;
@@ -414,7 +417,7 @@ impl FraudEngine {
     /// Get risk score for a wallet.
     pub async fn get_risk_score(&self, wallet: &str) -> Result<Option<RiskScore>> {
         let score = sqlx::query_as::<_, RiskScore>(
-            "SELECT * FROM risk_scores WHERE wallet_address = $1 AND source = 'internal'"
+            "SELECT * FROM risk_scores WHERE wallet_address = $1 AND source = 'internal'",
         )
         .bind(wallet)
         .fetch_optional(&self.pool)
@@ -426,7 +429,7 @@ impl FraudEngine {
     /// List open alerts.
     pub async fn list_open_alerts(&self, limit: i64) -> Result<Vec<FraudAlert>> {
         let alerts = sqlx::query_as::<_, FraudAlert>(
-            "SELECT * FROM fraud_alerts WHERE status = 'open' ORDER BY created_at DESC LIMIT $1"
+            "SELECT * FROM fraud_alerts WHERE status = 'open' ORDER BY created_at DESC LIMIT $1",
         )
         .bind(limit)
         .fetch_all(&self.pool)
@@ -462,7 +465,7 @@ impl FraudEngine {
     /// Check if a wallet is sanctioned.
     pub async fn is_sanctioned(&self, wallet: &str) -> Result<bool> {
         let exists: Option<(bool,)> = sqlx::query_as(
-            "SELECT TRUE FROM sanctions_list WHERE wallet_address = $1 AND is_active = TRUE"
+            "SELECT TRUE FROM sanctions_list WHERE wallet_address = $1 AND is_active = TRUE",
         )
         .bind(wallet)
         .fetch_optional(&self.pool)
@@ -474,16 +477,41 @@ impl FraudEngine {
     /// Seed default fraud rules.
     pub async fn seed_default_rules(&self) -> Result<()> {
         let defaults = vec![
-            ("velocity_check", "Block wallets exceeding 50 tx in 10 min", "velocity",
-                json!({"max_transactions": 50, "window_minutes": 10}), "warning"),
-            ("high_value_threshold", "Flag transactions over 100 SOL", "threshold",
-                json!({"max_amount": 100_000_000_000u64, "token_mint": null}), "critical"),
-            ("sanctions_screening", "Block sanctioned wallets", "sanctions",
-                json!({}), "block"),
-            ("structuring_detection", "Detect potential structuring patterns", "pattern",
-                json!({}), "warning"),
-            ("geo_restriction", "Block restricted jurisdictions", "geo",
-                json!({"blocked_countries": ["KP", "IR", "CU", "SY"]}), "block"),
+            (
+                "velocity_check",
+                "Block wallets exceeding 50 tx in 10 min",
+                "velocity",
+                json!({"max_transactions": 50, "window_minutes": 10}),
+                "warning",
+            ),
+            (
+                "high_value_threshold",
+                "Flag transactions over 100 SOL",
+                "threshold",
+                json!({"max_amount": 100_000_000_000u64, "token_mint": null}),
+                "critical",
+            ),
+            (
+                "sanctions_screening",
+                "Block sanctioned wallets",
+                "sanctions",
+                json!({}),
+                "block",
+            ),
+            (
+                "structuring_detection",
+                "Detect potential structuring patterns",
+                "pattern",
+                json!({}),
+                "warning",
+            ),
+            (
+                "geo_restriction",
+                "Block restricted jurisdictions",
+                "geo",
+                json!({"blocked_countries": ["KP", "IR", "CU", "SY"]}),
+                "block",
+            ),
         ];
 
         for (name, desc, rtype, config, severity) in defaults {
@@ -554,14 +582,15 @@ mod tests {
             },
         ];
 
-        let score: i32 = alerts.iter().map(|a| {
-            match a.severity.as_str() {
+        let score: i32 = alerts
+            .iter()
+            .map(|a| match a.severity.as_str() {
                 "block" => 40,
                 "critical" => 25,
                 "warning" => 10,
                 _ => 5,
-            }
-        }).sum();
+            })
+            .sum();
 
         assert_eq!(score, 50); // 10 (warning) + 40 (block)
     }
@@ -583,7 +612,8 @@ mod tests {
         let config: VelocityConfig = serde_json::from_value(json!({
             "max_transactions": 50,
             "window_minutes": 10
-        })).unwrap();
+        }))
+        .unwrap();
 
         assert_eq!(config.max_transactions, 50);
         assert_eq!(config.window_minutes, 10);
@@ -593,7 +623,8 @@ mod tests {
     fn test_geo_config_deserialize() {
         let config: GeoConfig = serde_json::from_value(json!({
             "blocked_countries": ["KP", "IR", "CU"]
-        })).unwrap();
+        }))
+        .unwrap();
 
         assert_eq!(config.blocked_countries.len(), 3);
         assert!(config.blocked_countries.contains(&"KP".to_string()));

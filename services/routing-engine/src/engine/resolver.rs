@@ -1,5 +1,5 @@
+use sha2::{Digest, Sha256};
 use solana_sdk::pubkey::Pubkey;
-use sha2::{Sha256, Digest};
 use solupg_common::error::AppError;
 use solupg_common::types::RecipientIdentifier;
 
@@ -7,7 +7,8 @@ use solupg_common::types::RecipientIdentifier;
 const SNS_PROGRAM_ID: Pubkey = solana_sdk::pubkey!("namesLPneVptA9Z5rqUDD9tMTWEJwofgaYNpp3pVvh5");
 
 /// SOL TLD Authority (root domain for .sol names)
-const SOL_TLD_AUTHORITY: Pubkey = solana_sdk::pubkey!("58PwtjSDuFHuUkYjH9BYnnQKHfvo9reZhC2zMJv9JPkx");
+const SOL_TLD_AUTHORITY: Pubkey =
+    solana_sdk::pubkey!("58PwtjSDuFHuUkYjH9BYnnQKHfvo9reZhC2zMJv9JPkx");
 
 /// Resolve a recipient identifier to a Solana wallet address.
 pub async fn resolve_recipient(
@@ -16,22 +17,15 @@ pub async fn resolve_recipient(
     recipient: &RecipientIdentifier,
 ) -> Result<Pubkey, AppError> {
     match recipient {
-        RecipientIdentifier::Wallet(addr) => {
-            addr.parse::<Pubkey>()
-                .map_err(|_| AppError::BadRequest(format!("invalid wallet address: {addr}")))
-        }
+        RecipientIdentifier::Wallet(addr) => addr
+            .parse::<Pubkey>()
+            .map_err(|_| AppError::BadRequest(format!("invalid wallet address: {addr}"))),
 
-        RecipientIdentifier::Email(email) => {
-            resolve_alias(http, directory_url, email).await
-        }
+        RecipientIdentifier::Email(email) => resolve_alias(http, directory_url, email).await,
 
-        RecipientIdentifier::Phone(phone) => {
-            resolve_alias(http, directory_url, phone).await
-        }
+        RecipientIdentifier::Phone(phone) => resolve_alias(http, directory_url, phone).await,
 
-        RecipientIdentifier::SolDomain(domain) => {
-            resolve_sol_domain(http, domain).await
-        }
+        RecipientIdentifier::SolDomain(domain) => resolve_sol_domain(http, domain).await,
 
         RecipientIdentifier::Merchant(merchant_id) => {
             resolve_merchant(http, directory_url, merchant_id).await
@@ -47,10 +41,7 @@ pub async fn resolve_recipient(
 ///
 /// For production, we call the Solana RPC to read the name registry.
 /// Falls back to the public SNS API endpoint.
-async fn resolve_sol_domain(
-    http: &reqwest::Client,
-    domain: &str,
-) -> Result<Pubkey, AppError> {
+async fn resolve_sol_domain(http: &reqwest::Client, domain: &str) -> Result<Pubkey, AppError> {
     // Strip .sol suffix if present
     let name = domain.strip_suffix(".sol").unwrap_or(domain);
 
@@ -67,8 +58,9 @@ async fn resolve_sol_domain(
         Ok(resp) if resp.status().is_success() => {
             if let Ok(body) = resp.json::<serde_json::Value>().await {
                 if let Some(result) = body.get("result").and_then(|r| r.as_str()) {
-                    return result.parse::<Pubkey>()
-                        .map_err(|_| AppError::Internal(format!("invalid pubkey from SNS API: {result}")));
+                    return result.parse::<Pubkey>().map_err(|_| {
+                        AppError::Internal(format!("invalid pubkey from SNS API: {result}"))
+                    });
                 }
             }
         }
@@ -98,21 +90,29 @@ async fn resolve_alias(
     alias_value: &str,
 ) -> Result<Pubkey, AppError> {
     let url = format!("{directory_url}/aliases/{alias_value}");
-    let resp = http.get(&url).send().await
+    let resp = http
+        .get(&url)
+        .send()
+        .await
         .map_err(|e| AppError::Internal(format!("directory service request failed: {e}")))?;
 
     if resp.status() == reqwest::StatusCode::NOT_FOUND {
-        return Err(AppError::NotFound(format!("alias '{alias_value}' not found")));
+        return Err(AppError::NotFound(format!(
+            "alias '{alias_value}' not found"
+        )));
     }
 
-    let body: serde_json::Value = resp.json().await
+    let body: serde_json::Value = resp
+        .json()
+        .await
         .map_err(|e| AppError::Internal(format!("failed to parse directory response: {e}")))?;
 
     let wallet = body["wallet_address"]
         .as_str()
         .ok_or_else(|| AppError::Internal("missing wallet_address in alias response".into()))?;
 
-    wallet.parse::<Pubkey>()
+    wallet
+        .parse::<Pubkey>()
         .map_err(|_| AppError::Internal(format!("invalid wallet in alias: {wallet}")))
 }
 
@@ -122,20 +122,28 @@ async fn resolve_merchant(
     merchant_id: &str,
 ) -> Result<Pubkey, AppError> {
     let url = format!("{directory_url}/merchants/{merchant_id}");
-    let resp = http.get(&url).send().await
+    let resp = http
+        .get(&url)
+        .send()
+        .await
         .map_err(|e| AppError::Internal(format!("directory service request failed: {e}")))?;
 
     if resp.status() == reqwest::StatusCode::NOT_FOUND {
-        return Err(AppError::NotFound(format!("merchant '{merchant_id}' not found")));
+        return Err(AppError::NotFound(format!(
+            "merchant '{merchant_id}' not found"
+        )));
     }
 
-    let body: serde_json::Value = resp.json().await
+    let body: serde_json::Value = resp
+        .json()
+        .await
         .map_err(|e| AppError::Internal(format!("failed to parse directory response: {e}")))?;
 
     let wallet = body["wallet_address"]
         .as_str()
         .ok_or_else(|| AppError::Internal("missing wallet_address in merchant response".into()))?;
 
-    wallet.parse::<Pubkey>()
+    wallet
+        .parse::<Pubkey>()
         .map_err(|_| AppError::Internal(format!("invalid wallet in merchant: {wallet}")))
 }

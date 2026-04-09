@@ -18,9 +18,10 @@ async fn main() -> Result<()> {
 
     // Initialize tracing
     tracing_subscriber::fmt()
-        .with_env_filter(EnvFilter::try_from_default_env().unwrap_or_else(|_| {
-            EnvFilter::new("monitoring=debug,tower_http=debug")
-        }))
+        .with_env_filter(
+            EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| EnvFilter::new("monitoring=debug,tower_http=debug")),
+        )
         .init();
 
     // Database connection
@@ -42,10 +43,7 @@ async fn main() -> Result<()> {
     let metrics = Arc::new(MetricsCollector::new(pool.clone()));
 
     // Build the monitoring API
-    let state = AppState {
-        pool,
-        metrics,
-    };
+    let state = AppState { pool, metrics };
     let app = api::router(state)
         .layer(CorsLayer::permissive())
         .layer(TraceLayer::new_for_http());
