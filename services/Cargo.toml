@@ -4,5 +4,6 @@ members = [
     "directory-service",
     "routing-engine",
     "api-gateway",
+    "clearing-engine",
 ]
 resolver = "2"
