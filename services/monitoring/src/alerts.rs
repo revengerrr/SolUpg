@@ -219,8 +219,6 @@ impl AlertDispatcher {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn test_slack_color_mapping() {
         let severities = vec![

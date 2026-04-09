@@ -338,7 +338,7 @@ impl FraudEngine {
             .sum();
 
         // Clamp to 0-100
-        let score = (base_score + alert_score).min(100).max(0);
+        let score = (base_score + alert_score).clamp(0, 100);
         Ok(score)
     }
 
@@ -551,7 +551,7 @@ mod tests {
     #[test]
     fn test_risk_score_from_alerts() {
         // Block = 40, Critical = 25, Warning = 10
-        let alerts = vec![
+        let alerts = [
             FraudAlert {
                 id: Uuid::new_v4(),
                 rule_id: None,

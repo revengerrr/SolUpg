@@ -36,18 +36,12 @@ pub async fn rate_limit_middleware(
         .redis
         .get_multiplexed_async_connection()
         .await
-        .map_err(|e| AppError::Redis(e))?;
+        .map_err(AppError::Redis)?;
 
-    let count: u64 = conn
-        .incr(&redis_key, 1u64)
-        .await
-        .map_err(|e| AppError::Redis(e))?;
+    let count: u64 = conn.incr(&redis_key, 1u64).await.map_err(AppError::Redis)?;
 
     if count == 1 {
-        let _: () = conn
-            .expire(&redis_key, 60)
-            .await
-            .map_err(|e| AppError::Redis(e))?;
+        let _: () = conn.expire(&redis_key, 60).await.map_err(AppError::Redis)?;
     }
 
     if count > limit {

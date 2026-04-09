@@ -54,6 +54,7 @@ pub fn build(route: &PaymentRoute) -> Result<Transaction, AppError> {
 ///   token_mint: Pubkey (32)
 ///   recipients: Vec<SplitRecipient>  (4-byte len + entries)
 ///     each entry: wallet: Pubkey (32), share_bps: u16 (2)
+#[allow(dead_code)]
 pub fn fetch_split_recipients(
     client: &solana_client::rpc_client::RpcClient,
     split_config_pda: &Pubkey,

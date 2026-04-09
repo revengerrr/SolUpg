@@ -5,6 +5,12 @@
 //!   solana-test-validator running with solupg programs loaded
 //!   Payer has SOL balance
 
+// solana-sdk 2.x deprecated `system_instruction` in favor of a split crate
+// and `Keypair::from_bytes` in favor of `Keypair::try_from`. Keeping the
+// deprecated calls here is intentional — this test hits the actual chain
+// path and is `#[ignore]`'d, so the deprecations don't impact regular CI.
+#![allow(deprecated)]
+
 use solana_client::rpc_client::RpcClient;
 use solana_sdk::{
     commitment_config::CommitmentConfig,

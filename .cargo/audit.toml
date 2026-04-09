@@ -5,8 +5,21 @@
 
 [advisories]
 ignore = [
-    # Example:
-    # "RUSTSEC-2024-0000",  # transitive dep, no fix available upstream. Review 2026-06-01.
+    # The following advisories all come from transitive dependencies pulled in by
+    # the Solana and Anchor ecosystem (solana-program, anchor-lang, spl-*).
+    # Upstream fixes are not yet available for our pinned toolchain
+    # (Solana 2.2.1 / Anchor 0.29.0). These should be re-evaluated whenever we
+    # bump the Solana/Anchor versions.
+    "RUSTSEC-2024-0436", # paste 1.x - unmaintained. Review 2026-10-01.
+    "RUSTSEC-2024-0388", # derivative 2.x - unmaintained. Review 2026-10-01.
+    "RUSTSEC-2024-0375", # atty 0.2.x - unmaintained. Review 2026-10-01.
+    "RUSTSEC-2021-0145", # atty 0.2.x - potential unaligned read. Review 2026-10-01.
+    "RUSTSEC-2024-0344", # curve25519-dalek 3.x - timing variability. Review 2026-10-01.
+    "RUSTSEC-2022-0093", # ed25519-dalek 1.x - double public key signing. Review 2026-10-01.
+    "RUSTSEC-2023-0033", # borsh 0.9/0.10 - ZST parsing. Review 2026-10-01.
+    "RUSTSEC-2024-0384", # instant 0.1 - unmaintained. Review 2026-10-01.
+    "RUSTSEC-2024-0320", # yaml-rust 0.4 - unmaintained. Review 2026-10-01.
+    "RUSTSEC-2024-0370", # proc-macro-error 1.x - unmaintained. Review 2026-10-01.
 ]
 informational_warnings = ["unmaintained", "unsound", "notice"]
 severity_threshold = "low"

@@ -228,11 +228,10 @@ mod tests {
     #[test]
     fn test_prometheus_format() {
         // Verify the format string compiles and produces valid output
-        let line = format!(
-            "# HELP solupg_uptime_seconds Service uptime\n\
+        let line = "# HELP solupg_uptime_seconds Service uptime\n\
              # TYPE solupg_uptime_seconds gauge\n\
-             solupg_uptime_seconds{{service=\"test\"}} 120\n"
-        );
+             solupg_uptime_seconds{service=\"test\"} 120\n"
+            .to_string();
         assert!(line.contains("solupg_uptime_seconds"));
         assert!(line.contains("gauge"));
     }

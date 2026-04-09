@@ -18,6 +18,7 @@ impl AuditTrail {
     }
 
     /// Record an audit event.
+    #[allow(clippy::too_many_arguments)]
     pub async fn record(
         &self,
         event_type: &str,
@@ -126,6 +127,7 @@ impl AuditTrail {
     }
 
     /// Query audit entries with filters.
+    #[allow(clippy::too_many_arguments)]
     pub async fn query(
         &self,
         event_type: Option<&str>,
@@ -221,8 +223,6 @@ impl AuditTrail {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn test_event_type_format() {
         let action = "created";

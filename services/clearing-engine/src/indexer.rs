@@ -141,6 +141,7 @@ impl TransactionIndexer {
     /// Parse a Solana transaction log into an IndexedTransaction.
     /// In production, this would decode instruction data and program logs.
     /// Currently provides the structural parser that services connect to.
+    #[allow(clippy::too_many_arguments)]
     pub fn parse_transaction_log(
         tx_signature: &str,
         payer: &str,

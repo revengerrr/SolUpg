@@ -42,7 +42,7 @@ pub async fn process_intent(
     let route = planner::plan_route(&intent, &recipient_wallet)?;
 
     // 5. Estimate fees
-    let fees = fee_calculator::estimate_fees(&route);
+    let _fees = fee_calculator::estimate_fees(&route);
 
     // 6. Persist intent
     sqlx::query(

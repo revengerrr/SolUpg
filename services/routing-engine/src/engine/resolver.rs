@@ -79,7 +79,7 @@ async fn resolve_sol_domain(http: &reqwest::Client, domain: &str) -> Result<Pubk
 fn hash_sns_name(name: &str) -> Vec<u8> {
     let mut hasher = Sha256::new();
     hasher.update(b"SPL Name Service");
-    hasher.update(&[0u8]); // null separator
+    hasher.update([0u8]); // null separator
     hasher.update(name.as_bytes());
     hasher.finalize().to_vec()
 }

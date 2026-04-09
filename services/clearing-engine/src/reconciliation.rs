@@ -367,15 +367,22 @@ impl ReconciliationEngine {
             return Ok(None);
         };
 
-        let rows: Vec<(Option<Uuid>, Option<String>, String, Option<String>, Option<String>, String)> =
-            sqlx::query_as(
-                r#"
+        type MismatchRow = (
+            Option<Uuid>,
+            Option<String>,
+            String,
+            Option<String>,
+            Option<String>,
+            String,
+        );
+        let rows: Vec<MismatchRow> = sqlx::query_as(
+            r#"
                 SELECT intent_id, tx_signature, mismatch_type, expected_value, actual_value, severity
                 FROM reconciliation_mismatches
                 WHERE run_id = $1
                 ORDER BY created_at
                 "#,
-            )
+        )
             .bind(run_id)
             .fetch_all(&self.pool)
             .await?;
