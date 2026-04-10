@@ -1,0 +1,94 @@
+name: anchor
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "programs/**"
+      - "tests/**"
+      - "Anchor.toml"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.json"
+      - ".github/workflows/anchor.yml"
+  pull_request:
+    paths:
+      - "programs/**"
+      - "tests/**"
+      - "Anchor.toml"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.json"
+      - ".github/workflows/anchor.yml"
+  workflow_dispatch:
+
+env:
+  SOLANA_VERSION: 2.2.1
+  ANCHOR_VERSION: 0.29.0
+  NODE_VERSION: 20
+  RUST_TOOLCHAIN: 1.79.0
+
+jobs:
+  build-and-test:
+    name: anchor build + anchor test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ". -> target"
+          key: anchor
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install Solana CLI
+        run: |
+          sh -c "$(curl -sSfL https://release.anza.xyz/v${SOLANA_VERSION}/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
+
+      - name: Verify Solana install
+        run: |
+          solana --version
+          solana-keygen --version
+
+      - name: Install Anchor CLI (pinned)
+        run: |
+          cargo install --locked --version "${ANCHOR_VERSION}" anchor-cli || \
+            cargo install --git https://github.com/coral-xyz/anchor --tag "v${ANCHOR_VERSION}" anchor-cli --locked
+          anchor --version
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libudev-dev pkg-config build-essential
+
+      - name: Configure Solana for local validator
+        run: |
+          solana-keygen new --no-bip39-passphrase -f -s -o "$HOME/.config/solana/id.json"
+          solana config set --url localhost
+          solana config get
+
+      - name: npm install (root)
+        run: npm ci || npm install
+
+      - name: anchor build
+        run: anchor build
+
+      - name: anchor test
+        run: anchor test

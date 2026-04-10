@@ -1,0 +1,140 @@
+name: security
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "**/package.json"
+      - "**/package-lock.json"
+      - "deny.toml"
+      - ".cargo/audit.toml"
+      - ".github/workflows/security.yml"
+  pull_request:
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "**/package.json"
+      - "**/package-lock.json"
+      - "deny.toml"
+      - ".cargo/audit.toml"
+      - ".github/workflows/security.yml"
+  schedule:
+    # Weekly run catches newly published advisories against pinned deps.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+env:
+  RUST_TOOLCHAIN: 1.79.0
+  NODE_VERSION: 20
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # cargo-audit — RustSec advisory DB
+  # ---------------------------------------------------------------------------
+  cargo-audit:
+    name: cargo audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+
+      - name: Install cargo-audit
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-audit
+
+      # Ignored advisories come from transitive deps pulled in by the Solana /
+      # Anchor ecosystem where no upstream fix is yet available for our pinned
+      # toolchain (Solana 2.2.1 / Anchor 0.29.0). These mirror the list in
+      # .cargo/audit.toml and should be re-evaluated whenever we bump Solana /
+      # Anchor versions.
+      - name: Audit services workspace
+        working-directory: services
+        run: |
+          cargo audit --deny warnings \
+            --ignore RUSTSEC-2024-0436 \
+            --ignore RUSTSEC-2024-0388 \
+            --ignore RUSTSEC-2024-0375 \
+            --ignore RUSTSEC-2021-0145 \
+            --ignore RUSTSEC-2024-0344 \
+            --ignore RUSTSEC-2022-0093 \
+            --ignore RUSTSEC-2023-0033 \
+            --ignore RUSTSEC-2024-0384 \
+            --ignore RUSTSEC-2024-0320 \
+            --ignore RUSTSEC-2024-0370
+
+      - name: Audit on-chain workspace
+        run: |
+          cargo audit --deny warnings \
+            --ignore RUSTSEC-2024-0436 \
+            --ignore RUSTSEC-2024-0388 \
+            --ignore RUSTSEC-2024-0375 \
+            --ignore RUSTSEC-2021-0145 \
+            --ignore RUSTSEC-2024-0344 \
+            --ignore RUSTSEC-2022-0093 \
+            --ignore RUSTSEC-2023-0033 \
+            --ignore RUSTSEC-2024-0384 \
+            --ignore RUSTSEC-2024-0320 \
+            --ignore RUSTSEC-2024-0370
+
+  # ---------------------------------------------------------------------------
+  # cargo-deny — license, advisory, bans, sources
+  # ---------------------------------------------------------------------------
+  cargo-deny:
+    name: cargo deny
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+
+      - name: Install cargo-deny
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-deny
+
+      - name: cargo deny (services)
+        working-directory: services
+        run: cargo deny --manifest-path Cargo.toml check --config ../deny.toml
+
+      - name: cargo deny (programs)
+        run: cargo deny check --config deny.toml
+
+  # ---------------------------------------------------------------------------
+  # npm audit — Anchor test deps + TypeScript SDK
+  # ---------------------------------------------------------------------------
+  npm-audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Root is only Anchor test tooling (not shipped to users), so we
+          # gate on critical only — high-sev dev-only advisories there are
+          # accepted risk until Anchor upstream refreshes.
+          - workspace: "."
+            level: "critical"
+          # The SDK is published to users, so we gate strictly on high.
+          - workspace: "sdk/typescript"
+            level: "high"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: npm audit (${{ matrix.workspace }} @ ${{ matrix.level }})
+        working-directory: ${{ matrix.workspace }}
+        run: npm audit --audit-level=${{ matrix.level }}

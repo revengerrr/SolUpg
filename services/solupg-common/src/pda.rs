@@ -1,5 +1,5 @@
-use solana_sdk::pubkey::Pubkey;
 use crate::program_ids;
+use solana_sdk::pubkey::Pubkey;
 
 /// Derive the PaymentState PDA.
 /// Seeds: [b"payment", payer, payment_id]
@@ -83,7 +83,9 @@ mod tests {
     fn different_payers_produce_different_pdas() {
         let id = test_id();
         let payer1: Pubkey = "11111111111111111111111111111112".parse().unwrap();
-        let payer2: Pubkey = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA".parse().unwrap();
+        let payer2: Pubkey = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+            .parse()
+            .unwrap();
         let (pda1, _) = payment_state_pda(&payer1, &id);
         let (pda2, _) = payment_state_pda(&payer2, &id);
         assert_ne!(pda1, pda2);

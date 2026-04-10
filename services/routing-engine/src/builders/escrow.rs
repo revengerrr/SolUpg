@@ -1,7 +1,7 @@
+use super::anchor_ix::anchor_instruction;
 use solana_sdk::instruction::AccountMeta;
 use solana_sdk::pubkey::Pubkey;
 use solana_sdk::transaction::Transaction;
-use super::anchor_ix::anchor_instruction;
 use solupg_common::error::AppError;
 use solupg_common::pda::{escrow_state_pda, escrow_vault_pda};
 use solupg_common::program_ids::escrow_program_id;
@@ -16,9 +16,11 @@ pub fn build(route: &PaymentRoute) -> Result<Transaction, AppError> {
     let (escrow_state, _) = escrow_state_pda(&route.payer, &escrow_id);
     let (escrow_vault, _) = escrow_vault_pda(&route.payer, &escrow_id);
 
-    let release_condition = route.escrow_condition
+    let release_condition = route
+        .escrow_condition
         .ok_or_else(|| AppError::BadRequest("escrow_condition required for escrow route".into()))?;
-    let expiry = route.escrow_expiry
+    let expiry = route
+        .escrow_expiry
         .ok_or_else(|| AppError::BadRequest("escrow_expiry required for escrow route".into()))?;
 
     // Borsh-serialize args: escrow_id: [u8;16], amount: u64, release_condition: enum(u8), expiry: i64
@@ -38,13 +40,16 @@ pub fn build(route: &PaymentRoute) -> Result<Transaction, AppError> {
 
     let accounts = vec![
         AccountMeta::new(route.payer, true),                      // payer
-        AccountMeta::new_readonly(route.recipient_wallet, false),  // recipient
-        AccountMeta::new_readonly(route.source_mint, false),       // token_mint
-        AccountMeta::new(escrow_state, false),                     // escrow_state (init)
-        AccountMeta::new(escrow_vault, false),                     // escrow_vault (init)
-        AccountMeta::new(payer_token_account, false),              // payer_token_account
-        AccountMeta::new_readonly(TOKEN_PROGRAM_ID, false),        // token_program
-        AccountMeta::new_readonly(solana_sdk::pubkey!("11111111111111111111111111111111"), false), // system_program
+        AccountMeta::new_readonly(route.recipient_wallet, false), // recipient
+        AccountMeta::new_readonly(route.source_mint, false),      // token_mint
+        AccountMeta::new(escrow_state, false),                    // escrow_state (init)
+        AccountMeta::new(escrow_vault, false),                    // escrow_vault (init)
+        AccountMeta::new(payer_token_account, false),             // payer_token_account
+        AccountMeta::new_readonly(TOKEN_PROGRAM_ID, false),       // token_program
+        AccountMeta::new_readonly(
+            solana_sdk::pubkey!("11111111111111111111111111111111"),
+            false,
+        ), // system_program
     ];
 
     let ix = anchor_instruction(program_id, "create_escrow", data, accounts);
@@ -58,7 +63,8 @@ fn spl_associated_token_account(wallet: &Pubkey, mint: &Pubkey) -> Pubkey {
     Pubkey::find_program_address(
         &[wallet.as_ref(), TOKEN_PROGRAM_ID.as_ref(), mint.as_ref()],
         &ata_program,
-    ).0
+    )
+    .0
 }
 
 #[cfg(test)]

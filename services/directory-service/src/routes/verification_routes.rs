@@ -1,9 +1,4 @@
-use axum::{
-    Router,
-    extract::State,
-    routing::post,
-    Json,
-};
+use axum::{extract::State, routing::post, Json, Router};
 use serde::{Deserialize, Serialize};
 
 use crate::state::AppState;
@@ -50,12 +45,17 @@ async fn request_otp(
 ) -> Result<Json<OtpResponse>, AppError> {
     match req.alias_type.as_str() {
         "email" | "phone" => {}
-        _ => return Err(AppError::BadRequest("alias_type must be email or phone".into())),
+        _ => {
+            return Err(AppError::BadRequest(
+                "alias_type must be email or phone".into(),
+            ))
+        }
     }
 
     tracing::info!(
         "OTP requested for {} ({}). Dev stub: use code '123456'",
-        req.alias_value, req.alias_type
+        req.alias_value,
+        req.alias_type
     );
 
     // TODO: In production:
@@ -97,7 +97,8 @@ async fn verify_otp(
 
     if result.rows_affected() == 0 {
         return Err(AppError::NotFound(format!(
-            "alias '{}' ({}) not found", req.alias_value, req.alias_type
+            "alias '{}' ({}) not found",
+            req.alias_value, req.alias_type
         )));
     }
 

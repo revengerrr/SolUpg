@@ -17,7 +17,8 @@ pub fn build(route: &PaymentRoute) -> Result<Transaction, AppError> {
     let swap_id = *route.intent_id.as_bytes();
 
     // Calculate minimum_amount_out based on slippage
-    let minimum_amount_out = route.amount
+    let minimum_amount_out = route
+        .amount
         .checked_mul(10_000u64.saturating_sub(route.slippage_bps as u64))
         .and_then(|v| v.checked_div(10_000))
         .ok_or_else(|| AppError::Transaction("overflow calculating minimum_amount_out".into()))?;
@@ -32,16 +33,17 @@ pub fn build(route: &PaymentRoute) -> Result<Transaction, AppError> {
     data.extend_from_slice(&route.slippage_bps.to_le_bytes());
 
     let payer_source_token = spl_associated_token_account(&route.payer, &route.source_mint);
-    let recipient_dest_token = spl_associated_token_account(&route.recipient_wallet, &route.destination_mint);
+    let recipient_dest_token =
+        spl_associated_token_account(&route.recipient_wallet, &route.destination_mint);
 
     let accounts = vec![
-        AccountMeta::new(route.payer, true),                          // payer
-        AccountMeta::new_readonly(route.recipient_wallet, false),      // recipient
-        AccountMeta::new_readonly(route.source_mint, false),           // source_mint
-        AccountMeta::new_readonly(route.destination_mint, false),      // destination_mint
-        AccountMeta::new(payer_source_token, false),                   // payer_source_token
-        AccountMeta::new(recipient_dest_token, false),                 // recipient_destination_token
-        AccountMeta::new_readonly(TOKEN_PROGRAM_ID, false),            // token_program
+        AccountMeta::new(route.payer, true),                      // payer
+        AccountMeta::new_readonly(route.recipient_wallet, false), // recipient
+        AccountMeta::new_readonly(route.source_mint, false),      // source_mint
+        AccountMeta::new_readonly(route.destination_mint, false), // destination_mint
+        AccountMeta::new(payer_source_token, false),              // payer_source_token
+        AccountMeta::new(recipient_dest_token, false),            // recipient_destination_token
+        AccountMeta::new_readonly(TOKEN_PROGRAM_ID, false),       // token_program
     ];
 
     let ix = anchor_instruction(program_id, "swap_and_pay", data, accounts);
@@ -55,7 +57,8 @@ fn spl_associated_token_account(wallet: &Pubkey, mint: &Pubkey) -> Pubkey {
     Pubkey::find_program_address(
         &[wallet.as_ref(), TOKEN_PROGRAM_ID.as_ref(), mint.as_ref()],
         &ata_program,
-    ).0
+    )
+    .0
 }
 
 #[cfg(test)]
@@ -101,7 +104,7 @@ mod tests {
     #[test]
     fn minimum_amount_out_respects_slippage() {
         let route = test_swap_route(); // 1M amount, 100 bps slippage
-        // minimum_amount_out = 1_000_000 * (10000 - 100) / 10000 = 990_000
+                                       // minimum_amount_out = 1_000_000 * (10000 - 100) / 10000 = 990_000
         let tx = build(&route).unwrap();
         // Verify tx built successfully (the slippage calc didn't overflow)
         assert_eq!(tx.message.instructions.len(), 1);

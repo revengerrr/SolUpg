@@ -1,9 +1,9 @@
-mod routes;
-mod engine;
 mod builders;
-mod submitter;
-mod state;
+mod engine;
 mod events;
+mod routes;
+mod state;
+mod submitter;
 
 use axum::Router;
 use sqlx::postgres::PgPoolOptions;
@@ -21,10 +21,10 @@ async fn main() -> anyhow::Result<()> {
 
     let database_url = std::env::var("DATABASE_URL")
         .unwrap_or_else(|_| "postgres://solupg:solupg_dev@localhost:5432/solupg".to_string());
-    let redis_url = std::env::var("REDIS_URL")
-        .unwrap_or_else(|_| "redis://localhost:6379".to_string());
-    let solana_rpc = std::env::var("SOLANA_RPC_URL")
-        .unwrap_or_else(|_| "http://localhost:8899".to_string());
+    let redis_url =
+        std::env::var("REDIS_URL").unwrap_or_else(|_| "redis://localhost:6379".to_string());
+    let solana_rpc =
+        std::env::var("SOLANA_RPC_URL").unwrap_or_else(|_| "http://localhost:8899".to_string());
     let directory_url = std::env::var("DIRECTORY_SERVICE_URL")
         .unwrap_or_else(|_| "http://localhost:3001".to_string());
     let port: u16 = std::env::var("ROUTING_ENGINE_PORT")
@@ -36,9 +36,7 @@ async fn main() -> anyhow::Result<()> {
         .connect(&database_url)
         .await?;
 
-    sqlx::migrate!("../migrations")
-        .run(&pool)
-        .await?;
+    sqlx::migrate!("../migrations").run(&pool).await?;
 
     let redis_client = redis::Client::open(redis_url)?;
     let solana_client = solana_client::rpc_client::RpcClient::new(solana_rpc);

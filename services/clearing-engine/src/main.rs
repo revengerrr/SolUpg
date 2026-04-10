@@ -16,9 +16,10 @@ async fn main() -> Result<()> {
 
     // Initialize tracing
     tracing_subscriber::fmt()
-        .with_env_filter(EnvFilter::try_from_default_env().unwrap_or_else(|_| {
-            EnvFilter::new("clearing_engine=debug,tower_http=debug")
-        }))
+        .with_env_filter(
+            EnvFilter::try_from_default_env()
+                .unwrap_or_else(|_| EnvFilter::new("clearing_engine=debug,tower_http=debug")),
+        )
         .init();
 
     // Database connection
@@ -33,8 +34,8 @@ async fn main() -> Result<()> {
     info!("Connected to database");
 
     // Initialize the transaction indexer
-    let rpc_url = std::env::var("SOLANA_RPC_URL")
-        .unwrap_or_else(|_| "http://localhost:8899".to_string());
+    let rpc_url =
+        std::env::var("SOLANA_RPC_URL").unwrap_or_else(|_| "http://localhost:8899".to_string());
 
     let program_ids = vec![
         "SoLuPGPaym111111111111111111111111111111111".to_string(),

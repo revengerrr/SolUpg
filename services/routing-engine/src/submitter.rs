@@ -13,10 +13,7 @@ const INITIAL_BACKOFF_MS: u64 = 500;
 /// client-side. For the routing engine MVP, this function expects a
 /// pre-signed transaction or will be extended to support server-side
 /// signing for custodial flows.
-pub async fn submit_and_confirm(
-    client: &RpcClient,
-    tx: &Transaction,
-) -> Result<String, AppError> {
+pub async fn submit_and_confirm(client: &RpcClient, tx: &Transaction) -> Result<String, AppError> {
     let mut last_error = None;
 
     for attempt in 0..MAX_RETRIES {
@@ -48,7 +45,9 @@ pub async fn submit_and_confirm(
                 }
             }
             Err(e) => {
-                last_error = Some(AppError::SolanaRpc(format!("simulation request failed: {e}")));
+                last_error = Some(AppError::SolanaRpc(format!(
+                    "simulation request failed: {e}"
+                )));
                 continue;
             }
         }

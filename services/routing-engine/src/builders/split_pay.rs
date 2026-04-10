@@ -18,7 +18,8 @@ const TOKEN_PROGRAM_ID: Pubkey = solana_sdk::pubkey!("TokenkegQfeZyiNwAJbNbGKPFX
 pub fn build(route: &PaymentRoute) -> Result<Transaction, AppError> {
     let program_id = solupg_common::program_ids::splitter_program_id();
 
-    let split_config_pda = route.split_config_pda
+    let split_config_pda = route
+        .split_config_pda
         .ok_or_else(|| AppError::BadRequest("split_config PDA required for split route".into()))?;
 
     let sender_token_account = spl_associated_token_account(&route.payer, &route.source_mint);
@@ -53,23 +54,25 @@ pub fn build(route: &PaymentRoute) -> Result<Transaction, AppError> {
 ///   token_mint: Pubkey (32)
 ///   recipients: Vec<SplitRecipient>  (4-byte len + entries)
 ///     each entry: wallet: Pubkey (32), share_bps: u16 (2)
+#[allow(dead_code)]
 pub fn fetch_split_recipients(
     client: &solana_client::rpc_client::RpcClient,
     split_config_pda: &Pubkey,
     mint: &Pubkey,
 ) -> Result<Vec<Pubkey>, AppError> {
-    let account = client.get_account(split_config_pda)
+    let account = client
+        .get_account(split_config_pda)
         .map_err(|e| AppError::SolanaRpc(format!("failed to fetch SplitConfig: {e}")))?;
 
     let data = &account.data;
     // Skip: 8 (discriminator) + 32 (authority) + 32 (token_mint) = 72
     if data.len() < 76 {
-        return Err(AppError::Internal("SplitConfig account data too short".into()));
+        return Err(AppError::Internal(
+            "SplitConfig account data too short".into(),
+        ));
     }
 
-    let recipient_count = u32::from_le_bytes(
-        data[72..76].try_into().unwrap()
-    ) as usize;
+    let recipient_count = u32::from_le_bytes(data[72..76].try_into().unwrap()) as usize;
 
     let mut recipients = Vec::with_capacity(recipient_count);
     let mut offset = 76;
@@ -93,7 +96,8 @@ fn spl_associated_token_account(wallet: &Pubkey, mint: &Pubkey) -> Pubkey {
     Pubkey::find_program_address(
         &[wallet.as_ref(), TOKEN_PROGRAM_ID.as_ref(), mint.as_ref()],
         &ata_program,
-    ).0
+    )
+    .0
 }
 
 #[cfg(test)]

@@ -7,6 +7,7 @@ use crate::events::EventBus;
 #[derive(Clone)]
 pub struct AppState {
     pub db: PgPool,
+    #[allow(dead_code)]
     pub redis: redis::Client,
     pub solana: Arc<RpcClient>,
     pub http: reqwest::Client,

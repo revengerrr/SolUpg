@@ -1,0 +1,109 @@
+# cargo-deny configuration for SolUPG.
+# Run locally:   cargo deny check
+# Run in CI:     .github/workflows/security.yml
+
+[graph]
+all-features = false
+no-default-features = false
+
+[output]
+feature-depth = 1
+
+# ---------------------------------------------------------------------------
+# Advisory database (RustSec)
+# ---------------------------------------------------------------------------
+[advisories]
+version = 2
+db-path = "~/.cargo/advisory-db"
+db-urls = ["https://github.com/rustsec/advisory-db"]
+yanked = "deny"
+ignore = [
+    # Transitive deps from Solana / Anchor ecosystem (Solana 2.2.1 / Anchor 0.29.0).
+    # Upstream fixes not yet available — re-evaluate on next toolchain bump.
+    "RUSTSEC-2024-0436", # paste 1.x - unmaintained
+    "RUSTSEC-2024-0388", # derivative 2.x - unmaintained
+    "RUSTSEC-2024-0375", # atty 0.2.x - unmaintained
+    "RUSTSEC-2021-0145", # atty 0.2.x - potential unaligned read
+    "RUSTSEC-2024-0344", # curve25519-dalek 3.x - timing variability
+    "RUSTSEC-2022-0093", # ed25519-dalek 1.x - double public key signing
+    "RUSTSEC-2023-0033", # borsh 0.9/0.10 - ZST parsing
+    "RUSTSEC-2024-0384", # instant 0.1 - unmaintained
+    "RUSTSEC-2024-0320", # yaml-rust 0.4 - unmaintained
+    "RUSTSEC-2024-0370", # proc-macro-error 1.x - unmaintained
+]
+
+# ---------------------------------------------------------------------------
+# License allowlist — we only accept permissive SPDX identifiers.
+# ---------------------------------------------------------------------------
+[licenses]
+version = 2
+confidence-threshold = 0.93
+allow = [
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "MIT",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Unicode-DFS-2016",
+    "Unicode-3.0",
+    "Zlib",
+    "MPL-2.0",
+    "CC0-1.0",
+    "OpenSSL",
+    "BSL-1.0",
+    "Unlicense",
+    "0BSD",
+    "BSD-3-Clause-Clear",
+    "CDLA-Permissive-2.0",
+]
+exceptions = [
+    # Pin any crates requiring a license that isn't in the global allowlist.
+    # { allow = ["OpenSSL"], crate = "ring" },
+]
+
+[[licenses.clarify]]
+crate = "ring"
+expression = "MIT AND ISC AND OpenSSL"
+license-files = [
+    { path = "LICENSE", hash = 0xbd0eed23 },
+]
+
+# ---------------------------------------------------------------------------
+# Bans — disallow unmaintained, deprecated, or duplicated dependencies.
+# ---------------------------------------------------------------------------
+[bans]
+multiple-versions = "warn"
+wildcards = "deny"
+highlight = "all"
+workspace-default-features = "allow"
+external-default-features = "allow"
+
+deny = [
+    # Known problematic crates. Add to this list as they arise.
+]
+
+skip = [
+    # Crates allowed to be present in multiple versions.
+]
+
+skip-tree = [
+    # Subtrees allowed to pull multiple versions.
+]
+
+# ---------------------------------------------------------------------------
+# Sources — only pull crates from crates.io + trusted git remotes.
+# ---------------------------------------------------------------------------
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+allow-registry = ["https://github.com/rust-lang/crates.io-index"]
+allow-git = [
+    "https://github.com/solana-labs/solana",
+    "https://github.com/coral-xyz/anchor",
+]
+
+[sources.allow-org]
+github = []
+gitlab = []
+bitbucket = []

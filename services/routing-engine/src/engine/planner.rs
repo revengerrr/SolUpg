@@ -10,16 +10,22 @@ pub fn plan_route(
     intent: &PaymentIntent,
     recipient_wallet: &Pubkey,
 ) -> Result<PaymentRoute, AppError> {
-    let payer = intent.payer.parse::<Pubkey>()
+    let payer = intent
+        .payer
+        .parse::<Pubkey>()
         .map_err(|_| AppError::BadRequest("invalid payer pubkey".into()))?;
 
-    let source_mint = intent.source_token.as_ref()
+    let source_mint = intent
+        .source_token
+        .as_ref()
         .map(|s| s.parse::<Pubkey>())
         .transpose()
         .map_err(|_| AppError::BadRequest("invalid source_token mint".into()))?
         .unwrap_or(NATIVE_SOL_MINT);
 
-    let destination_mint = intent.destination_token.as_ref()
+    let destination_mint = intent
+        .destination_token
+        .as_ref()
         .map(|s| s.parse::<Pubkey>())
         .transpose()
         .map_err(|_| AppError::BadRequest("invalid destination_token mint".into()))?
@@ -38,7 +44,9 @@ pub fn plan_route(
         RouteType::DirectPay
     };
 
-    let split_config_pda = intent.split_config.as_ref()
+    let split_config_pda = intent
+        .split_config
+        .as_ref()
         .map(|s| s.parse::<Pubkey>())
         .transpose()
         .map_err(|_| AppError::BadRequest("invalid split_config PDA".into()))?;
@@ -57,7 +65,7 @@ pub fn plan_route(
         escrow_expiry: intent.escrow_expiry,
         split_config_pda,
         slippage_bps: intent.slippage_bps.unwrap_or(100), // default 1%
-        remaining_accounts: vec![], // populated later by builder if needed
+        remaining_accounts: vec![],                       // populated later by builder if needed
     })
 }
 
@@ -68,7 +76,9 @@ mod tests {
     use uuid::Uuid;
 
     fn test_recipient() -> Pubkey {
-        "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA".parse().unwrap()
+        "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"
+            .parse()
+            .unwrap()
     }
 
     fn base_intent() -> PaymentIntent {

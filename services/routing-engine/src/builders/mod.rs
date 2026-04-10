@@ -1,8 +1,8 @@
+mod anchor_ix;
 mod direct_pay;
 mod escrow;
 mod split_pay;
 mod swap_pay;
-mod anchor_ix;
 
 use solana_sdk::transaction::Transaction;
 use solupg_common::error::AppError;

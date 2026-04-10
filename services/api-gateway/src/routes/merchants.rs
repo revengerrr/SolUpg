@@ -1,8 +1,7 @@
 use axum::{
-    Router,
     extract::State,
     routing::{get, post},
-    Json,
+    Json, Router,
 };
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
@@ -78,10 +77,7 @@ async fn register_merchant(
     .execute(&state.db)
     .await?;
 
-    Ok(Json(RegisterMerchantResponse {
-        merchant,
-        api_key,
-    }))
+    Ok(Json(RegisterMerchantResponse { merchant, api_key }))
 }
 
 #[derive(Debug, Deserialize)]
@@ -115,9 +111,10 @@ async fn login_merchant(
         return Err(AppError::NotFound("merchant not found".to_string()));
     }
 
-    let merchant: serde_json::Value = resp.json().await.map_err(|e| {
-        AppError::Internal(format!("parse error: {e}"))
-    })?;
+    let merchant: serde_json::Value = resp
+        .json()
+        .await
+        .map_err(|e| AppError::Internal(format!("parse error: {e}")))?;
 
     let wallet = merchant["wallet_address"].as_str().unwrap_or_default();
     if wallet != req.wallet_address {
@@ -199,9 +196,10 @@ async fn create_api_key(
     State(state): State<AppState>,
     Json(req): Json<CreateApiKeyRequest>,
 ) -> Result<Json<ApiKeyCreatedResponse>, AppError> {
-    let key_info = req.merchant_id.as_ref().ok_or_else(|| {
-        AppError::BadRequest("merchant_id required".to_string())
-    })?;
+    let key_info = req
+        .merchant_id
+        .as_ref()
+        .ok_or_else(|| AppError::BadRequest("merchant_id required".to_string()))?;
     let merchant_uuid: Uuid = key_info
         .parse()
         .map_err(|_| AppError::BadRequest("invalid merchant_id".to_string()))?;

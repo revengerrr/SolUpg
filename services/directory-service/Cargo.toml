@@ -7,6 +7,10 @@ edition = "2021"
 name = "directory-service"
 path = "src/main.rs"
 
+[lib]
+name = "directory_service"
+path = "src/lib.rs"
+
 [dependencies]
 solupg-common = { path = "../solupg-common" }
 axum = "0.8"

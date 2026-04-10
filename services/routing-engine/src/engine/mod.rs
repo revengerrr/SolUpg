@@ -1,16 +1,16 @@
+mod fee_calculator;
 mod parser;
 mod planner;
-mod fee_calculator;
 mod resolver;
 
-use uuid::Uuid;
+use crate::builders;
 use crate::events::PaymentEvent;
 use crate::routes::intent_routes::IntentResponse;
 use crate::state::AppState;
-use crate::builders;
 use crate::submitter;
 use solupg_common::error::AppError;
 use solupg_common::types::{IntentStatus, PaymentIntent};
+use uuid::Uuid;
 
 /// Main payment processing pipeline.
 pub async fn process_intent(
@@ -21,29 +21,28 @@ pub async fn process_intent(
     parser::validate_intent(&intent)?;
 
     // 2. Check idempotency
-    let existing = sqlx::query_scalar::<_, Uuid>(
-        "SELECT intent_id FROM payment_intents WHERE intent_id = $1"
-    )
-    .bind(intent.intent_id)
-    .fetch_optional(&state.db)
-    .await?;
+    let existing =
+        sqlx::query_scalar::<_, Uuid>("SELECT intent_id FROM payment_intents WHERE intent_id = $1")
+            .bind(intent.intent_id)
+            .fetch_optional(&state.db)
+            .await?;
 
     if existing.is_some() {
-        return Err(AppError::Conflict(format!("intent {} already exists", intent.intent_id)));
+        return Err(AppError::Conflict(format!(
+            "intent {} already exists",
+            intent.intent_id
+        )));
     }
 
     // 3. Resolve recipient wallet
-    let recipient_wallet = resolver::resolve_recipient(
-        &state.http,
-        &state.directory_url,
-        &intent.recipient,
-    ).await?;
+    let recipient_wallet =
+        resolver::resolve_recipient(&state.http, &state.directory_url, &intent.recipient).await?;
 
     // 4. Plan route
     let route = planner::plan_route(&intent, &recipient_wallet)?;
 
     // 5. Estimate fees
-    let fees = fee_calculator::estimate_fees(&route);
+    let _fees = fee_calculator::estimate_fees(&route);
 
     // 6. Persist intent
     sqlx::query(

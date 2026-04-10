@@ -28,6 +28,7 @@ impl EventBus {
         let _ = self.sender.send(event);
     }
 
+    #[allow(dead_code)]
     pub fn subscribe(&self) -> broadcast::Receiver<PaymentEvent> {
         self.sender.subscribe()
     }

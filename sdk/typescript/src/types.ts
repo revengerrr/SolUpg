@@ -167,6 +167,36 @@ export interface UpdateWebhookRequest {
   is_active?: boolean;
 }
 
+/** Solana Pay URL and QR generation request. */
+export interface GenerateSolanaPayRequest {
+  /** Base58 encoded recipient wallet address. */
+  recipient: string;
+  /** Decimal amount as a string in UI units (for example "1.50" for 1.5 USDC). */
+  amount: string;
+  /** SPL token mint address. Omit for a native SOL transfer. */
+  splToken?: string;
+  /** Unique reference key for tracking the payment on chain. */
+  reference?: string;
+  /** Merchant label shown in the paying wallet. */
+  label?: string;
+  /** Human readable message shown in the paying wallet. */
+  message?: string;
+  /** On chain memo attached to the transfer. */
+  memo?: string;
+  /** PNG size per side in pixels. Defaults to 400, capped at 2000. */
+  qrSize?: number;
+}
+
+/** Solana Pay URL and QR generation response. */
+export interface GenerateSolanaPayResponse {
+  /** The full Solana Pay URL that wallets understand. */
+  url: string;
+  /** Base64 encoded PNG of the QR code. */
+  qr_png_base64: string;
+  /** Effective pixel size per side of the generated PNG. */
+  qr_size: number;
+}
+
 /** API error response. */
 export interface ApiError {
   error: string;

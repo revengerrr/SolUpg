@@ -16,6 +16,8 @@ import type {
   CreateWebhookRequest,
   WebhookResponse,
   UpdateWebhookRequest,
+  GenerateSolanaPayRequest,
+  GenerateSolanaPayResponse,
   ApiError,
 } from "./types";
 
@@ -205,6 +207,24 @@ class Webhooks {
   }
 }
 
+/** Solana Pay URL and QR generation client. */
+class SolanaPay {
+  constructor(private http: HttpClient) {}
+
+  async generate(req: GenerateSolanaPayRequest): Promise<GenerateSolanaPayResponse> {
+    return this.http.request("POST", "/v1/solana-pay/generate", {
+      recipient: req.recipient,
+      amount: req.amount,
+      spl_token: req.splToken,
+      reference: req.reference,
+      label: req.label,
+      message: req.message,
+      memo: req.memo,
+      qr_size: req.qrSize,
+    });
+  }
+}
+
 /** Main SolUPG SDK client. */
 export class SolUPG {
   public readonly payments: Payments;
@@ -212,6 +232,7 @@ export class SolUPG {
   public readonly directory: Directory;
   public readonly merchants: Merchants;
   public readonly webhooks: Webhooks;
+  public readonly solanaPay: SolanaPay;
 
   constructor(config: SolUPGConfig) {
     const http = new HttpClient(config);
@@ -220,5 +241,6 @@ export class SolUPG {
     this.directory = new Directory(http);
     this.merchants = new Merchants(http);
     this.webhooks = new Webhooks(http);
+    this.solanaPay = new SolanaPay(http);
   }
 }

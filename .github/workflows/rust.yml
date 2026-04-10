@@ -1,0 +1,245 @@
+name: rust
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "services/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "deny.toml"
+      - ".cargo/**"
+      - ".github/workflows/rust.yml"
+  pull_request:
+    paths:
+      - "services/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "deny.toml"
+      - ".cargo/**"
+      - ".github/workflows/rust.yml"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_BACKTRACE: short
+  RUSTFLAGS: "-D warnings"
+  RUST_TOOLCHAIN: 1.79.0
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # Fast checks: fmt, clippy — fail early.
+  # ---------------------------------------------------------------------------
+  lint:
+    name: fmt + clippy
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+          components: rustfmt, clippy
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "services -> target"
+
+      - name: cargo fmt --check
+        run: cargo fmt --all -- --check
+
+      - name: cargo clippy
+        run: cargo clippy --all-targets --all-features
+
+  # ---------------------------------------------------------------------------
+  # Build + unit tests (excluding ignored/integration).
+  # ---------------------------------------------------------------------------
+  test:
+    name: build + test
+    needs: lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: solupg
+          POSTGRES_PASSWORD: solupg_dev
+          POSTGRES_DB: solupg
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U solupg -d solupg"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgres://solupg:solupg_dev@localhost:5432/solupg
+      REDIS_URL: redis://localhost:6379
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "services -> target"
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev libssl-dev pkg-config
+
+      - name: cargo build
+        run: cargo build --locked --workspace --all-targets
+
+      - name: cargo test (excl. ignored)
+        run: cargo test --locked --workspace --all-targets
+
+  # ---------------------------------------------------------------------------
+  # Coverage — gated after tests pass.
+  # ---------------------------------------------------------------------------
+  coverage:
+    name: coverage (llvm-cov)
+    needs: test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: solupg
+          POSTGRES_PASSWORD: solupg_dev
+          POSTGRES_DB: solupg
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U solupg -d solupg"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+    env:
+      DATABASE_URL: postgres://solupg:solupg_dev@localhost:5432/solupg
+      REDIS_URL: redis://localhost:6379
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+          components: llvm-tools-preview
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "services -> target"
+          key: coverage
+
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev libssl-dev pkg-config
+
+      - name: Generate lcov report
+        run: cargo llvm-cov --locked --workspace --lcov --output-path lcov.info
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: services/lcov.info
+          flags: services
+          fail_ci_if_error: false
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  # ---------------------------------------------------------------------------
+  # E2E integration tests — manual trigger or scheduled (not on every PR).
+  # Runs the full compose stack, then invokes #[ignore]'d tests.
+  # ---------------------------------------------------------------------------
+  e2e:
+    name: e2e (compose + ignored tests)
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "services -> target"
+          key: e2e
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libpq-dev libssl-dev pkg-config curl
+
+      - name: Build integration-tests (fail fast)
+        working-directory: services
+        run: cargo build --locked -p integration-tests --tests
+
+      - name: Start stack
+        working-directory: services
+        run: docker compose up -d --build
+
+      - name: Wait for stack healthy
+        run: |
+          for svc in 3000 3001 3002 3003 3004; do
+            for i in $(seq 1 60); do
+              if curl -fsS "http://localhost:${svc}/health" >/dev/null 2>&1; then
+                echo "port ${svc} ready"
+                break
+              fi
+              sleep 2
+            done
+          done
+
+      - name: Run ignored integration tests
+        working-directory: services
+        run: cargo test --locked -p integration-tests -- --ignored --test-threads=1
+
+      - name: Stack logs on failure
+        if: failure()
+        working-directory: services
+        run: docker compose logs --no-color
+
+      - name: Stop stack
+        if: always()
+        working-directory: services
+        run: docker compose down -v

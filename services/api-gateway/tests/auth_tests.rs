@@ -1,7 +1,10 @@
 #[test]
 fn test_api_key_generation_format() {
     let key = api_gateway::auth::generate_api_key();
-    assert!(key.starts_with("solupg_live_"), "key should start with solupg_live_");
+    assert!(
+        key.starts_with("solupg_live_"),
+        "key should start with solupg_live_"
+    );
     assert!(key.len() > 20, "key should be sufficiently long");
 }
 
@@ -24,7 +27,10 @@ fn test_api_key_hash_deterministic() {
 fn test_api_key_hash_different_keys() {
     let hash1 = api_gateway::auth::hash_api_key("key_a");
     let hash2 = api_gateway::auth::hash_api_key("key_b");
-    assert_ne!(hash1, hash2, "different keys should produce different hashes");
+    assert_ne!(
+        hash1, hash2,
+        "different keys should produce different hashes"
+    );
 }
 
 #[test]

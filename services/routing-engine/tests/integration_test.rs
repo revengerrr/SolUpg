@@ -5,6 +5,12 @@
 //!   solana-test-validator running with solupg programs loaded
 //!   Payer has SOL balance
 
+// solana-sdk 2.x deprecated `system_instruction` in favor of a split crate
+// and `Keypair::from_bytes` in favor of `Keypair::try_from`. Keeping the
+// deprecated calls here is intentional — this test hits the actual chain
+// path and is `#[ignore]`'d, so the deprecations don't impact regular CI.
+#![allow(deprecated)]
+
 use solana_client::rpc_client::RpcClient;
 use solana_sdk::{
     commitment_config::CommitmentConfig,
@@ -21,8 +27,8 @@ use uuid::Uuid;
 #[test]
 #[ignore]
 fn direct_pay_end_to_end() {
-    let rpc_url = std::env::var("SOLANA_RPC_URL")
-        .unwrap_or_else(|_| "http://127.0.0.1:8899".to_string());
+    let rpc_url =
+        std::env::var("SOLANA_RPC_URL").unwrap_or_else(|_| "http://127.0.0.1:8899".to_string());
     let client = RpcClient::new_with_commitment(&rpc_url, CommitmentConfig::confirmed());
 
     // Check validator is reachable
@@ -44,12 +50,17 @@ fn direct_pay_end_to_end() {
     // Fund payer from validator identity
     let blockhash = client.get_latest_blockhash().unwrap();
     let fund_tx = Transaction::new_signed_with_payer(
-        &[system_instruction::transfer(&funder.pubkey(), &payer.pubkey(), 5_000_000_000)],
+        &[system_instruction::transfer(
+            &funder.pubkey(),
+            &payer.pubkey(),
+            5_000_000_000,
+        )],
         Some(&funder.pubkey()),
         &[&funder],
         blockhash,
     );
-    client.send_and_confirm_transaction_with_spinner(&fund_tx)
+    client
+        .send_and_confirm_transaction_with_spinner(&fund_tx)
         .expect("failed to fund payer from validator identity");
 
     let balance = client.get_balance(&payer.pubkey()).unwrap();
@@ -80,7 +91,8 @@ fn direct_pay_end_to_end() {
     let blockhash = client.get_latest_blockhash().unwrap();
     // Transfer enough for rent exemption (min ~890,880 lamports for 0-byte account)
     let transfer_amount = 1_000_000; // 0.001 SOL
-    let transfer_ix = system_instruction::transfer(&payer.pubkey(), &recipient.pubkey(), transfer_amount);
+    let transfer_ix =
+        system_instruction::transfer(&payer.pubkey(), &recipient.pubkey(), transfer_amount);
     let tx = Transaction::new_signed_with_payer(
         &[transfer_ix],
         Some(&payer.pubkey()),

@@ -5,5 +5,7 @@ members = [
     "routing-engine",
     "api-gateway",
     "clearing-engine",
+    "monitoring",
+    "integration-tests",
 ]
 resolver = "2"

@@ -1,0 +1,21 @@
+{
+  "name": "solupg-example-qr-checkout",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Tiny SolUPG QR checkout demo: a single Node server that generates Solana Pay QRs on demand.",
+  "type": "module",
+  "scripts": {
+    "start": "tsx server.ts",
+    "build": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@solupg/sdk": "^0.1.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.5.0"
+  },
+  "license": "Apache-2.0"
+}

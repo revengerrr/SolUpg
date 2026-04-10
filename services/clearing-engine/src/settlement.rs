@@ -141,12 +141,11 @@ impl SettlementEngine {
 
     /// Get a settlement batch by ID.
     pub async fn get_batch(&self, batch_id: Uuid) -> Result<Option<SettlementBatch>> {
-        let batch = sqlx::query_as::<_, SettlementBatch>(
-            "SELECT * FROM settlement_batches WHERE id = $1"
-        )
-        .bind(batch_id)
-        .fetch_optional(&self.pool)
-        .await?;
+        let batch =
+            sqlx::query_as::<_, SettlementBatch>("SELECT * FROM settlement_batches WHERE id = $1")
+                .bind(batch_id)
+                .fetch_optional(&self.pool)
+                .await?;
 
         Ok(batch)
     }
@@ -154,7 +153,7 @@ impl SettlementEngine {
     /// Get token breakdown for a settlement batch.
     pub async fn get_token_breakdown(&self, batch_id: Uuid) -> Result<Vec<TokenBreakdown>> {
         let breakdown = sqlx::query_as::<_, TokenBreakdown>(
-            "SELECT * FROM settlement_token_breakdown WHERE batch_id = $1 ORDER BY volume DESC"
+            "SELECT * FROM settlement_token_breakdown WHERE batch_id = $1 ORDER BY volume DESC",
         )
         .bind(batch_id)
         .fetch_all(&self.pool)
@@ -186,29 +185,29 @@ impl SettlementEngine {
     }
 
     /// Generate CSV report for a settlement batch.
-    pub fn generate_csv(
-        batch: &SettlementBatch,
-        breakdown: &[TokenBreakdown],
-    ) -> Result<String> {
+    pub fn generate_csv(batch: &SettlementBatch, breakdown: &[TokenBreakdown]) -> Result<String> {
         let mut wtr = csv::Writer::from_writer(vec![]);
 
         // Summary header
-        wtr.write_record(&["Settlement Report"])?;
-        wtr.write_record(&["Batch ID", &batch.id.to_string()])?;
-        wtr.write_record(&["Merchant ID", &batch.merchant_id.to_string()])?;
-        wtr.write_record(&["Period", &format!("{} to {}", batch.period_start, batch.period_end)])?;
-        wtr.write_record(&["Total Transactions", &batch.total_transactions.to_string()])?;
-        wtr.write_record(&["Total Volume", &batch.total_volume.to_string()])?;
-        wtr.write_record(&["Total Fees", &batch.total_fees.to_string()])?;
-        wtr.write_record(&["Net Settlement", &batch.net_settlement.to_string()])?;
-        wtr.write_record(&["Status", &batch.status])?;
-        wtr.write_record(&[""])?;
+        wtr.write_record(["Settlement Report"])?;
+        wtr.write_record(["Batch ID", &batch.id.to_string()])?;
+        wtr.write_record(["Merchant ID", &batch.merchant_id.to_string()])?;
+        wtr.write_record([
+            "Period",
+            &format!("{} to {}", batch.period_start, batch.period_end),
+        ])?;
+        wtr.write_record(["Total Transactions", &batch.total_transactions.to_string()])?;
+        wtr.write_record(["Total Volume", &batch.total_volume.to_string()])?;
+        wtr.write_record(["Total Fees", &batch.total_fees.to_string()])?;
+        wtr.write_record(["Net Settlement", &batch.net_settlement.to_string()])?;
+        wtr.write_record(["Status", &batch.status])?;
+        wtr.write_record([""])?;
 
         // Token breakdown
-        wtr.write_record(&["Token Breakdown"])?;
-        wtr.write_record(&["Token Mint", "Transactions", "Volume", "Fees"])?;
+        wtr.write_record(["Token Breakdown"])?;
+        wtr.write_record(["Token Mint", "Transactions", "Volume", "Fees"])?;
         for t in breakdown {
-            wtr.write_record(&[
+            wtr.write_record([
                 &t.token_mint,
                 &t.transaction_count.to_string(),
                 &t.volume.to_string(),

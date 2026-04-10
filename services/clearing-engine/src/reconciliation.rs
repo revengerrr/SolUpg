@@ -4,7 +4,9 @@ use sqlx::PgPool;
 use tracing::{info, warn};
 use uuid::Uuid;
 
-use crate::models::{MismatchType, ReconciliationMismatch, ReconciliationReport, ReconciliationRun};
+use crate::models::{
+    MismatchType, ReconciliationMismatch, ReconciliationReport, ReconciliationRun,
+};
 
 /// The reconciliation engine cross-references on-chain transactions
 /// with off-chain payment intents to ensure data consistency.
@@ -44,19 +46,27 @@ impl ReconciliationEngine {
         let mut mismatches = Vec::new();
 
         // 1. Find payment intents with confirmed/submitted status but no matching transaction
-        let missing_tx = self.find_missing_transactions(period_start, period_end).await?;
+        let missing_tx = self
+            .find_missing_transactions(period_start, period_end)
+            .await?;
         mismatches.extend(missing_tx.iter().cloned());
 
         // 2. Find on-chain transactions with no matching payment intent
-        let orphaned = self.find_orphaned_transactions(period_start, period_end).await?;
+        let orphaned = self
+            .find_orphaned_transactions(period_start, period_end)
+            .await?;
         mismatches.extend(orphaned.iter().cloned());
 
         // 3. Find amount mismatches between intents and transactions
-        let amount_mismatches = self.find_amount_mismatches(period_start, period_end).await?;
+        let amount_mismatches = self
+            .find_amount_mismatches(period_start, period_end)
+            .await?;
         mismatches.extend(amount_mismatches.iter().cloned());
 
         // 4. Find status mismatches
-        let status_mismatches = self.find_status_mismatches(period_start, period_end).await?;
+        let status_mismatches = self
+            .find_status_mismatches(period_start, period_end)
+            .await?;
         mismatches.extend(status_mismatches.iter().cloned());
 
         // Persist mismatches
@@ -88,16 +98,21 @@ impl ReconciliationEngine {
         .await?;
 
         let matched = total_intents.min(total_transactions)
-            - mismatches.iter().filter(|m| m.mismatch_type == MismatchType::Amount).count() as i64;
+            - mismatches
+                .iter()
+                .filter(|m| m.mismatch_type == MismatchType::Amount)
+                .count() as i64;
 
         // Finalize the run
-        let run = self.finalize_run(
-            run_id,
-            total_intents as i32,
-            total_transactions as i32,
-            matched.max(0) as i32,
-            &mismatches,
-        ).await?;
+        let run = self
+            .finalize_run(
+                run_id,
+                total_intents as i32,
+                total_transactions as i32,
+                matched.max(0) as i32,
+                &mismatches,
+            )
+            .await?;
 
         info!(
             run_id = %run_id,
@@ -269,11 +284,7 @@ impl ReconciliationEngine {
     }
 
     /// Persist a mismatch to the database.
-    async fn save_mismatch(
-        &self,
-        run_id: Uuid,
-        m: &ReconciliationMismatch,
-    ) -> Result<()> {
+    async fn save_mismatch(&self, run_id: Uuid, m: &ReconciliationMismatch) -> Result<()> {
         sqlx::query(
             r#"
             INSERT INTO reconciliation_mismatches (
@@ -307,7 +318,9 @@ impl ReconciliationEngine {
     ) -> Result<ReconciliationRun> {
         let mismatched = mismatches
             .iter()
-            .filter(|m| m.mismatch_type == MismatchType::Amount || m.mismatch_type == MismatchType::Status)
+            .filter(|m| {
+                m.mismatch_type == MismatchType::Amount || m.mismatch_type == MismatchType::Status
+            })
             .count() as i32;
         let orphaned = mismatches
             .iter()
@@ -344,7 +357,7 @@ impl ReconciliationEngine {
     /// Get a reconciliation report by run ID.
     pub async fn get_report(&self, run_id: Uuid) -> Result<Option<ReconciliationReport>> {
         let run = sqlx::query_as::<_, ReconciliationRun>(
-            "SELECT * FROM reconciliation_runs WHERE id = $1"
+            "SELECT * FROM reconciliation_runs WHERE id = $1",
         )
         .bind(run_id)
         .fetch_optional(&self.pool)
@@ -354,15 +367,22 @@ impl ReconciliationEngine {
             return Ok(None);
         };
 
-        let rows: Vec<(Option<Uuid>, Option<String>, String, Option<String>, Option<String>, String)> =
-            sqlx::query_as(
-                r#"
+        type MismatchRow = (
+            Option<Uuid>,
+            Option<String>,
+            String,
+            Option<String>,
+            Option<String>,
+            String,
+        );
+        let rows: Vec<MismatchRow> = sqlx::query_as(
+            r#"
                 SELECT intent_id, tx_signature, mismatch_type, expected_value, actual_value, severity
                 FROM reconciliation_mismatches
                 WHERE run_id = $1
                 ORDER BY created_at
                 "#,
-            )
+        )
             .bind(run_id)
             .fetch_all(&self.pool)
             .await?;
@@ -393,7 +413,7 @@ impl ReconciliationEngine {
     /// List recent reconciliation runs.
     pub async fn list_runs(&self, limit: i64) -> Result<Vec<ReconciliationRun>> {
         let runs = sqlx::query_as::<_, ReconciliationRun>(
-            "SELECT * FROM reconciliation_runs ORDER BY started_at DESC LIMIT $1"
+            "SELECT * FROM reconciliation_runs ORDER BY started_at DESC LIMIT $1",
         )
         .bind(limit)
         .fetch_all(&self.pool)
