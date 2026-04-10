@@ -20,5 +20,7 @@ export type {
   CreateWebhookRequest,
   WebhookResponse,
   UpdateWebhookRequest,
+  GenerateSolanaPayRequest,
+  GenerateSolanaPayResponse,
   ApiError,
 } from "./types";

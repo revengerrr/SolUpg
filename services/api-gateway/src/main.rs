@@ -58,6 +58,7 @@ async fn main() -> anyhow::Result<()> {
         .nest("/v1", routes::directory_routes())
         .nest("/v1/merchants", routes::merchant_routes())
         .nest("/v1/webhooks", routes::webhook_routes())
+        .nest("/v1/solana-pay", routes::solana_pay_routes())
         .layer(from_fn_with_state(
             app_state.clone(),
             middleware::rate_limit_middleware,
