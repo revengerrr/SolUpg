@@ -13,6 +13,7 @@ Every example in this folder is:
 | Example | Description | Stack |
 |---|---|---|
 | [`simple-payment`](./simple-payment/) | Register a merchant, create a payment intent, and poll for confirmation | Node.js, TypeScript, `@solupg/sdk` |
+| [`qr-checkout`](./qr-checkout/) | Tiny merchant checkout page that generates Solana Pay QR codes on demand | Node.js http, TypeScript, inline HTML |
 
 More examples are in flight. Pull requests welcome under [`examples/`](./).
 
