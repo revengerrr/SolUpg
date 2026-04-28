@@ -114,9 +114,9 @@ describe("solupg-escrow", () => {
       .rpc();
 
     const state = await program.account.escrowState.fetch(escrowStatePda);
-    assert.equal(state.amount.toNumber(), 200_000_000);
-    assert.deepEqual(state.status, { active: {} });
-    assert.deepEqual(state.releaseCondition, { authorityApproval: {} });
+    assert.equal((state as any).amount.toNumber(), 200_000_000);
+    assert.deepEqual((state as any).status, { active: {} });
+    assert.deepEqual((state as any).releaseCondition, { authorityApproval: {} });
 
     // Verify tokens are in vault
     const vault = await getAccount(provider.connection, escrowVaultPda);

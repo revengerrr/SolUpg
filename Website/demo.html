@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SolUPG — QR Payment Demo</title>
+<meta name="description" content="Create Solana Pay QR codes instantly. Paste any wallet address, choose SOL/USDC/USDT, get a scannable QR. Free, no account needed." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="SolUPG — Solana Pay QR Generator" />
+<meta property="og:description" content="Create Solana Pay QR codes instantly. Paste any wallet, choose SOL/USDC/USDT, download PNG. Free, open-source, no account needed." />
+<meta property="og:url" content="https://solupg.dev/demo" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@revengerai" />
+<meta name="twitter:title" content="SolUPG — Free Solana Pay QR Generator" />
+<meta name="twitter:description" content="Paste a wallet address, choose token, get a scannable QR code. Works with Phantom, Solflare, Backpack." />
+<link rel="stylesheet" href="styles.css" />
+<!-- qrcode-generator for client-side QR -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+</head>
+<body>
+
+<div class="statusbar">
+  <div class="statusbar-inner">
+    <span><span class="live-dot"></span>demo · live</span>
+    <span class="sep">/</span>
+    <span>qr generator · live</span>
+    <span class="sep">/</span>
+    <span>SOL · USDC · USDT</span>
+    <span class="sep" style="margin-left:auto">/</span>
+    <span>solana-pay · any wallet</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark"></span>SolUPG<span class="tag">/ payment-gateway</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">~/overview</a>
+      <a class="nav-link" href="funding.html">~/funding</a>
+      <a class="nav-link" href="quickstart.html">~/quickstart</a>
+      <a class="nav-link active" href="demo.html">~/demo</a>
+      <a class="nav-link" href="https://github.com/revengerrr/solupg">github ↗</a>
+    </div>
+    <div class="nav-right">
+      <button class="nav-hamburger" aria-label="Menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
+      </button>
+      <a class="btn btn-accent" href="#try">Try it</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="section" style="border-top:none">
+  <div class="demo-hero">
+    <div>
+      <div class="pill dot ok" style="margin-bottom:16px">live · create your own QR</div>
+      <h1>Create a payment QR.<br/><span class="accent">Scan. Pay. Done.</span></h1>
+      <p>Paste any Solana wallet address, set the amount and token, and get a scannable QR code instantly. Works with Phantom, Solflare, Backpack, and any Solana Pay compatible wallet. Everything runs <span class="mono fg-2">in your browser</span>.</p>
+    </div>
+    <div class="hero-meta mono">
+      <div><span class="k">input</span><span class="v accent">wallet · alias · email</span></div>
+      <div><span class="k">tokens</span><span class="v">SOL · USDC · USDT</span></div>
+      <div><span class="k">output</span><span class="v">scannable QR (PNG / SVG)</span></div>
+      <div><span class="k">protocol</span><span class="v">solana-pay · bip-21</span></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .demo-hero {
+    max-width: var(--max-w); margin: 0 auto;
+    padding: 60px var(--pad-x) 40px;
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: end;
+  }
+  .demo-hero h1 { font-size: clamp(32px, 4vw, 52px); line-height: 1.05; letter-spacing: -0.025em; margin: 0 0 18px; font-weight: 600; }
+  .demo-hero p { color: var(--fg-2); max-width: 56ch; margin: 0; font-size: 15.5px; }
+  .hero-meta { border: 1px solid var(--line); border-radius: 6px; background: var(--surface); padding: 6px 0; }
+  .hero-meta > div { display: grid; grid-template-columns: 100px 1fr; padding: 10px 18px; border-bottom: 1px dashed var(--line); font-size: 12px; }
+  .hero-meta > div:last-child { border-bottom: none; }
+  .hero-meta .k { color: var(--dim); letter-spacing: 0.08em; text-transform: uppercase; font-size: 10px; align-self: center; }
+  .hero-meta .v { color: var(--fg); text-align: right; }
+  @media (max-width: 900px) { .demo-hero { grid-template-columns: 1fr; padding: 40px var(--pad-x); } }
+</style>
+
+<!-- MAIN DEMO -->
+<section class="section" id="try">
+  <div class="section-head">
+    <div><div class="idx">§01 · try it</div></div>
+    <div>
+      <h2 class="title">Create your QR code.</h2>
+      <p class="sub">Paste your Solana wallet address, choose a token, set the amount. Get a scannable QR code you can print, embed, or share.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="demo-stage">
+      <!-- Input panel -->
+      <div class="stage-card input-card">
+        <div class="card-head">
+          <span class="u-kicker">$ create qr</span>
+          <span class="mono dim" style="font-size:11px">01 · input</span>
+        </div>
+        <div class="card-body">
+          <label class="field">
+            <span>recipient (wallet address or alias)</span>
+            <input type="text" id="alias-input" value="" placeholder="paste Solana wallet address..." spellcheck="false" autocomplete="off" />
+            <div class="field-hint mono">base58 wallet · alias · email · .sol domain</div>
+          </label>
+
+          <div class="field-row" style="grid-template-columns: 1fr 1fr 1fr">
+            <label class="field">
+              <span>amount <span style="color:var(--dim-2); text-transform:none; letter-spacing:0; font-weight:400">— leave empty = payer decides</span></span>
+              <input type="number" id="amount-input" value="" min="0.001" step="0.01" placeholder="open amount" />
+            </label>
+            <label class="field">
+              <span>token</span>
+              <select id="token-input">
+                <option value="SOL" selected>SOL</option>
+                <option value="USDC">USDC</option>
+                <option value="USDT">USDT</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>label <span style="color:var(--dim-2); text-transform:none; letter-spacing:0; font-weight:400">— optional</span></span>
+              <input type="text" id="label-input" value="" placeholder="store name" />
+            </label>
+          </div>
+
+          <label class="field">
+            <span>memo <span style="color:var(--dim-2); text-transform:none; letter-spacing:0; font-weight:400">— optional</span></span>
+            <input type="text" id="memo-input" value="" placeholder="order #1234, invoice, note..." />
+          </label>
+
+          <div class="field-examples">
+            <span class="u-kicker">try</span>
+            <button class="chip mono" data-fill="bvfyyVjWL75SaahjfLLw8tphBtBG5qwKHpr4yWxYRmH">your wallet</button>
+            <button class="chip mono" data-fill="taco-bell">taco-bell</button>
+            <button class="chip mono" data-fill="bonfida.sol">bonfida.sol</button>
+          </div>
+
+          <button id="generate-btn" class="btn btn-accent btn-lg">
+            <span>→ Generate QR</span>
+            <span class="k">⏎</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pipeline visualization -->
+      <div class="stage-card pipe-card">
+        <div class="card-head">
+          <span class="u-kicker">pipeline</span>
+          <span class="mono" id="pipe-timer" style="font-size:11px; color:var(--ok)">t=0.00s · idle</span>
+        </div>
+        <div class="card-body">
+          <div class="pipeline" id="pipeline">
+            <div class="pipe-step" data-step="1">
+              <div class="pipe-icon"><span class="n">1</span></div>
+              <div class="pipe-txt">
+                <div class="pipe-title">Resolve recipient</div>
+                <div class="pipe-sub mono">wallet address or alias lookup</div>
+              </div>
+              <div class="pipe-status">—</div>
+            </div>
+            <div class="pipe-step" data-step="2">
+              <div class="pipe-icon"><span class="n">2</span></div>
+              <div class="pipe-txt">
+                <div class="pipe-title">Validate wallet</div>
+                <div class="pipe-sub mono">ed25519 · base58 · 32-byte</div>
+              </div>
+              <div class="pipe-status">—</div>
+            </div>
+            <div class="pipe-step" data-step="3">
+              <div class="pipe-icon"><span class="n">3</span></div>
+              <div class="pipe-txt">
+                <div class="pipe-title">Build Solana Pay URL</div>
+                <div class="pipe-sub mono">bip-21 · solana:&lt;addr&gt;?amount=…</div>
+              </div>
+              <div class="pipe-status">—</div>
+            </div>
+            <div class="pipe-step" data-step="4">
+              <div class="pipe-icon"><span class="n">4</span></div>
+              <div class="pipe-txt">
+                <div class="pipe-title">Encode QR</div>
+                <div class="pipe-sub mono">qrcode · ecc-M · 33×33</div>
+              </div>
+              <div class="pipe-status">—</div>
+            </div>
+            <div class="pipe-step" data-step="5">
+              <div class="pipe-icon"><span class="n">5</span></div>
+              <div class="pipe-txt">
+                <div class="pipe-title">Ready to scan</div>
+                <div class="pipe-sub mono">waiting for wallet · tx.finality</div>
+              </div>
+              <div class="pipe-status">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- QR output -->
+      <div class="stage-card qr-output">
+        <div class="card-head">
+          <span class="u-kicker">qr · scan</span>
+          <span class="pill dot ok" id="qr-status" style="visibility:hidden">ready</span>
+        </div>
+        <div class="card-body qr-body">
+          <div class="qr-frame" id="qr-frame">
+            <svg viewBox="0 0 200 200" width="100%" id="qr-placeholder" class="qr-placeholder">
+              <rect width="200" height="200" fill="#0a0b0f"/>
+              <g fill="#1a1d24">
+                <rect x="10" y="10" width="40" height="40"/>
+                <rect x="150" y="10" width="40" height="40"/>
+                <rect x="10" y="150" width="40" height="40"/>
+              </g>
+              <text x="100" y="104" text-anchor="middle" fill="#565c68" font-family="JetBrains Mono" font-size="10">awaiting input</text>
+            </svg>
+          </div>
+          <div class="qr-caption mono" id="qr-caption">generate to render</div>
+          <div class="qr-actions">
+            <button class="btn" id="copy-url-btn" disabled>copy url</button>
+            <button class="btn" id="download-btn" disabled>download png</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- URL & response readouts -->
+    <div class="readouts">
+      <div class="ro-card">
+        <div class="ro-head">
+          <span class="u-kicker">recipient · resolved</span>
+          <span class="mono dim" style="font-size:11px" id="ro-endpoint">waiting for input</span>
+        </div>
+        <pre id="ro-json" class="ro-pre"><span class="tco">// paste a wallet address and click "Generate QR"</span></pre>
+      </div>
+      <div class="ro-card">
+        <div class="ro-head">
+          <span class="u-kicker">solana pay url · bip-21</span>
+          <span class="mono dim" style="font-size:11px">utf-8 · urlencoded</span>
+        </div>
+        <pre id="ro-url" class="ro-pre"><span class="tco">// url appears here</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .demo-stage {
+    display: grid;
+    grid-template-columns: 1fr 1fr 340px;
+    gap: 16px;
+    align-items: stretch;
+  }
+  .stage-card {
+    border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .card-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .card-body { padding: 20px; display: grid; gap: 14px; flex: 1; }
+  .qr-body { align-items: center; justify-items: center; }
+
+  .field { display: grid; gap: 6px; font-family: var(--font-mono); font-size: 11px; color: var(--dim); }
+  .field > span { text-transform: uppercase; letter-spacing: 0.1em; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .input-wrap { position: relative; }
+  .input-prefix {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--dim-2); font-size: 13px;
+    pointer-events: none;
+  }
+  input[type="text"], input[type="number"], select {
+    width: 100%;
+    background: var(--bg-2);
+    border: 1px solid var(--line-2);
+    border-radius: 5px;
+    padding: 10px 12px;
+    color: var(--fg);
+    font-family: var(--font-mono); font-size: 14px;
+    outline: none;
+    transition: border-color .15s, background .15s;
+  }
+  select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a818e' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+  select option { background: var(--bg-2); color: var(--fg); }
+  input:focus, select:focus { border-color: var(--accent); background: var(--bg); }
+  .field-hint { color: var(--dim-2); font-size: 10.5px; letter-spacing: 0.02em; text-transform: none; }
+
+  .field-examples { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 4px; }
+  .field-examples .u-kicker { margin-right: 4px; }
+  .chip {
+    font-family: var(--font-mono); font-size: 10.5px;
+    background: var(--bg-2); color: var(--fg-2);
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    padding: 3px 8px;
+    cursor: pointer;
+    transition: all .12s;
+  }
+  .chip:hover { border-color: var(--accent-line); color: var(--accent); }
+
+  #generate-btn { justify-content: space-between; margin-top: 4px; }
+
+  /* Pipeline */
+  .pipeline { display: grid; gap: 10px; }
+  .pipe-step {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    transition: all .2s;
+  }
+  .pipe-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1px solid var(--line-2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 11px; color: var(--dim);
+    background: var(--surface);
+  }
+  .pipe-title { font-size: 13px; font-weight: 500; letter-spacing: -0.005em; }
+  .pipe-sub { font-size: 11px; color: var(--dim); margin-top: 2px; }
+  .pipe-status {
+    font-family: var(--font-mono); font-size: 11px; color: var(--dim);
+    min-width: 50px; text-align: right;
+  }
+  .pipe-step.running {
+    border-color: var(--accent-line); background: var(--accent-soft);
+  }
+  .pipe-step.running .pipe-icon {
+    border-color: var(--accent); color: var(--accent);
+    animation: spin-ring 1s infinite linear;
+  }
+  .pipe-step.done { border-color: rgba(20,241,149,0.25); }
+  .pipe-step.done .pipe-icon { border-color: var(--ok); color: var(--ok); background: var(--ok-soft); }
+  .pipe-step.done .pipe-icon::before { content: '✓'; font-weight: 700; }
+  .pipe-step.done .pipe-icon .n { display: none; }
+  .pipe-step.done .pipe-status { color: var(--ok); }
+  .pipe-step.err .pipe-icon { border-color: var(--err); color: var(--err); }
+  .pipe-step.err .pipe-status { color: var(--err); }
+
+  @keyframes spin-ring { to { transform: rotate(360deg); } }
+
+  /* QR output */
+  .qr-output .card-body { padding: 22px; }
+  .qr-frame {
+    width: 100%; aspect-ratio: 1; max-width: 260px;
+    background: #fff; border-radius: 6px; padding: 14px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    transition: all .3s;
+  }
+  .qr-frame.ready { box-shadow: 0 0 0 3px rgba(153,69,255,0.3), 0 0 60px -10px rgba(153,69,255,0.4); }
+  .qr-frame .qr-placeholder { background: #0a0b0f; border-radius: 4px; }
+  .qr-frame > svg { width: 100%; height: 100%; display: block; }
+  .qr-frame img { width: 100%; height: auto; display: block; }
+  .qr-caption {
+    text-align: center; font-size: 10.5px; color: var(--dim);
+    word-break: break-all; max-width: 240px;
+    padding: 0 8px;
+  }
+  .qr-actions { display: flex; gap: 6px; }
+  .qr-actions .btn { flex: 1; font-size: 11px; padding: 0 10px; height: 30px; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Readouts */
+  .readouts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  .ro-card { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; overflow: hidden; }
+  .ro-head { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  .ro-pre {
+    margin: 0; padding: 16px 18px;
+    font-family: var(--font-mono); font-size: 12px; line-height: 1.7;
+    color: var(--fg);
+    background: var(--bg-2);
+    white-space: pre-wrap; word-break: break-all;
+    min-height: 130px;
+  }
+
+  @media (max-width: 1100px) {
+    .demo-stage { grid-template-columns: 1fr 1fr; }
+    .qr-output { grid-column: span 2; }
+    .qr-frame { max-width: 220px; margin: 0 auto; }
+  }
+  @media (max-width: 720px) {
+    .demo-stage { grid-template-columns: 1fr; }
+    .qr-output { grid-column: span 1; }
+    .readouts { grid-template-columns: 1fr; }
+  }
+</style>
+
+<!-- Code sample -->
+<section class="section" id="code">
+  <div class="section-head">
+    <div><div class="idx">§02 · code</div></div>
+    <div>
+      <h2 class="title">Runnable Node.js example.</h2>
+      <p class="sub">Copy-paste into any empty directory, <span class="mono fg-2">npm install</span>, and you have a working end-to-end QR generator. No SolUPG account needed for this snippet — it's just the public primitives.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="code">
+      <div class="code-head">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="node">generate-qr.js</button>
+          <button class="code-tab" data-tab="sdk">with-sdk.ts</button>
+          <button class="code-tab" data-tab="curl">curl</button>
+        </div>
+        <span class="code-copy">copy</span>
+      </div>
+
+      <!-- Node -->
+      <div class="code-body" data-tab-pane="node">
+        <div class="gutter">
+<div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div>
+<div>11</div><div>12</div><div>13</div><div>14</div><div>15</div><div>16</div><div>17</div><div>18</div><div>19</div><div>20</div>
+<div>21</div><div>22</div><div>23</div><div>24</div><div>25</div><div>26</div><div>27</div><div>28</div><div>29</div><div>30</div>
+<div>31</div><div>32</div><div>33</div><div>34</div><div>35</div>
+        </div>
+<div class="src"><span class="tco">// $ npm i qrcode</span>
+<span class="tco">// $ node generate-qr.js taco-bell 0.1</span>
+
+<span class="tkw">const</span> <span class="tvr">QRCode</span> = <span class="tfn">require</span>(<span class="tst">"qrcode"</span>);
+<span class="tkw">const</span> <span class="tvr">fs</span>     = <span class="tfn">require</span>(<span class="tst">"fs"</span>);
+
+<span class="tco">// 1. Mock directory service (in production: GET https://api.solupg.dev/v1/resolve)</span>
+<span class="tkw">const</span> <span class="tvr">DIRECTORY</span> = {
+  <span class="tst">"taco-bell"</span>: <span class="tst">"4vyomkhcqdp66vzbq8gHcc3mPiRW2Mm8uFT7NVq88EH4"</span>,
+};
+
+<span class="tkw">async function</span> <span class="tfn">main</span>() {
+  <span class="tkw">const</span> [<span class="tvr">alias</span>, <span class="tvr">amountArg</span>] = <span class="tfn">process</span>.<span class="tpr">argv</span>.<span class="tfn">slice</span>(<span class="tnm">2</span>);
+  <span class="tkw">const</span> <span class="tvr">amount</span> = <span class="tvr">amountArg</span> ?? <span class="tst">"0.1"</span>;
+
+  <span class="tco">// 2. Resolve alias → wallet</span>
+  <span class="tkw">const</span> <span class="tvr">wallet</span> = <span class="tvr">DIRECTORY</span>[<span class="tvr">alias</span>];
+  <span class="tkw">if</span> (!<span class="tvr">wallet</span>) <span class="tkw">throw new</span> <span class="tfn">Error</span>(<span class="tst">`unknown alias: ${alias}`</span>);
+
+  <span class="tfn">console</span>.<span class="tfn">log</span>(<span class="tfn">JSON</span>.<span class="tfn">stringify</span>({ alias: <span class="tvr">alias</span>, wallet: <span class="tvr">wallet</span> }, <span class="tkw">null</span>, <span class="tnm">2</span>));
+
+  <span class="tco">// 3. Build Solana Pay URL (bip-21)</span>
+  <span class="tkw">const</span> <span class="tvr">url</span> = <span class="tst">`solana:${wallet}`</span>
+    + <span class="tst">`?amount=${amount}`</span>
+    + <span class="tst">`&amp;label=${encodeURIComponent("TacoBell")}`</span>
+    + <span class="tst">`&amp;memo=${encodeURIComponent("SolUPG Payment")}`</span>;
+
+  <span class="tfn">console</span>.<span class="tfn">log</span>(<span class="tst">"url:"</span>, <span class="tvr">url</span>);
+
+  <span class="tco">// 4. Encode QR — pick one: terminal · base64 · PNG file</span>
+  <span class="tfn">console</span>.<span class="tfn">log</span>(<span class="tkw">await</span> <span class="tvr">QRCode</span>.<span class="tfn">toString</span>(<span class="tvr">url</span>, { type: <span class="tst">"terminal"</span>, small: <span class="tkw">true</span> }));
+  <span class="tkw">const</span> <span class="tvr">b64</span> = <span class="tkw">await</span> <span class="tvr">QRCode</span>.<span class="tfn">toDataURL</span>(<span class="tvr">url</span>);                <span class="tco">// base64 image</span>
+  <span class="tkw">await</span> <span class="tvr">QRCode</span>.<span class="tfn">toFile</span>(<span class="tst">"./checkout.png"</span>, <span class="tvr">url</span>, { width: <span class="tnm">512</span> }); <span class="tco">// PNG file</span>
+
+  <span class="tfn">console</span>.<span class="tfn">log</span>(<span class="tst">"✓ wrote checkout.png ·"</span>, <span class="tvr">b64</span>.<span class="tpr">length</span>, <span class="tst">"b (data-url)"</span>);
+}
+
+<span class="tfn">main</span>().<span class="tfn">catch</span>(<span class="tvr">console</span>.<span class="tpr">error</span>);</div>
+      </div>
+
+      <!-- SDK -->
+      <div class="code-body hidden" data-tab-pane="sdk">
+        <div class="gutter"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div><div>15</div><div>16</div><div>17</div></div>
+<div class="src"><span class="tco">// Preferred: the SDK wraps resolve + pay + QR in one call</span>
+<span class="tkw">import</span> { <span class="tvr">SolUPG</span> } <span class="tkw">from</span> <span class="tst">"@solupg/sdk"</span>;
+
+<span class="tkw">const</span> <span class="tvr">upg</span> = <span class="tkw">new</span> <span class="tfn">SolUPG</span>({ cluster: <span class="tst">"mainnet-beta"</span> });
+
+<span class="tkw">const</span> <span class="tvr">checkout</span> = <span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">qr</span>.<span class="tfn">create</span>({
+  to:     <span class="tst">"taco-bell"</span>,          <span class="tco">// alias · email · phone · .sol · wallet</span>
+  amount: <span class="tnm">0.1</span>,
+  token:  <span class="tst">"SOL"</span>,
+  label:  <span class="tst">"TacoBell"</span>,
+  memo:   <span class="tst">"SolUPG Payment"</span>,
+});
+
+<span class="tco">// checkout.wallet     → 4vyomkhcqdp66vzbq8gHcc3mPiRW2Mm8uFT7NVq88EH4</span>
+<span class="tco">// checkout.url        → solana:…?amount=0.1&amp;label=TacoBell&amp;memo=…</span>
+<span class="tco">// checkout.png        → base64 QR, 400×400</span>
+<span class="tco">// checkout.reference  → idempotency key — poll waitForPayment() with it</span>
+
+<span class="tkw">const</span> <span class="tvr">status</span> = <span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">qr</span>.<span class="tfn">waitForPayment</span>(<span class="tvr">checkout</span>.<span class="tpr">reference</span>);</div>
+      </div>
+
+      <!-- cURL -->
+      <div class="code-body hidden" data-tab-pane="curl">
+        <div class="gutter"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div></div>
+<div class="src"><span class="tco"># 1. Resolve alias</span>
+<span class="tpr">curl</span> https://api.solupg.dev/v1/resolve?alias=taco-bell
+
+<span class="tco"># → { "alias": "taco-bell",</span>
+<span class="tco">#     "wallet": "4vyomkhcqdp66vzbq8gHcc3mPiRW2Mm8uFT7NVq88EH4" }</span>
+
+<span class="tco"># 2. Create QR checkout</span>
+<span class="tpr">curl</span> -X POST https://api.solupg.dev/v1/qr \
+  -H <span class="tst">"content-type: application/json"</span> \
+  -d <span class="tst">'{"to":"taco-bell","amount":0.1,"token":"SOL","label":"TacoBell","memo":"SolUPG Payment"}'</span>
+
+<span class="tco"># → { "url": "solana:4vyo…", "png": "data:image/png;base64,…", "reference": "…" }</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- End-to-end flow -->
+<section class="section" id="flow">
+  <div class="section-head">
+    <div><div class="idx">§03 · end-to-end</div></div>
+    <div>
+      <h2 class="title">Six steps. Sub-second.</h2>
+      <p class="sub">From the moment a user types an alias to the moment funds are finalized on mainnet.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="flow">
+      <div class="flow-row">
+        <div class="fr-idx mono">01</div>
+        <div class="fr-ttl">User enters alias</div>
+        <div class="fr-code mono">"taco-bell"</div>
+        <div class="fr-desc">Any human-readable handle — alias, email, phone, .sol domain, or raw wallet.</div>
+      </div>
+      <div class="flow-row">
+        <div class="fr-idx mono">02</div>
+        <div class="fr-ttl">Backend resolves to wallet</div>
+        <div class="fr-code mono">GET /v1/resolve</div>
+        <div class="fr-desc">Directory service returns the canonical 32-byte Solana address. OTP-verified at registration.</div>
+      </div>
+      <div class="flow-row">
+        <div class="fr-idx mono">03</div>
+        <div class="fr-ttl">Build Solana Pay URL</div>
+        <div class="fr-code mono">bip-21 · utf-8</div>
+        <div class="fr-desc">Canonical <span class="mono">solana:&lt;wallet&gt;?amount=…</span> scheme. Compatible with every major wallet.</div>
+      </div>
+      <div class="flow-row">
+        <div class="fr-idx mono">04</div>
+        <div class="fr-ttl">Encode as QR</div>
+        <div class="fr-code mono">qrcode · ecc-M</div>
+        <div class="fr-desc">Medium error-correction, 33×33 modules. Renders as SVG / PNG / terminal / data-URL.</div>
+      </div>
+      <div class="flow-row">
+        <div class="fr-idx mono">05</div>
+        <div class="fr-ttl">User scans with wallet</div>
+        <div class="fr-code mono">phantom · solflare · backpack</div>
+        <div class="fr-desc">Wallet reads the URL, pre-fills amount & memo, asks the user to approve.</div>
+      </div>
+      <div class="flow-row">
+        <div class="fr-idx mono">06</div>
+        <div class="fr-ttl">Tx executed on-chain</div>
+        <div class="fr-code mono">&lt; 800ms finality</div>
+        <div class="fr-desc">Merchant's webhook fires on <span class="mono fg-2">payment.finalized</span>. Dashboard updates live.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .flow { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; overflow: hidden; }
+  .flow-row {
+    display: grid;
+    grid-template-columns: 60px 240px 180px 1fr;
+    gap: 20px; align-items: center;
+    padding: 18px 22px;
+    border-bottom: 1px dashed var(--line);
+    transition: background .2s;
+  }
+  .flow-row:last-child { border-bottom: none; }
+  .flow-row:hover { background: var(--surface-2); }
+  .fr-idx { color: var(--dim-2); font-size: 14px; }
+  .fr-ttl { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .fr-code {
+    font-size: 11.5px; color: var(--accent);
+    background: var(--bg-2); padding: 6px 10px; border-radius: 3px;
+    border: 1px solid var(--line); justify-self: start;
+  }
+  .fr-desc { color: var(--dim); font-size: 13px; }
+  @media (max-width: 900px) {
+    .flow-row { grid-template-columns: 1fr; gap: 6px; padding: 16px 18px; }
+    .fr-code { justify-self: start; }
+  }
+</style>
+
+<!-- Scan mockup -->
+<section class="section" id="mock">
+  <div class="section-head">
+    <div><div class="idx">§04 · wallet-side mock</div></div>
+    <div>
+      <h2 class="title">What the payer sees.</h2>
+      <p class="sub">The QR decodes into a standard Solana Pay request. Every wallet renders it the same way.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="phone-mock">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="ps-statusbar mono">
+            <span>9:41</span>
+            <span>•••</span>
+            <span>100%</span>
+          </div>
+          <div class="ps-header">
+            <span class="ps-back">←</span>
+            <span class="ps-title">Review payment</span>
+            <span></span>
+          </div>
+          <div class="ps-to">
+            <div class="ps-avatar">T</div>
+            <div class="ps-to-info">
+              <div class="ps-to-name">TacoBell</div>
+              <div class="ps-to-addr mono">4vyo…88EH4</div>
+            </div>
+            <span class="pill ok dot" style="font-size:9px">verified</span>
+          </div>
+          <div class="ps-amount">
+            <div class="ps-amt-num mono">0.1 <span>SOL</span></div>
+            <div class="ps-amt-sub">≈ $14.95 USD</div>
+          </div>
+          <div class="ps-rows">
+            <div class="ps-row"><span>Memo</span><span>SolUPG Payment</span></div>
+            <div class="ps-row"><span>Network fee</span><span>~0.000005 SOL</span></div>
+            <div class="ps-row"><span>Settlement</span><span class="ok">instant · mainnet-beta</span></div>
+          </div>
+          <div class="ps-sign">
+            <span>Slide to approve</span>
+            <span class="ps-sign-chevron">→</span>
+          </div>
+          <div class="ps-cancel">Cancel</div>
+        </div>
+      </div>
+      <div class="mock-notes">
+        <h3>Identical across wallets.</h3>
+        <p>Because the payload is a standard Solana Pay URL, every major mobile wallet — Phantom, Solflare, Backpack — parses it identically. The merchant writes zero wallet-specific code.</p>
+        <ul class="mock-checks">
+          <li><span class="ok">✓</span> No deep-link registration</li>
+          <li><span class="ok">✓</span> No wallet SDK dependency</li>
+          <li><span class="ok">✓</span> Works in person (print QR) or online (embed)</li>
+          <li><span class="ok">✓</span> Amount &amp; memo are tamper-evident</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .phone-mock { display: grid; grid-template-columns: 300px 1fr; gap: 48px; align-items: center; }
+  .phone {
+    width: 300px; height: 600px;
+    background: #000;
+    border-radius: 42px;
+    padding: 10px;
+    border: 2px solid #1a1d24;
+    box-shadow: 0 40px 80px -30px rgba(0,0,0,0.6);
+    position: relative;
+  }
+  .phone-notch {
+    position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+    width: 100px; height: 26px;
+    background: #000; border-radius: 14px; z-index: 2;
+  }
+  .phone-screen {
+    width: 100%; height: 100%;
+    background: #0d0f14;
+    border-radius: 34px;
+    overflow: hidden;
+    padding: 50px 22px 20px;
+    display: flex; flex-direction: column;
+    color: var(--fg);
+  }
+  .ps-statusbar { display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 18px; }
+  .ps-header { display: grid; grid-template-columns: 20px 1fr 20px; align-items: center; margin-bottom: 24px; }
+  .ps-back { color: var(--dim); }
+  .ps-title { text-align: center; font-size: 13px; font-weight: 500; }
+  .ps-to {
+    display: grid; grid-template-columns: 40px 1fr auto; align-items: center; gap: 10px;
+    padding: 14px; background: var(--surface);
+    border-radius: 10px; margin-bottom: 20px;
+  }
+  .ps-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #6e2edc);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 16px;
+  }
+  .ps-to-name { font-weight: 600; font-size: 14px; }
+  .ps-to-addr { font-size: 10.5px; color: var(--dim); }
+  .ps-amount { text-align: center; padding: 16px 0 20px; }
+  .ps-amt-num { font-size: 36px; font-weight: 600; letter-spacing: -0.03em; }
+  .ps-amt-num span { font-size: 18px; color: var(--dim); margin-left: 4px; }
+  .ps-amt-sub { color: var(--dim); font-size: 12px; margin-top: 4px; font-family: var(--font-mono); }
+  .ps-rows { border-top: 1px solid var(--line); }
+  .ps-row {
+    display: flex; justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+  }
+  .ps-row > span:first-child { color: var(--dim); }
+  .ps-row > span:last-child { color: var(--fg); font-family: var(--font-mono); }
+  .ps-row .ok { color: var(--ok); }
+  .ps-sign {
+    margin-top: auto; margin-bottom: 10px;
+    background: var(--accent);
+    color: #fff; font-size: 13px; font-weight: 500;
+    padding: 14px 20px; border-radius: 30px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .ps-sign-chevron {
+    width: 28px; height: 28px; border-radius: 50%; background: #fff; color: var(--accent);
+    display: flex; align-items: center; justify-content: center; font-weight: 700;
+  }
+  .ps-cancel { text-align: center; color: var(--dim); font-size: 12px; padding: 8px; }
+
+  .mock-notes h3 { font-size: 22px; font-weight: 600; letter-spacing: -0.015em; margin: 0 0 12px; }
+  .mock-notes p { color: var(--fg-2); max-width: 52ch; font-size: 14.5px; margin: 0 0 20px; }
+  .mock-checks { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; font-family: var(--font-mono); font-size: 12.5px; color: var(--fg-2); }
+  .mock-checks .ok { color: var(--ok); margin-right: 10px; font-weight: 700; }
+
+  @media (max-width: 900px) {
+    .phone-mock { grid-template-columns: 1fr; justify-items: center; }
+    .phone { margin-bottom: 24px; }
+  }
+</style>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <div class="brand" style="margin-bottom:12px"><span class="brand-mark"></span>SolUPG</div>
+      <p style="color:var(--dim-2); font-size:11px; max-width:28ch; margin:0;">Open payment infrastructure for Solana. Apache 2.0. Built in Indonesia, free for the world.</p>
+    </div>
+    <div><h5>Project</h5><ul><li><a href="index.html">Overview</a></li><li><a href="quickstart.html">Quick start</a></li><li><a href="demo.html">QR demo</a></li><li><a href="funding.html">Funding</a></li></ul></div>
+    <div><h5>Demo</h5><ul><li><a href="#try">Try it</a></li><li><a href="#code">Code</a></li><li><a href="#flow">End-to-end flow</a></li><li><a href="#mock">Wallet mock</a></li></ul></div>
+    <div><h5>Contact</h5><ul><li><a href="#">hello@solupg.dev</a></li><li><a href="https://x.com/revengerai">twitter / x</a></li></ul></div>
+  </div>
+  <div class="legal">
+    <span>© 2026 SolUPG contributors · Apache-2.0</span>
+    <span>commit · <span style="color:var(--fg-2)">a8f3c2e</span> · v0.4.0-rc.2</span>
+    <span>🌏 built in Indonesia</span>
+  </div>
+</footer>
+
+<div class="tweaks" id="tweaks-panel">
+  <h4>Tweaks</h4>
+  <label>accent hue · <span id="tw-hue-v" class="mono">275</span>
+    <input type="range" id="tw-hue" min="0" max="360" step="5" />
+  </label>
+  <label>density
+    <select id="tw-density">
+      <option value="compact">compact</option>
+      <option value="default">default</option>
+      <option value="spacious">spacious</option>
+    </select>
+  </label>
+  <label><input type="checkbox" id="tw-labels" /> show architecture layer labels</label>
+</div>
+
+<script src="shared.js"></script>
+<script>
+/* ── Config ── */
+const DIRECTORY = {
+  "taco-bell": "4vyomkhcqdp66vzbq8gHcc3mPiRW2Mm8uFT7NVq88EH4",
+  "alice@mail.id": "7xKX9mPqVr8zB4cN5Qw3RsLtYbAa1VfGhJkDmXeP2oUi",
+  "+628112345678": "9pFz3BgMkKtYwSn6RvQuXhLcAa4VfGhJkDmXeP2oUiRs",
+  "bonfida.sol": "BXQR1r2HyKgSDxyzW1w8cVBwr9cSYkVH7ZCFT6kBfHKc"
+};
+
+const SPL_MINTS = {
+  "USDC": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+  "USDT": "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"
+};
+
+function isBase58(s) {
+  return /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(s);
+}
+
+/* ── DOM refs ── */
+const $ = (s) => document.querySelector(s);
+const pipeSteps = document.querySelectorAll('.pipe-step');
+const timer = $('#pipe-timer');
+const qrFrame = $('#qr-frame');
+const qrCaption = $('#qr-caption');
+const qrStatus = $('#qr-status');
+const copyBtn = $('#copy-url-btn');
+const downloadBtn = $('#download-btn');
+const roJson = $('#ro-json');
+const roUrl = $('#ro-url');
+const roEndpoint = $('#ro-endpoint');
+
+let t0 = 0;
+let timerId = null;
+
+function resetPipeline() {
+  pipeSteps.forEach(s => { s.classList.remove('running', 'done', 'err'); s.querySelector('.pipe-status').textContent = '—'; });
+}
+function setStep(n, state, meta) {
+  const s = document.querySelector(`.pipe-step[data-step="${n}"]`);
+  if (!s) return;
+  s.classList.remove('running', 'done', 'err');
+  if (state) s.classList.add(state);
+  s.querySelector('.pipe-status').textContent = meta ?? (state === 'running' ? 'running' : state === 'done' ? 'ok' : state === 'err' ? 'err' : '—');
+}
+function startTimer() {
+  t0 = performance.now();
+  clearInterval(timerId);
+  timerId = setInterval(() => {
+    const dt = (performance.now() - t0) / 1000;
+    timer.textContent = `t=${dt.toFixed(2)}s · running`;
+    timer.style.color = 'var(--accent)';
+  }, 40);
+}
+function stopTimer(ok) {
+  clearInterval(timerId);
+  const dt = (performance.now() - t0) / 1000;
+  timer.textContent = `t=${dt.toFixed(2)}s · ${ok ? 'ready' : 'error'}`;
+  timer.style.color = ok ? 'var(--ok)' : 'var(--err)';
+}
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c])); }
+
+function syntaxJson(obj) {
+  const str = JSON.stringify(obj, null, 2);
+  return esc(str)
+    .replace(/("(?:[^"\\]|\\.)*")(\s*:)/g, '<span class="tpr">$1</span>$2')
+    .replace(/:\s*("(?:[^"\\]|\\.)*")/g, ': <span class="tst">$1</span>')
+    .replace(/:\s*(true|false|null)/g, ': <span class="tkw">$1</span>')
+    .replace(/:\s*(-?\d+\.?\d*)/g, ': <span class="tnm">$1</span>');
+}
+
+/* ── Main flow ── */
+async function run() {
+  const input = $('#alias-input').value.trim();
+  const amountRaw = $('#amount-input').value.trim();
+  const amount = amountRaw ? parseFloat(amountRaw) : null;
+  const token = $('#token-input').value;
+  const label = $('#label-input').value.trim();
+  const memo = $('#memo-input').value.trim();
+
+  if (!input) {
+    $('#alias-input').focus();
+    return;
+  }
+
+  resetPipeline();
+  startTimer();
+  copyBtn.disabled = true; downloadBtn.disabled = true;
+  qrStatus.style.visibility = 'hidden';
+  qrFrame.classList.remove('ready');
+  roJson.innerHTML = '<span class="tco">// resolving…</span>';
+  roUrl.innerHTML = '<span class="tco">// building url…</span>';
+
+  let wallet;
+
+  // STEP 1 — resolve recipient
+  setStep(1, 'running', '…');
+  await sleep(200);
+
+  if (isBase58(input)) {
+    // Direct wallet address — no lookup needed
+    wallet = input;
+    setStep(1, 'done', 'direct');
+    if (roEndpoint) roEndpoint.textContent = 'wallet address · base58';
+    roJson.innerHTML = syntaxJson({
+      input: input,
+      type: 'wallet_address',
+      wallet: wallet,
+      resolved: true
+    });
+  } else {
+    // Try alias lookup
+    if (roEndpoint) roEndpoint.textContent = 'alias lookup · ' + input;
+    await sleep(150);
+    wallet = DIRECTORY[input];
+    if (!wallet) {
+      setStep(1, 'err', 'not found');
+      roJson.innerHTML = syntaxJson({
+        error: 'not_found',
+        input: input,
+        hint: 'paste a Solana wallet address (base58) or try "taco-bell"'
+      });
+      stopTimer(false);
+      return;
+    }
+    setStep(1, 'done', '142ms');
+    roJson.innerHTML = syntaxJson({
+      alias: input,
+      wallet: wallet,
+      verified: true,
+      method: 'directory'
+    });
+  }
+
+  // STEP 2 — validate wallet
+  setStep(2, 'running', '…');
+  await sleep(120);
+  if (!isBase58(wallet)) {
+    setStep(2, 'err', 'invalid');
+    stopTimer(false);
+    return;
+  }
+  setStep(2, 'done', wallet.length + ' chars');
+
+  // STEP 3 — build Solana Pay URL
+  setStep(3, 'running', '…');
+  await sleep(150);
+
+  let url = `solana:${wallet}`;
+  const params = [];
+  if (amount && amount > 0) params.push(`amount=${amount}`);
+  if (token !== 'SOL' && SPL_MINTS[token]) params.push(`spl-token=${SPL_MINTS[token]}`);
+  if (label) params.push(`label=${encodeURIComponent(label)}`);
+  if (memo) params.push(`memo=${encodeURIComponent(memo)}`);
+  if (params.length) url += '?' + params.join('&');
+
+  setStep(3, 'done', amount ? `${amount} ${token}` : 'open amount');
+
+  // Render URL readout
+  let urlHtml = `<span class="tpr">solana</span>:<span class="tvr">${esc(wallet)}</span>`;
+  if (amount && amount > 0) urlHtml += `\n?<span class="tac">amount</span>=<span class="tnm">${amount}</span>`;
+  if (token !== 'SOL' && SPL_MINTS[token]) {
+    urlHtml += `\n${urlHtml.includes('?') ? '&amp;' : '?'}<span class="tac">spl-token</span>=<span class="tst">${esc(SPL_MINTS[token])}</span>`;
+  }
+  if (label) urlHtml += `\n&amp;<span class="tac">label</span>=<span class="tst">${esc(encodeURIComponent(label))}</span>`;
+  if (memo) urlHtml += `\n&amp;<span class="tac">memo</span>=<span class="tst">${esc(encodeURIComponent(memo))}</span>`;
+  roUrl.innerHTML = urlHtml;
+
+  // STEP 4 — encode QR
+  setStep(4, 'running', '…');
+  await sleep(200);
+  try {
+    const qr = qrcode(0, 'M');
+    qr.addData(url);
+    qr.make();
+    const mc = qr.getModuleCount();
+    const cell = 6;
+    const pad = 14;
+    const size = mc * cell + pad * 2;
+    let rects = '';
+    for (let r = 0; r < mc; r++) {
+      for (let c = 0; c < mc; c++) {
+        if (qr.isDark(r, c)) rects += `<rect x="${pad + c*cell}" y="${pad + r*cell}" width="${cell}" height="${cell}" fill="#0a0b0f"/>`;
+      }
+    }
+    const svg = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg"><rect width="${size}" height="${size}" fill="#fff"/>${rects}</svg>`;
+    qrFrame.innerHTML = svg;
+    qrFrame.dataset.svg = svg;
+    qrFrame.dataset.svgSize = size;
+    qrCaption.textContent = url.length > 60 ? url.slice(0, 60) + '…' : url;
+    qrCaption.title = url;
+    qrFrame.dataset.url = url;
+    setStep(4, 'done', mc + '×' + mc);
+  } catch (e) {
+    setStep(4, 'err', 'encode failed');
+    stopTimer(false);
+    return;
+  }
+
+  // STEP 5 — ready
+  setStep(5, 'running', '…');
+  await sleep(100);
+  setStep(5, 'done', 'scan it');
+  qrStatus.style.visibility = 'visible';
+  qrFrame.classList.add('ready');
+  copyBtn.disabled = false; downloadBtn.disabled = false;
+  // Show hint when amount is empty
+  if (!amount) {
+    qrCaption.innerHTML = '<span style="color:var(--ok)">ready to scan</span> · payer enters amount in wallet';
+  }
+  stopTimer(true);
+}
+
+/* ── Events ── */
+$('#generate-btn').addEventListener('click', run);
+document.querySelectorAll('[data-fill]').forEach(b => {
+  b.addEventListener('click', () => { $('#alias-input').value = b.dataset.fill; run(); });
+});
+['alias-input','amount-input','label-input','memo-input','token-input'].forEach(id => {
+  const el = $('#'+id);
+  if (!el) return;
+  if (el.tagName === 'SELECT') {
+    el.addEventListener('change', () => { if (qrFrame.dataset.url) run(); });
+  } else {
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') run(); });
+  }
+});
+
+/* Copy URL */
+copyBtn.addEventListener('click', () => {
+  navigator.clipboard?.writeText(qrFrame.dataset.url || '');
+  const old = copyBtn.textContent; copyBtn.textContent = '✓ copied';
+  setTimeout(() => copyBtn.textContent = old, 1400);
+});
+
+/* Download as PNG (via canvas) */
+downloadBtn.addEventListener('click', () => {
+  const svgData = qrFrame.dataset.svg;
+  if (!svgData) return;
+  const svgSize = parseInt(qrFrame.dataset.svgSize) || 200;
+  const pxSize = 512;
+  const img = new Image();
+  const blob = new Blob([svgData], { type: 'image/svg+xml' });
+  const blobUrl = URL.createObjectURL(blob);
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = pxSize;
+    canvas.height = pxSize;
+    const ctx = canvas.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, pxSize, pxSize);
+    ctx.drawImage(img, 0, 0, pxSize, pxSize);
+    URL.revokeObjectURL(blobUrl);
+    canvas.toBlob(pngBlob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(pngBlob);
+      a.download = 'solupg-checkout.png';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    }, 'image/png');
+  };
+  img.src = blobUrl;
+});
+
+/* Code tabs */
+document.querySelectorAll('.code-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const name = tab.dataset.tab;
+    document.querySelectorAll('.code-tab').forEach(t => t.classList.toggle('active', t === tab));
+    document.querySelectorAll('[data-tab-pane]').forEach(p => p.classList.toggle('hidden', p.dataset.tabPane !== name));
+  });
+});
+document.querySelectorAll('.code-copy').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const code = btn.closest('.code')?.querySelector('.code-body:not(.hidden) .src');
+    if (code) navigator.clipboard?.writeText(code.innerText);
+    const old = btn.textContent; btn.textContent = '✓ copied';
+    setTimeout(() => btn.textContent = old, 1200);
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SolUPG — Quick Start</title>
+<meta name="description" content="Integrate SolUPG in five minutes. SDK, self-host, and contribution guides." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="SolUPG — Quick Start" />
+<meta property="og:description" content="Integrate Solana payments in five minutes. SDK install, self-host with Docker, or contribute to the project." />
+<meta property="og:url" content="https://solupg.dev/quickstart" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@revengerai" />
+<meta name="twitter:title" content="SolUPG — Quick Start" />
+<meta name="twitter:description" content="Integrate Solana payments in five minutes. TypeScript SDK, Docker self-host, open-source." />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="statusbar">
+  <div class="statusbar-inner">
+    <span><span class="live-dot"></span>docs · v0.4.0-rc.2</span>
+    <span class="sep">/</span>
+    <span>sdk · @solupg/sdk@0.4.2</span>
+    <span class="sep">/</span>
+    <span>tested · node 20 · deno 1.40</span>
+    <span class="sep" style="margin-left:auto">/</span>
+    <span>last-updated · 2d ago</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark"></span>SolUPG<span class="tag">/ payment-gateway</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">~/overview</a>
+      <a class="nav-link" href="funding.html">~/funding</a>
+      <a class="nav-link active" href="quickstart.html">~/quickstart</a>
+      <a class="nav-link" href="demo.html">~/demo</a>
+      <a class="nav-link" href="https://github.com/revengerrr/solupg">github ↗</a>
+    </div>
+    <div class="nav-right">
+      <button class="nav-hamburger" aria-label="Menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
+      </button>
+      <a class="btn" href="https://github.com/revengerrr/solupg">Full API reference ↗</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Docs layout -->
+<div class="docs">
+  <!-- Sidebar -->
+  <aside class="docs-side">
+    <div class="side-block">
+      <div class="u-kicker">getting started</div>
+      <a href="#install" class="side-link">01 · Install</a>
+      <a href="#first-payment" class="side-link">02 · First payment</a>
+      <a href="#webhooks" class="side-link">03 · Webhooks</a>
+    </div>
+    <div class="side-block">
+      <div class="u-kicker">common patterns</div>
+      <a href="#pattern-simple" class="side-link">simple-payment.ts</a>
+      <a href="#pattern-qr" class="side-link">qr-checkout.ts</a>
+      <a href="#pattern-route" class="side-link">universal-routing.ts</a>
+    </div>
+    <div class="side-block">
+      <div class="u-kicker">self-hosting</div>
+      <a href="#selfhost" class="side-link">Docker Compose</a>
+      <a href="#env" class="side-link">Environment</a>
+      <a href="#scale" class="side-link">Scaling</a>
+    </div>
+    <div class="side-block">
+      <div class="u-kicker">contributing</div>
+      <a href="#contribute" class="side-link">How to contribute</a>
+      <a href="#code-style" class="side-link">Code style</a>
+      <a href="#release" class="side-link">Release process</a>
+    </div>
+    <div class="side-block side-foot">
+      <a class="btn" href="https://github.com/revengerrr/solupg" style="width:100%; justify-content:center">View on GitHub</a>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <main class="docs-main">
+    <!-- Intro -->
+    <header class="docs-hero">
+      <div class="u-kicker">~/quickstart</div>
+      <h1>Five minutes from <span class="mono">npm install</span> to a signed, settled Solana payment.</h1>
+      <p>Three code snippets cover 90% of what most integrations need. The SDK is typed, tree-shakable, and works in Node, Deno, Bun, and the browser. Everything below runs against devnet by default — swap one env var to go to mainnet.</p>
+
+      <div class="hero-chips">
+        <span class="pill mono">node ≥ 18</span>
+        <span class="pill mono">typescript 5.x</span>
+        <span class="pill mono">bundler optional</span>
+        <span class="pill dot ok">devnet live</span>
+        <span class="pill dot warn">mainnet · pending audit</span>
+      </div>
+    </header>
+
+    <!-- 01 Install -->
+    <section id="install" class="docs-section">
+      <div class="sec-idx mono">§01</div>
+      <h2>Install the SDK</h2>
+      <p>One dependency. No peer-deps. <span class="mono fg-2">@solana/web3.js</span> is bundled transitively — you can import it directly if needed.</p>
+
+      <div class="pm-tabs">
+        <button class="pm-tab active" data-pm="npm">npm</button>
+        <button class="pm-tab" data-pm="pnpm">pnpm</button>
+        <button class="pm-tab" data-pm="yarn">yarn</button>
+        <button class="pm-tab" data-pm="bun">bun</button>
+      </div>
+      <div class="terminal" data-pm-pane="npm">
+        <div class="term-line"><span class="prompt">$</span> npm install @solupg/sdk</div>
+        <div class="term-line dim">added 1 package in 1.2s</div>
+      </div>
+      <div class="terminal hidden" data-pm-pane="pnpm">
+        <div class="term-line"><span class="prompt">$</span> pnpm add @solupg/sdk</div>
+        <div class="term-line dim">+ @solupg/sdk 0.4.2</div>
+      </div>
+      <div class="terminal hidden" data-pm-pane="yarn">
+        <div class="term-line"><span class="prompt">$</span> yarn add @solupg/sdk</div>
+        <div class="term-line dim">✨ Done in 0.87s</div>
+      </div>
+      <div class="terminal hidden" data-pm-pane="bun">
+        <div class="term-line"><span class="prompt">$</span> bun add @solupg/sdk</div>
+        <div class="term-line dim">installed @solupg/sdk@0.4.2</div>
+      </div>
+    </section>
+
+    <!-- 02 First payment -->
+    <section id="first-payment" class="docs-section">
+      <div class="sec-idx mono">§02</div>
+      <h2>Your first payment</h2>
+      <p>Get an API key from <span class="mono fg-2">dashboard.solupg.dev</span> — or run locally without one (see <a href="#selfhost" class="inline-link">self-hosting</a>). Sign transactions with a keypair you own; the SDK never touches your seed.</p>
+
+      <div class="code">
+        <div class="code-head">
+          <div><span class="mono" style="color:var(--fg)">first-payment.ts</span></div>
+          <span class="code-copy">copy</span>
+        </div>
+        <div class="code-body">
+          <div class="gutter"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div><div>15</div><div>16</div></div>
+<div class="src"><span class="tkw">import</span> { <span class="tvr">SolUPG</span>, <span class="tvr">Keypair</span> } <span class="tkw">from</span> <span class="tst">"@solupg/sdk"</span>;
+
+<span class="tkw">const</span> <span class="tvr">upg</span> = <span class="tkw">new</span> <span class="tfn">SolUPG</span>({
+  apiKey: <span class="tst">"sk_devnet_…"</span>,
+  cluster: <span class="tst">"devnet"</span>,
+  payer: <span class="tvr">Keypair</span>.<span class="tfn">fromSecretKey</span>(<span class="tvr">SECRET</span>),
+});
+
+<span class="tco">// Pay 0.5 SOL worth of USDC to a human-readable recipient</span>
+<span class="tkw">const</span> <span class="tvr">tx</span> = <span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">pay</span>({
+  to: <span class="tst">"bob@example.id"</span>,
+  amount: <span class="tnm">25</span>,
+  settle: <span class="tst">"USDC"</span>,
+});
+
+<span class="tfn">console</span>.<span class="tfn">log</span>(<span class="tst">`https://explorer.solana.com/tx/${tx.signature}`</span>);</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <span class="pill accent dot">tip</span>
+        <p>In devnet, SolUPG auto-funds your payer with 2 SOL on first use. In mainnet you're responsible for keeping it topped up.</p>
+      </div>
+    </section>
+
+    <!-- 03 Webhooks -->
+    <section id="webhooks" class="docs-section">
+      <div class="sec-idx mono">§03</div>
+      <h2>Webhooks</h2>
+      <p>Every payment lifecycle event (<span class="mono">created · signed · confirmed · finalized · failed</span>) fires a webhook. Signatures are HMAC-SHA256; verify before trusting.</p>
+
+      <div class="code">
+        <div class="code-head"><div><span class="mono" style="color:var(--fg)">webhook-handler.ts</span></div><span class="code-copy">copy</span></div>
+        <div class="code-body">
+          <div class="gutter"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div></div>
+<div class="src"><span class="tkw">import</span> { <span class="tvr">verifyWebhook</span> } <span class="tkw">from</span> <span class="tst">"@solupg/sdk"</span>;
+
+<span class="tfn">app</span>.<span class="tfn">post</span>(<span class="tst">"/webhooks/solupg"</span>, <span class="tkw">async</span> (<span class="tvr">req</span>, <span class="tvr">res</span>) =&gt; {
+  <span class="tkw">const</span> <span class="tvr">event</span> = <span class="tfn">verifyWebhook</span>(<span class="tvr">req</span>.<span class="tpr">body</span>, <span class="tvr">req</span>.<span class="tpr">headers</span>[<span class="tst">"x-solupg-sig"</span>], <span class="tvr">SECRET</span>);
+
+  <span class="tkw">if</span> (<span class="tvr">event</span>.<span class="tpr">type</span> === <span class="tst">"payment.finalized"</span>) {
+    <span class="tkw">await</span> <span class="tfn">fulfillOrder</span>(<span class="tvr">event</span>.<span class="tpr">data</span>.<span class="tpr">reference</span>);
+  }
+
+  <span class="tvr">res</span>.<span class="tfn">sendStatus</span>(<span class="tnm">200</span>);
+});</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Patterns -->
+    <section id="pattern-simple" class="docs-section">
+      <div class="sec-idx mono">§04</div>
+      <h2>Patterns</h2>
+      <p>Three canonical flows. Pick the one closest to your use case and fork.</p>
+
+      <div class="code">
+        <div class="code-head">
+          <div class="code-tabs">
+            <button class="code-tab active" data-tab="simple">simple-payment.ts</button>
+            <button class="code-tab" data-tab="qr">qr-checkout.ts</button>
+            <button class="code-tab" data-tab="route">universal-routing.ts</button>
+          </div>
+          <span class="code-copy">copy</span>
+        </div>
+
+        <div class="code-body" data-tab-pane="simple">
+          <div class="gutter"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div></div>
+<div class="src"><span class="tkw">const</span> <span class="tvr">tx</span> = <span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">pay</span>({
+  to:     <span class="tst">"alice@example.id"</span>,
+  amount: <span class="tnm">25</span>,
+  settle: <span class="tst">"USDC"</span>,
+  memo:   <span class="tst">"invoice #8821"</span>,
+});
+
+<span class="tco">// tx.signature    → on-chain signature</span>
+<span class="tco">// tx.reference    → idempotency key, safe to retry</span></div>
+        </div>
+
+        <div class="code-body hidden" data-tab-pane="qr">
+          <div class="gutter"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div></div>
+<div class="src"><span class="tkw">const</span> <span class="tvr">checkout</span> = <span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">qr</span>.<span class="tfn">create</span>({
+  reference: <span class="tst">"order_8821"</span>,
+  amount: <span class="tnm">49.99</span>,
+  token: <span class="tst">"USDC"</span>,
+  label: <span class="tst">"Kopi Kenangan #8821"</span>,
+  message: <span class="tst">"1x V60 + 1x Croissant"</span>,
+});
+
+<span class="tco">// checkout.url  → solana:…</span>
+<span class="tco">// checkout.png  → base64 QR, 400×400</span>
+<span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">qr</span>.<span class="tfn">waitForPayment</span>(<span class="tvr">checkout</span>.<span class="tpr">reference</span>);</div>
+        </div>
+
+        <div class="code-body hidden" data-tab-pane="route">
+          <div class="gutter"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div></div>
+<div class="src"><span class="tco">// Payer holds SOL. Merchant settles in USDT. One call.</span>
+<span class="tkw">const</span> <span class="tvr">quote</span> = <span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">route</span>.<span class="tfn">quote</span>({
+  from: <span class="tst">"SOL"</span>,
+  to:   <span class="tst">"USDT"</span>,
+  amount: <span class="tnm">0.25</span>,
+  slippageBps: <span class="tnm">30</span>,
+});
+
+<span class="tco">// quote.out          → 37.41</span>
+<span class="tco">// quote.priceImpact  → 0.02%</span>
+<span class="tco">// quote.route        → ["Jupiter", "Orca"]</span>
+
+<span class="tkw">const</span> <span class="tvr">tx</span> = <span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">route</span>.<span class="tfn">execute</span>(<span class="tvr">quote</span>, { merchant: <span class="tst">"bob@sol"</span> });</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Self-host -->
+    <section id="selfhost" class="docs-section">
+      <div class="sec-idx mono">§05</div>
+      <h2>Self-host in one command</h2>
+      <p>If you'd rather not depend on our hosted gateway, run the full stack on your own machine. Clone, compose, done.</p>
+
+      <div class="terminal lg">
+        <div class="term-line"><span class="prompt">$</span> git clone https://github.com/revengerrr/solupg</div>
+        <div class="term-line"><span class="prompt">$</span> cd solupg</div>
+        <div class="term-line"><span class="prompt">$</span> cp .env.example .env</div>
+        <div class="term-line"><span class="prompt">$</span> docker compose up -d</div>
+        <div class="term-line dim">✔ postgres      healthy</div>
+        <div class="term-line dim">✔ redis         healthy</div>
+        <div class="term-line dim">✔ api-gateway   started on :8080</div>
+        <div class="term-line dim">✔ router        started on :8081</div>
+        <div class="term-line dim">✔ directory     started on :8082</div>
+        <div class="term-line dim">✔ clearing      started on :8083</div>
+        <div class="term-line dim">✔ monitoring    started on :8084</div>
+        <div class="term-line" style="color:var(--ok)">✓ solupg stack is up · http://localhost:8080</div>
+      </div>
+
+      <div id="env" class="env-grid">
+        <div class="env-card">
+          <h4>Required env</h4>
+          <table class="env-table">
+            <tr><td class="mono">SOLANA_RPC_URL</td><td class="dim">RPC endpoint (Helius, Triton, QuickNode)</td></tr>
+            <tr><td class="mono">POSTGRES_URL</td><td class="dim">defaults to compose service</td></tr>
+            <tr><td class="mono">REDIS_URL</td><td class="dim">defaults to compose service</td></tr>
+            <tr><td class="mono">UPG_SIGNER_KEY</td><td class="dim">base58 keypair for the gateway payer</td></tr>
+            <tr><td class="mono">WEBHOOK_SECRET</td><td class="dim">HMAC secret for signed events</td></tr>
+          </table>
+        </div>
+        <div class="env-card">
+          <h4>Optional env</h4>
+          <table class="env-table">
+            <tr><td class="mono">JUPITER_URL</td><td class="dim">override default quote endpoint</td></tr>
+            <tr><td class="mono">OTP_PROVIDER</td><td class="dim">twilio · mailgun · log</td></tr>
+            <tr><td class="mono">PROM_PUSHGATEWAY</td><td class="dim">optional metrics push</td></tr>
+            <tr><td class="mono">RATE_LIMIT_RPS</td><td class="dim">default 50</td></tr>
+            <tr><td class="mono">LOG_LEVEL</td><td class="dim">trace · debug · info · warn</td></tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scaling -->
+    <section id="scale" class="docs-section">
+      <div class="sec-idx mono">§06</div>
+      <h2>Scaling notes</h2>
+      <p>The stack was load-tested to <span class="mono fg-2">1,000 TPS sustained</span> on a single 8-core node. Past that, split along the natural service boundaries:</p>
+
+      <div class="scale-grid">
+        <div class="scale-card"><div class="u-kicker">api-gateway</div><p>Stateless. Scale horizontally behind any load balancer. Use sticky sessions only if you rely on long-poll webhooks.</p></div>
+        <div class="scale-card"><div class="u-kicker">router</div><p>CPU-bound on signature verification. Pin to dedicated cores; each replica handles ~350 TPS.</p></div>
+        <div class="scale-card"><div class="u-kicker">directory</div><p>Redis-cached. Scales with RAM. 1M entries ≈ 180MB.</p></div>
+        <div class="scale-card"><div class="u-kicker">clearing</div><p>Single-writer by design. Use Postgres streaming replicas for read-heavy dashboards.</p></div>
+      </div>
+    </section>
+
+    <!-- Contribute -->
+    <section id="contribute" class="docs-section">
+      <div class="sec-idx mono">§07</div>
+      <h2>Contribute</h2>
+      <p>This is a small team. Good first issues are tagged <span class="mono fg-2">good-first-issue</span> and deliberately kept scoped. Large refactors should start with an RFC in <span class="mono fg-2">/rfcs</span>.</p>
+
+      <div class="contrib-grid">
+        <a href="https://github.com/revengerrr/solupg/issues?q=is%3Aissue+is%3Aopen+label%3Agood-first-issue" class="contrib-card">
+          <div class="c-head"><span class="mono">good-first-issue</span><span class="pill ok dot">14 open</span></div>
+          <h4>Pick a starter ticket</h4>
+          <p>Typo fixes, missing tests, docs improvements. Most merge within 48h.</p>
+        </a>
+        <a href="https://github.com/revengerrr/solupg/blob/main/CONTRIBUTING.md" class="contrib-card" id="code-style">
+          <div class="c-head"><span class="mono">CONTRIBUTING.md</span><span class="pill mono">read</span></div>
+          <h4>Code style &amp; conventions</h4>
+          <p>Rustfmt + clippy for Rust. ESLint + Prettier for TS. Conventional commits.</p>
+        </a>
+        <a href="https://github.com/revengerrr/solupg/discussions" class="contrib-card" id="release">
+          <div class="c-head"><span class="mono">discussions</span><span class="pill accent dot">active</span></div>
+          <h4>Propose an RFC</h4>
+          <p>Open a discussion before opening a large PR. Saves everyone's time.</p>
+        </a>
+      </div>
+
+      <div class="callout">
+        <span class="pill accent dot">release</span>
+        <p>Releases cut every two weeks on Fridays. Changelog lives at <span class="mono fg-2">/CHANGELOG.md</span>. SDK versions follow the on-chain program IDL — a minor bump indicates a new IDL.</p>
+      </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="docs-end">
+      <div class="u-kicker">$ next steps</div>
+      <h3>Still stuck?</h3>
+      <p>Open a discussion on GitHub or reach out on X. Response times are typically under a day, because this team is small and nobody has a support-ticket queue.</p>
+      <div class="docs-end-actions">
+        <a class="btn btn-accent" href="https://github.com/revengerrr/solupg/discussions">Open a discussion</a>
+        <a class="btn" href="https://x.com/revengerai">Follow on X</a>
+        <a class="btn btn-ghost" href="funding.html">Learn about funding</a>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<style>
+  .docs {
+    max-width: var(--max-w); margin: 0 auto;
+    padding: 0 var(--pad-x);
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 48px;
+    min-height: calc(100vh - 85px);
+  }
+  .docs-side {
+    position: sticky; top: 85px; align-self: start;
+    padding: 40px 0;
+    max-height: calc(100vh - 85px);
+    overflow-y: auto;
+    border-right: 1px solid var(--line);
+    padding-right: 24px;
+    margin-right: -24px;
+  }
+  .side-block { margin-bottom: 28px; }
+  .side-block .u-kicker { margin-bottom: 10px; display: block; }
+  .side-link {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--dim);
+    padding: 5px 10px 5px 10px;
+    border-radius: 3px;
+    margin: 0 -10px;
+    transition: all .15s;
+  }
+  .side-link:hover { background: var(--surface); color: var(--fg); }
+  .side-link.active { color: var(--fg); background: var(--surface); border-left: 2px solid var(--accent); padding-left: 8px; }
+  .side-foot { margin-top: 36px; padding-top: 24px; border-top: 1px dashed var(--line); }
+
+  .docs-main {
+    padding: 48px 0 96px;
+    min-width: 0;
+  }
+  .docs-hero {
+    margin-bottom: 48px; padding-bottom: 40px; border-bottom: 1px dashed var(--line);
+  }
+  .docs-hero h1 {
+    font-size: clamp(30px, 3.4vw, 42px);
+    font-weight: 600; letter-spacing: -0.02em; line-height: 1.1;
+    margin: 14px 0 18px; text-wrap: balance;
+  }
+  .docs-hero h1 .mono { font-weight: 500; background: var(--bg-2); padding: 0 8px; border-radius: 4px; font-size: 0.8em; }
+  .docs-hero p { color: var(--fg-2); max-width: 66ch; font-size: 15.5px; margin: 0 0 20px; }
+  .hero-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .docs-section { margin-bottom: 64px; scroll-margin-top: 80px; }
+  .sec-idx { font-size: 11px; color: var(--dim); letter-spacing: 0.1em; margin-bottom: 8px; }
+  .docs-section h2 { font-size: 22px; font-weight: 600; letter-spacing: -0.015em; margin: 0 0 12px; }
+  .docs-section > p { color: var(--fg-2); max-width: 68ch; font-size: 14.5px; margin: 0 0 22px; }
+  .inline-link { color: var(--accent); border-bottom: 1px dashed var(--accent-line); }
+
+  .pm-tabs { display: flex; gap: 2px; margin-bottom: -1px; }
+  .pm-tab {
+    font-family: var(--font-mono); font-size: 11px;
+    background: var(--bg-2); color: var(--dim);
+    border: 1px solid var(--line); border-bottom: none;
+    padding: 6px 14px; border-radius: 4px 4px 0 0;
+    cursor: pointer;
+  }
+  .pm-tab.active { background: var(--bg-2); color: var(--fg); border-color: var(--line); }
+  .pm-tab:not(.active):hover { color: var(--fg); }
+
+  .terminal {
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 0 4px 4px 4px;
+    padding: 16px 20px;
+    font-family: var(--font-mono); font-size: 13px;
+    line-height: 1.9;
+    overflow-x: auto;
+  }
+  .terminal.lg { padding: 20px 24px; border-radius: 6px; }
+  .terminal.hidden { display: none; }
+  .term-line .prompt { color: var(--accent); margin-right: 10px; }
+  .term-line.dim { color: var(--dim); }
+
+  .callout {
+    display: grid; grid-template-columns: auto 1fr; gap: 14px;
+    padding: 14px 18px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    border-radius: 6px;
+    margin-top: 20px;
+  }
+  .callout .pill { align-self: start; }
+  .callout p { margin: 0; color: var(--fg-2); font-size: 13.5px; }
+
+  .env-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+  .env-card { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 18px 20px; }
+  .env-card h4 { margin: 0 0 12px; font-size: 13px; letter-spacing: -0.005em; font-weight: 600; }
+  .env-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .env-table td { padding: 6px 8px 6px 0; vertical-align: top; border-bottom: 1px dashed var(--line); }
+  .env-table tr:last-child td { border-bottom: none; }
+  .env-table td:first-child { color: var(--accent); width: 42%; white-space: nowrap; }
+
+  .scale-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .scale-card { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 18px 20px; }
+  .scale-card .u-kicker { display: block; margin-bottom: 8px; color: var(--accent); }
+  .scale-card p { margin: 0; color: var(--fg-2); font-size: 13px; line-height: 1.55; }
+
+  .contrib-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .contrib-card {
+    display: block; border: 1px solid var(--line); background: var(--surface);
+    border-radius: 6px; padding: 18px 20px;
+    transition: background .2s, border-color .2s;
+  }
+  .contrib-card:hover { background: var(--surface-2); border-color: var(--dim-2); }
+  .contrib-card .c-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; font-size: 11px; color: var(--dim); }
+  .contrib-card h4 { margin: 0 0 6px; font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+  .contrib-card p { margin: 0; color: var(--dim); font-size: 13px; }
+
+  .docs-end {
+    margin-top: 64px; padding: 36px 40px;
+    border: 1px dashed var(--line-2);
+    border-radius: 8px;
+    background: linear-gradient(160deg, rgba(153,69,255,0.06), transparent 70%);
+  }
+  .docs-end .u-kicker { margin-bottom: 8px; display: block; color: var(--accent); }
+  .docs-end h3 { font-size: 26px; font-weight: 600; margin: 0 0 10px; letter-spacing: -0.02em; }
+  .docs-end p { color: var(--fg-2); max-width: 60ch; margin: 0 0 20px; }
+  .docs-end-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  @media (max-width: 960px) {
+    .docs { grid-template-columns: 1fr; }
+    .docs-side { position: static; border-right: none; border-bottom: 1px dashed var(--line); padding-right: 0; margin-right: 0; padding: 24px 0; max-height: none; }
+    .env-grid, .scale-grid, .contrib-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <div class="brand" style="margin-bottom:12px"><span class="brand-mark"></span>SolUPG</div>
+      <p style="color:var(--dim-2); font-size:11px; max-width:28ch; margin:0;">Open payment infrastructure for Solana. Apache 2.0. Built in Indonesia, free for the world.</p>
+    </div>
+    <div><h5>Project</h5><ul><li><a href="index.html">Overview</a></li><li><a href="quickstart.html">Quick start</a></li><li><a href="funding.html">Funding</a></li><li><a href="https://github.com/revengerrr/solupg">GitHub</a></li></ul></div>
+    <div><h5>Docs</h5><ul><li><a href="#install">Install</a></li><li><a href="#selfhost">Self-host</a></li><li><a href="#contribute">Contribute</a></li><li><a href="#">API reference</a></li></ul></div>
+    <div><h5>Contact</h5><ul><li><a href="#">hello@solupg.dev</a></li><li><a href="https://x.com/revengerai">twitter / x</a></li></ul></div>
+  </div>
+  <div class="legal">
+    <span>© 2026 SolUPG contributors · Apache-2.0</span>
+    <span>commit · <span style="color:var(--fg-2)">a8f3c2e</span> · v0.4.0-rc.2</span>
+    <span>🌏 built in Indonesia</span>
+  </div>
+</footer>
+
+<div class="tweaks" id="tweaks-panel">
+  <h4>Tweaks</h4>
+  <label>accent hue · <span id="tw-hue-v" class="mono">275</span>
+    <input type="range" id="tw-hue" min="0" max="360" step="5" />
+  </label>
+  <label>density
+    <select id="tw-density">
+      <option value="compact">compact</option>
+      <option value="default">default</option>
+      <option value="spacious">spacious</option>
+    </select>
+  </label>
+  <label><input type="checkbox" id="tw-labels" /> show architecture layer labels</label>
+</div>
+
+<script src="shared.js"></script>
+<script>
+// Package manager tabs
+document.querySelectorAll('.pm-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    const name = t.dataset.pm;
+    document.querySelectorAll('.pm-tab').forEach(x => x.classList.toggle('active', x === t));
+    document.querySelectorAll('[data-pm-pane]').forEach(p => p.classList.toggle('hidden', p.dataset.pmPane !== name));
+  });
+});
+
+// Pattern tabs
+document.querySelectorAll('.code-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const name = tab.dataset.tab;
+    document.querySelectorAll('.code-tab').forEach(t => t.classList.toggle('active', t === tab));
+    document.querySelectorAll('[data-tab-pane]').forEach(p => p.classList.toggle('hidden', p.dataset.tabPane !== name));
+  });
+});
+
+// Sidebar scrollspy
+(() => {
+  const links = document.querySelectorAll('.side-link');
+  const sections = [...document.querySelectorAll('.docs-section, .docs-hero')].map(el => ({
+    id: el.id, el
+  })).filter(x => x.id);
+  const byId = new Map();
+  links.forEach(a => {
+    const href = a.getAttribute('href') || '';
+    if (href.startsWith('#')) byId.set(href.slice(1), a);
+  });
+  function onScroll() {
+    let active = null;
+    for (const s of sections) {
+      const r = s.el.getBoundingClientRect();
+      if (r.top < 120) active = s.id;
+    }
+    links.forEach(a => a.classList.remove('active'));
+    if (active && byId.get(active)) byId.get(active).classList.add('active');
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+// Copy code
+document.querySelectorAll('.code-copy').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const code = btn.closest('.code')?.querySelector('.src');
+    if (code) navigator.clipboard?.writeText(code.innerText);
+    const old = btn.textContent; btn.textContent = '✓ copied';
+    setTimeout(() => btn.textContent = old, 1200);
+  });
+});
+</script>
+</body>
+</html>

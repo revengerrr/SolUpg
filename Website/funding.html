@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SolUPG — Funding</title>
+<meta name="description" content="Help fund the security audit and mainnet deployment of SolUPG. Fully transparent breakdown. Apache 2.0 forever." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="SolUPG — Fund the Audit" />
+<meta property="og:description" content="Help fund the security audit and mainnet deployment of SolUPG. Fully transparent. No equity, no tokens. Apache 2.0 forever." />
+<meta property="og:url" content="https://solupg.dev/funding" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@revengerai" />
+<meta name="twitter:title" content="SolUPG — Fund the Audit" />
+<meta name="twitter:description" content="Help fund the security audit of SolUPG. Fully transparent breakdown. No equity, no tokens." />
+<link rel="stylesheet" href="styles.css" />
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+</head>
+<body>
+
+<div class="statusbar">
+  <div class="statusbar-inner">
+    <span><span class="live-dot"></span>funding · round 01</span>
+    <span class="sep">/</span>
+    <span>goal $70k – $170k</span>
+    <span class="sep">/</span>
+    <span>100% transparent</span>
+    <span class="sep">/</span>
+    <span>no equity · no tokens · open-source</span>
+    <span class="sep" style="margin-left:auto">/</span>
+    <span>updated 2026-04-28</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><span class="brand-mark"></span>SolUPG<span class="tag">/ payment-gateway</span></a>
+    <div class="nav-links">
+      <a class="nav-link" href="index.html">~/overview</a>
+      <a class="nav-link active" href="funding.html">~/funding</a>
+      <a class="nav-link" href="quickstart.html">~/quickstart</a>
+      <a class="nav-link" href="demo.html">~/demo</a>
+      <a class="nav-link" href="https://github.com/revengerrr/solupg">github ↗</a>
+    </div>
+    <div class="nav-right">
+      <button class="nav-hamburger" aria-label="Menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
+      </button>
+      <a class="btn btn-accent" href="#donate">Donate</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Funding hero / ticker -->
+<section class="section" style="border-top:none">
+  <div class="fhero">
+    <div class="fhero-text">
+      <div class="pill dot warn" style="margin-bottom:18px">blocked on funding · Q2 2026</div>
+      <h1>The code is written.<br/><span class="accent">The audit is not.</span></h1>
+      <p>
+        Four on-chain programs. Six off-chain services. A full-stack SDK. Everything runs on
+        devnet today — but before a single mainnet dollar flows through SolUPG, it needs a
+        professional security audit. That audit is the <span class="fg-2 mono">only</span> thing
+        between this project and launch.
+      </p>
+      <p class="dim">
+        We don't take equity. We don't issue a token. This page is the entire funding story —
+        every line item, every donation, every receipt.
+      </p>
+      <div class="fhero-actions">
+        <a class="btn btn-accent btn-lg" href="#donate">→ Donate in SOL / USDC</a>
+        <a class="btn btn-lg" href="#breakdown">See the breakdown</a>
+        <a class="btn btn-lg btn-ghost" href="#ledger">Public ledger</a>
+      </div>
+    </div>
+
+    <!-- Progress panel -->
+    <aside class="fhero-panel">
+      <div class="panel-row">
+        <div class="u-kicker">raised to date</div>
+        <div class="big-num mono">$0<span class="big-num-sub">.00</span></div>
+        <div class="dim mono" style="font-size:11px">funding not yet started · 0 sponsors</div>
+      </div>
+
+      <div class="panel-bar">
+        <div class="bar-wrap">
+          <div class="bar-marks">
+            <span style="left:0%">$0</span>
+            <span style="left:41%">$70k · min audit</span>
+            <span style="left:100%">$170k · full audit</span>
+          </div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:0%"></div>
+            <div class="bar-tick" style="left:41%"></div>
+          </div>
+          <div class="bar-legend">
+            <span class="mono dim">0% of minimum goal</span>
+            <span class="mono dim">0% of stretch</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel-grid">
+        <div>
+          <div class="u-kicker">status</div>
+          <div class="m-val mono">pre-launch</div>
+        </div>
+        <div>
+          <div class="u-kicker">goal</div>
+          <div class="m-val mono">$70k</div>
+        </div>
+        <div>
+          <div class="u-kicker">stretch</div>
+          <div class="m-val mono">$170k</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .fhero {
+    max-width: var(--max-w); margin: 0 auto;
+    padding: 72px var(--pad-x) 80px;
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 56px; align-items: start;
+  }
+  .fhero-text h1 {
+    font-size: clamp(36px, 4.8vw, 60px);
+    line-height: 1.05; letter-spacing: -0.025em; margin: 0 0 20px;
+    font-weight: 600;
+  }
+  .fhero-text p { color: var(--fg-2); font-size: 16px; max-width: 56ch; margin: 0 0 14px; }
+  .fhero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+
+  .fhero-panel {
+    border: 1px solid var(--line); background: var(--surface);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .panel-row { padding: 22px 24px; border-bottom: 1px dashed var(--line); }
+  .big-num { font-size: 44px; font-weight: 600; letter-spacing: -0.02em; margin: 4px 0 6px; }
+  .big-num-sub { font-size: 22px; color: var(--dim); font-weight: 400; }
+  .panel-bar { padding: 22px 24px; border-bottom: 1px dashed var(--line); }
+  .bar-marks {
+    position: relative; height: 20px;
+    font-family: var(--font-mono); font-size: 10px; color: var(--dim);
+    margin-bottom: 4px;
+  }
+  .bar-marks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+  .bar-marks span:first-child { transform: translateX(0); }
+  .bar-marks span:last-child { transform: translateX(-100%); }
+  .bar-track {
+    position: relative;
+    height: 10px; background: var(--line); border-radius: 5px; overflow: visible;
+  }
+  .bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent), var(--ok));
+    border-radius: 5px;
+    box-shadow: 0 0 12px rgba(153,69,255,0.4);
+  }
+  .bar-tick {
+    position: absolute; top: -4px; bottom: -4px; width: 2px;
+    background: var(--warn); border-radius: 1px;
+  }
+  .bar-legend { display: flex; justify-content: space-between; margin-top: 8px; }
+
+  .panel-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .panel-grid > div { padding: 18px 24px; border-right: 1px dashed var(--line); }
+  .panel-grid > div:last-child { border-right: none; }
+  .m-val { font-size: 18px; font-weight: 600; margin-top: 4px; letter-spacing: -0.01em; }
+
+  @media (max-width: 900px) {
+    .fhero { grid-template-columns: 1fr; gap: 32px; padding: 48px var(--pad-x); }
+  }
+</style>
+
+<!-- Breakdown -->
+<section class="section" id="breakdown">
+  <div class="section-head">
+    <div><div class="idx">§01 · where the money goes</div></div>
+    <div>
+      <h2 class="title">Every dollar, itemized.</h2>
+      <p class="sub">No salaries. No marketing budget. No founder pay. Every line below is a real invoice from an auditor, an infrastructure bill, or a tool the project depends on.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="ledger">
+      <div class="ledger-head">
+        <div>ITEM</div>
+        <div>VENDOR / OPTIONS</div>
+        <div>RECURRENCE</div>
+        <div>MIN</div>
+        <div>MAX</div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="l-item"><span class="l-tag accent">AUDIT</span><strong>Professional security audit</strong><div class="l-note">Full scope: 4 programs + 6 services + SDK. Includes remediation review.</div></div>
+        <div class="l-vendor mono">OtterSec · Neodyme<br/>Halborn · Zellic</div>
+        <div class="l-rec mono">one-time</div>
+        <div class="l-min mono">$50,000</div>
+        <div class="l-max mono">$150,000</div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="l-item"><span class="l-tag accent">CHAIN</span><strong>Mainnet deployment</strong><div class="l-note">Program deploy fees, multisig upgrade authority setup, deterministic build toolchain.</div></div>
+        <div class="l-vendor mono">Solana mainnet-beta<br/>Squads multisig</div>
+        <div class="l-rec mono">one-time</div>
+        <div class="l-min mono">$3,000</div>
+        <div class="l-max mono">$5,000</div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="l-item"><span class="l-tag accent">INFRA</span><strong>Production infrastructure</strong><div class="l-note">2× VPS nodes (indexer + API), Postgres, Redis, Grafana Cloud. 1-year prepay.</div></div>
+        <div class="l-vendor mono">Hetzner · Grafana Cloud<br/>Helius RPC</div>
+        <div class="l-rec mono">12 months</div>
+        <div class="l-min mono">$3,600</div>
+        <div class="l-max mono">$7,200</div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="l-item"><span class="l-tag accent">MONITOR</span><strong>Monitoring &amp; alerting</strong><div class="l-note">PagerDuty, Sentry, uptime checks. Required for 99.9% SLO commitment.</div></div>
+        <div class="l-vendor mono">PagerDuty · Sentry<br/>BetterStack</div>
+        <div class="l-rec mono">12 months</div>
+        <div class="l-min mono">$2,400</div>
+        <div class="l-max mono">$5,400</div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="l-item"><span class="l-tag warn">BOUNTY</span><strong>Bug bounty pool</strong><div class="l-note">Immunefi-hosted post-launch bounty — critical findings up to $25k each.</div></div>
+        <div class="l-vendor mono">Immunefi</div>
+        <div class="l-rec mono">ongoing</div>
+        <div class="l-min mono">$10,000</div>
+        <div class="l-max mono">$100,000</div>
+      </div>
+
+      <div class="ledger-row">
+        <div class="l-item"><span class="l-tag warn">LEGAL</span><strong>Legal review (optional)</strong><div class="l-note">Apache 2.0 licensing review, trademark, contributor agreements. Only if we hit stretch.</div></div>
+        <div class="l-vendor mono">Cooley · Gunderson<br/>(TBD)</div>
+        <div class="l-rec mono">one-time</div>
+        <div class="l-min mono">$0</div>
+        <div class="l-max mono">$8,000</div>
+      </div>
+
+      <div class="ledger-footer">
+        <div></div>
+        <div class="mono dim" style="text-align:right">TOTAL</div>
+        <div class="mono dim">6 line items</div>
+        <div class="mono" style="color:var(--fg); font-weight:600">$69,000</div>
+        <div class="mono" style="color:var(--accent); font-weight:600">$275,600</div>
+      </div>
+    </div>
+
+    <div class="transparency-note">
+      <span class="u-kicker">note · transparency</span>
+      <p>The <span class="mono fg-2">min column</span> is the bare minimum to get audited + live. The <span class="mono fg-2">max column</span> covers premium auditors, multi-firm review, and a well-funded bounty pool. We'll publish every invoice at <span class="mono fg-2">/ledger</span> as funds are spent.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ledger { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--surface); }
+  .ledger-head, .ledger-row, .ledger-footer {
+    display: grid;
+    grid-template-columns: minmax(0, 2.2fr) minmax(0, 1.2fr) 120px 120px 120px;
+    gap: 16px;
+    padding: 14px 20px;
+  }
+  .ledger-head {
+    font-family: var(--font-mono); font-size: 10px; color: var(--dim);
+    letter-spacing: 0.12em; border-bottom: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+  .ledger-head > div:nth-child(4), .ledger-head > div:nth-child(5) { text-align: right; }
+  .ledger-row {
+    border-bottom: 1px dashed var(--line);
+    align-items: start;
+    transition: background .2s;
+  }
+  .ledger-row:hover { background: var(--surface-2); }
+  .l-item strong { display: block; font-size: 15px; font-weight: 600; margin: 6px 0 4px; letter-spacing: -0.01em; }
+  .l-tag { display: inline-block; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.12em;
+    padding: 2px 6px; border: 1px solid var(--line-2); border-radius: 3px; color: var(--dim); background: var(--bg-2); }
+  .l-tag.accent { color: var(--accent); border-color: var(--accent-line); background: var(--accent-soft); }
+  .l-tag.warn { color: var(--warn); border-color: rgba(242,181,68,0.25); background: var(--warn-soft); }
+  .l-note { color: var(--dim); font-size: 12.5px; margin-top: 2px; max-width: 58ch; }
+  .l-vendor, .l-rec, .l-min, .l-max { font-size: 12px; padding-top: 22px; }
+  .l-min, .l-max { text-align: right; color: var(--fg); }
+  .ledger-footer {
+    padding: 16px 20px;
+    background: var(--bg-2);
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+  }
+  .ledger-footer > div:nth-child(4), .ledger-footer > div:nth-child(5) { text-align: right; }
+
+  .transparency-note {
+    margin-top: 24px; padding: 20px 24px;
+    border: 1px dashed var(--line-2);
+    border-radius: 6px;
+    background: var(--bg-2);
+  }
+  .transparency-note p { margin: 8px 0 0; color: var(--fg-2); font-size: 14px; max-width: 80ch; }
+
+  @media (max-width: 900px) {
+    .ledger-head, .ledger-row, .ledger-footer { grid-template-columns: 1fr; }
+    .l-vendor, .l-rec, .l-min, .l-max { padding-top: 4px; text-align: left; }
+  }
+</style>
+
+<!-- Tiers -->
+<section class="section" id="tiers">
+  <div class="section-head">
+    <div><div class="idx">§02 · support tiers</div></div>
+    <div>
+      <h2 class="title">Four ways to chip in.</h2>
+      <p class="sub">Every tier is permissionless — send from any wallet. Names pulled from on-chain memos. No paperwork. No NDAs.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="tiers">
+      <article class="tier">
+        <div class="tier-head">
+          <span class="tier-id mono">T_01</span>
+          <span class="tier-price mono">$10 – $50</span>
+        </div>
+        <h3>Supporter</h3>
+        <ul>
+          <li>Name in <span class="mono">CONTRIBUTORS.md</span></li>
+          <li>Project newsletter</li>
+          <li>On-chain receipt NFT</li>
+        </ul>
+        <div class="tier-cta">
+          <a href="#donate" class="btn">Donate</a>
+        </div>
+      </article>
+
+      <article class="tier">
+        <div class="tier-head">
+          <span class="tier-id mono">T_02</span>
+          <span class="tier-price mono">$50 – $500</span>
+        </div>
+        <h3>Backer</h3>
+        <ul>
+          <li>Everything in Supporter</li>
+          <li>Name on the project website</li>
+          <li>Early access to private testnet</li>
+          <li>Priority updates via X / email</li>
+        </ul>
+        <div class="tier-cta">
+          <a href="#donate" class="btn">Donate</a>
+        </div>
+      </article>
+
+      <article class="tier featured">
+        <div class="tier-ribbon mono">MOST POPULAR</div>
+        <div class="tier-head">
+          <span class="tier-id mono">T_03</span>
+          <span class="tier-price mono">$500 – $5,000</span>
+        </div>
+        <h3>Sponsor</h3>
+        <ul>
+          <li>Everything in Backer</li>
+          <li>Logo in <span class="mono">README.md</span></li>
+          <li>Logo on project website footer</li>
+          <li>Priority support channel</li>
+          <li>Quarterly 30-min sync with maintainers</li>
+        </ul>
+        <div class="tier-cta">
+          <a href="#donate" class="btn btn-accent">Donate</a>
+        </div>
+      </article>
+
+      <article class="tier">
+        <div class="tier-head">
+          <span class="tier-id mono">T_04</span>
+          <span class="tier-price mono">$5,000+</span>
+        </div>
+        <h3>Partner</h3>
+        <ul>
+          <li>Everything in Sponsor</li>
+          <li>Primary logo placement</li>
+          <li>Co-announced launch blog post</li>
+          <li>Direct roadmap input</li>
+          <li>Engineering pairing time</li>
+        </ul>
+        <div class="tier-cta">
+          <a href="#donate" class="btn">Get in touch</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .tiers {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+  }
+  .tier {
+    padding: 26px 22px;
+    border-right: 1px solid var(--line);
+    background: var(--surface);
+    display: flex; flex-direction: column;
+    position: relative;
+  }
+  .tier:last-child { border-right: none; }
+  .tier.featured { background: linear-gradient(180deg, rgba(153,69,255,0.08), transparent 60%); }
+  .tier-ribbon {
+    position: absolute; top: 0; right: 0;
+    background: var(--accent); color: #fff;
+    font-size: 9px; letter-spacing: 0.15em;
+    padding: 3px 8px;
+    border-bottom-left-radius: 4px;
+  }
+  .tier-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
+  .tier-id { font-size: 10px; color: var(--dim); letter-spacing: 0.15em; }
+  .tier-price { font-size: 12px; color: var(--fg-2); letter-spacing: 0.02em; }
+  .tier h3 { font-size: 20px; font-weight: 600; margin: 0 0 16px; letter-spacing: -0.015em; }
+  .tier ul {
+    list-style: none; padding: 0; margin: 0 0 24px;
+    flex: 1;
+    font-size: 13px; color: var(--fg-2);
+    line-height: 1.7;
+  }
+  .tier li {
+    padding-left: 16px;
+    position: relative;
+  }
+  .tier li::before {
+    content: '+'; position: absolute; left: 0; top: 0;
+    color: var(--accent); font-family: var(--font-mono); font-weight: 600;
+  }
+  .tier-cta .btn { width: 100%; justify-content: center; }
+  @media (max-width: 1000px) {
+    .tiers { grid-template-columns: repeat(2, 1fr); }
+    .tier:nth-child(2n) { border-right: none; }
+    .tier { border-bottom: 1px solid var(--line); }
+  }
+  @media (max-width: 600px) {
+    .tiers { grid-template-columns: 1fr; }
+    .tier { border-right: none !important; }
+  }
+</style>
+
+<!-- Donate / addresses -->
+<section class="section" id="donate">
+  <div class="section-head">
+    <div><div class="idx">§03 · donate</div></div>
+    <div>
+      <h2 class="title">Send directly on-chain.</h2>
+      <p class="sub">No intermediaries, no processor. Funds arrive on-chain the moment your tx confirms.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="donate-grid">
+      <!-- Address cards -->
+      <div class="donate-addrs">
+        <div class="addr-card">
+          <div class="addr-head">
+            <span class="addr-ticker mono">SOL / SPL</span>
+            <span class="pill dot ok">mainnet</span>
+          </div>
+          <div class="addr-val mono" id="addr-sol">bvfyyVjWL75SaahjfLLw8tphBtBG5qwKHpr4yWxYRmH</div>
+          <div class="addr-actions">
+            <button class="btn" onclick="copyAddr('addr-sol', this)">copy</button>
+            <a class="btn" href="https://solscan.io/account/bvfyyVjWL75SaahjfLLw8tphBtBG5qwKHpr4yWxYRmH">view on explorer ↗</a>
+          </div>
+        </div>
+
+        <div class="addr-card">
+          <div class="addr-head">
+            <span class="addr-ticker mono">github · sponsors</span>
+            <span class="pill mono">monthly · cc</span>
+          </div>
+          <div class="addr-val mono">github.com/sponsors/revengerrr</div>
+          <div class="addr-actions">
+            <a class="btn" href="https://github.com/sponsors/revengerrr">open github sponsors ↗</a>
+          </div>
+        </div>
+
+        <div class="addr-card">
+          <div class="addr-head">
+            <span class="addr-ticker mono">solana · foundation grants</span>
+            <span class="pill warn dot">planned</span>
+          </div>
+          <div class="addr-val dim" style="font-size:13px; letter-spacing:0">Grant application in preparation. Status update will be published here.</div>
+        </div>
+      </div>
+
+      <!-- QR placeholder -->
+      <div class="qr-card">
+        <div class="qr-head">
+          <span class="u-kicker">scan · solana pay</span>
+          <span class="mono dim" style="font-size:11px">any wallet</span>
+        </div>
+        <div class="qr-body">
+          <!-- Stylized QR placeholder generated with pattern -->
+          <div id="donate-qr" style="width:100%; max-width:220px; margin:0 auto; background:#fff; border-radius:6px; padding:12px;"></div>
+          <p class="dim mono" style="font-size:11px; text-align:center; margin:12px 0 0">solana:bvfyyVjWL75S…RmH</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .donate-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; }
+  .donate-addrs { display: grid; gap: 14px; }
+  .addr-card {
+    border: 1px solid var(--line); background: var(--surface);
+    border-radius: 6px; padding: 20px;
+  }
+  .addr-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .addr-ticker { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; }
+  .addr-val {
+    font-size: 15px; color: var(--fg);
+    padding: 14px; border: 1px dashed var(--line-2); border-radius: 4px;
+    background: var(--bg-2);
+    word-break: break-all;
+    margin-bottom: 14px;
+  }
+  .addr-actions { display: flex; gap: 8px; }
+
+  .qr-card { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 20px; }
+  .qr-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .qr-body { background: var(--bg-2); padding: 20px; border-radius: 4px; border: 1px dashed var(--line-2); }
+  .qr-svg { width: 100%; max-width: 220px; display: block; margin: 0 auto; }
+
+  @media (max-width: 900px) { .donate-grid { grid-template-columns: 1fr; } }
+</style>
+
+<script>
+  // Real donation QR code
+  (() => {
+    const container = document.getElementById('donate-qr');
+    if (!container) return;
+    const wallet = 'bvfyyVjWL75SaahjfLLw8tphBtBG5qwKHpr4yWxYRmH';
+    const url = 'solana:' + wallet;
+    try {
+      const qr = qrcode(0, 'M');
+      qr.addData(url);
+      qr.make();
+      const mc = qr.getModuleCount();
+      const cell = 6, pad = 10;
+      const size = mc * cell + pad * 2;
+      let rects = '';
+      for (let r = 0; r < mc; r++)
+        for (let c = 0; c < mc; c++)
+          if (qr.isDark(r, c))
+            rects += `<rect x="${pad+c*cell}" y="${pad+r*cell}" width="${cell}" height="${cell}" fill="#0a0b0f"/>`;
+      container.innerHTML = `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;border-radius:4px;"><rect width="${size}" height="${size}" fill="#fff"/>${rects}</svg>`;
+    } catch(e) {}
+  })();
+
+  function copyAddr(id, btn) {
+    const t = document.getElementById(id);
+    if (!t) return;
+    navigator.clipboard?.writeText(t.textContent.trim());
+    const old = btn.textContent; btn.textContent = '✓ copied';
+    setTimeout(() => btn.textContent = old, 1400);
+  }
+</script>
+
+<!-- Public ledger -->
+<section class="section" id="ledger">
+  <div class="section-head">
+    <div><div class="idx">§04 · public ledger</div></div>
+    <div>
+      <h2 class="title">Every donation. Every expense.</h2>
+      <p class="sub">All transactions are on-chain and publicly verifiable. Donations and expenses will be listed here as they happen.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="led">
+      <div class="led-head">
+        <div>TIME</div>
+        <div>TYPE</div>
+        <div>PARTY</div>
+        <div>MEMO</div>
+        <div>AMOUNT</div>
+        <div>TX</div>
+      </div>
+      <div class="led-row" style="grid-column: 1 / -1; text-align: center; padding: 40px 18px;">
+        <div class="mono dim" style="font-size: 13px;">No transactions yet. Ledger entries will appear here once funding begins.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .led { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--surface); }
+  .led-head, .led-row {
+    display: grid;
+    grid-template-columns: 140px 60px 140px 1fr 140px 100px;
+    gap: 14px; align-items: center;
+    padding: 12px 18px;
+    font-family: var(--font-mono); font-size: 12px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .led-head {
+    background: var(--bg-2); color: var(--dim);
+    font-size: 10px; letter-spacing: 0.12em;
+  }
+  .led-row:last-of-type { border-bottom: none; }
+  .led-row:hover { background: var(--surface-2); }
+  .led-row .pill { justify-self: start; }
+  .led-more { padding: 16px 18px; text-align: center; background: var(--bg-2); }
+  .led-more a { font-size: 12px; color: var(--dim); border-bottom: 1px dashed var(--line-2); padding-bottom: 1px; }
+  .led-more a:hover { color: var(--accent); border-color: var(--accent-line); }
+  @media (max-width: 900px) { .led-head { display: none; } .led-row { grid-template-columns: 1fr; gap: 6px; } }
+</style>
+
+<!-- Trust / FAQ -->
+<section class="section" id="trust">
+  <div class="section-head">
+    <div><div class="idx">§05 · trust</div></div>
+    <div>
+      <h2 class="title">Common questions.</h2>
+      <p class="sub">The uncomfortable ones first.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="faq">
+      <details open>
+        <summary>What if you don't hit the goal?</summary>
+        <p>Whatever we raise, we spend on the most critical items first — starting with audit scoping. We'll publish the partial audit even if full coverage isn't funded. Every dollar is tied to a line item; nothing is kept as "founder compensation."</p>
+      </details>
+      <details>
+        <summary>Why not just raise a seed round?</summary>
+        <p>Investors want returns. Returns require either a token, fees, or vendor lock-in. All three would compromise the goal of neutral, open payment infrastructure — which is the entire reason this project exists. Donations keep the protocol free.</p>
+      </details>
+      <details>
+        <summary>Where is the money held until it's spent?</summary>
+        <p>A dedicated Solana wallet on mainnet. The address is public and all transactions are verifiable on-chain via any block explorer.</p>
+      </details>
+      <details>
+        <summary>Can I get my money back?</summary>
+        <p>No — donations are non-refundable, the same as any open-source grant. If you need a recovery clause, contact us before sending; we can discuss a custom arrangement for Partner-tier contributions.</p>
+      </details>
+      <details>
+        <summary>Will there ever be a token?</summary>
+        <p>No. The project charter explicitly forbids issuing a governance or utility token. We believe tokens and neutral payment infrastructure are incompatible.</p>
+      </details>
+      <details>
+        <summary>What happens after the audit?</summary>
+        <p>Findings are remediated. The report is published in full. Programs deploy to mainnet under a time-locked upgrade authority. A bug bounty program opens on Immunefi. Then we start on Phase 6 — production scale.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq { display: grid; gap: 2px; }
+  .faq details {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface);
+    overflow: hidden;
+    transition: background .2s;
+  }
+  .faq details[open] { background: var(--surface-2); }
+  .faq summary {
+    padding: 18px 22px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    position: relative;
+    list-style: none;
+    padding-right: 48px;
+  }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after {
+    content: '+'; position: absolute; right: 22px; top: 18px;
+    font-family: var(--font-mono); color: var(--dim); font-size: 18px;
+    transition: transform .2s;
+  }
+  .faq details[open] summary::after { content: '−'; }
+  .faq p {
+    padding: 0 22px 20px; margin: 0; color: var(--fg-2); font-size: 14px; max-width: 78ch;
+    line-height: 1.6;
+  }
+</style>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <div class="brand" style="margin-bottom:12px"><span class="brand-mark"></span>SolUPG</div>
+      <p style="color:var(--dim-2); font-size:11px; max-width:28ch; margin:0;">Open payment infrastructure for Solana. Apache 2.0. Built in Indonesia, free for the world.</p>
+    </div>
+    <div>
+      <h5>Project</h5>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="quickstart.html">Quick start</a></li>
+        <li><a href="funding.html">Funding</a></li>
+        <li><a href="https://github.com/revengerrr/solupg">GitHub</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Funding</h5>
+      <ul>
+        <li><a href="#breakdown">Breakdown</a></li>
+        <li><a href="#tiers">Tiers</a></li>
+        <li><a href="#ledger">Public ledger</a></li>
+        <li><a href="#trust">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="#">hello@solupg.dev</a></li>
+        <li><a href="https://x.com/revengerai">twitter / x</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 SolUPG contributors · Apache-2.0</span>
+    <span>commit · <span style="color:var(--fg-2)">a8f3c2e</span> · v0.4.0-rc.2</span>
+    <span>🌏 built in Indonesia</span>
+  </div>
+</footer>
+
+<div class="tweaks" id="tweaks-panel">
+  <h4>Tweaks</h4>
+  <label>accent hue · <span id="tw-hue-v" class="mono">275</span>
+    <input type="range" id="tw-hue" min="0" max="360" step="5" />
+  </label>
+  <label>density
+    <select id="tw-density">
+      <option value="compact">compact</option>
+      <option value="default">default</option>
+      <option value="spacious">spacious</option>
+    </select>
+  </label>
+  <label><input type="checkbox" id="tw-labels" /> show architecture layer labels</label>
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>

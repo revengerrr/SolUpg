@@ -118,8 +118,8 @@ describe("solupg-splitter", () => {
       .rpc();
 
     const config = await program.account.splitConfig.fetch(splitConfigPda);
-    assert.equal(config.recipients.length, 3);
-    assert.deepEqual(config.ratios, [9700, 200, 100]);
+    assert.equal((config as any).recipients.length, 3);
+    assert.deepEqual((config as any).ratios, [9700, 200, 100]);
   });
 
   it("executes a split", async () => {
@@ -183,7 +183,7 @@ describe("solupg-splitter", () => {
       .rpc();
 
     const config = await program.account.splitConfig.fetch(splitConfigPda);
-    assert.equal(config.recipients.length, 2);
-    assert.deepEqual(config.ratios, [9500, 500]);
+    assert.equal((config as any).recipients.length, 2);
+    assert.deepEqual((config as any).ratios, [9500, 500]);
   });
 });

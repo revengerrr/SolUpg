@@ -101,9 +101,9 @@ describe("solupg-payment", () => {
       .rpc();
 
     const state = await program.account.paymentState.fetch(paymentStatePda);
-    assert.equal(state.amount.toNumber(), 100_000_000);
-    assert.deepEqual(state.status, { pending: {} });
-    assert.equal(state.metadata, "Test payment");
+    assert.equal((state as any).amount.toNumber(), 100_000_000);
+    assert.deepEqual((state as any).status, { pending: {} });
+    assert.equal((state as any).metadata, "Test payment");
   });
 
   it("executes a payment", async () => {

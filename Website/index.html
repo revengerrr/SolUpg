@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SolUPG — One Integration. Every SPL Token. Instant Settlement.</title>
+<meta name="description" content="SolUPG — open-source payment infrastructure for Solana. One API for every SPL token, verified identity, on-chain escrow, instant settlement." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="SolUPG — Open Payment Infrastructure for Solana" />
+<meta property="og:description" content="One integration. Every SPL token. Instant settlement. Open-source payment gateway for Solana. Apache 2.0." />
+<meta property="og:url" content="https://solupg.dev" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:site" content="@revengerai" />
+<meta name="twitter:title" content="SolUPG — Open Payment Infrastructure for Solana" />
+<meta name="twitter:description" content="One integration. Every SPL token. Instant settlement. Open-source, Apache 2.0, built in Indonesia." />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Status bar -->
+<div class="statusbar">
+  <div class="statusbar-inner">
+    <span><span class="live-dot"></span>mainnet · pending audit</span>
+    <span class="sep">/</span>
+    <span>v0.4.0-rc.2</span>
+    <span class="sep">/</span>
+    <span>apache-2.0</span>
+    <span class="sep">/</span>
+    <span>open-source · no-investors</span>
+    <span class="sep" style="margin-left:auto">/</span>
+    <span>built in Indonesia</span>
+  </div>
+</div>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html">
+      <span class="brand-mark"></span>
+      SolUPG<span class="tag">/ payment-gateway</span>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link active" href="index.html">~/overview</a>
+      <a class="nav-link" href="funding.html">~/funding</a>
+      <a class="nav-link" href="quickstart.html">~/quickstart</a>
+      <a class="nav-link" href="demo.html">~/demo</a>
+      <a class="nav-link" href="https://github.com/revengerrr/solupg">github ↗</a>
+    </div>
+    <div class="nav-right">
+      <button class="nav-hamburger" aria-label="Menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
+      </button>
+      <a class="btn btn-primary" href="https://github.com/revengerrr/solupg">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="section hero">
+  <div class="hero-inner">
+    <!-- Left: text -->
+    <div class="hero-text">
+      <div class="pill dot accent" style="margin-bottom:20px">open-source · pre-mainnet</div>
+      <h1 class="hero-h1">
+        One integration.<br/>
+        <span class="h1-mono">Every SPL token.</span><br/>
+        <span class="h1-accent">Instant settlement.</span>
+      </h1>
+      <p class="hero-sub">
+        SolUPG is open payment infrastructure for Solana — a universal router that connects wallets,
+        merchants, and providers into a single network with sub-second finality and near-zero fees.
+      </p>
+
+      <div class="hero-cta">
+        <a class="btn btn-accent btn-lg" href="demo.html">
+          Create a payment QR
+        </a>
+        <a class="btn btn-lg" href="quickstart.html">
+          $ npm install @solupg/sdk
+        </a>
+        <a class="btn btn-lg" href="https://github.com/revengerrr/solupg">
+          View on GitHub
+        </a>
+      </div>
+
+      <!-- Stats row -->
+      <div class="hero-stats">
+        <div><div class="num">4</div><div class="lbl">on-chain programs</div></div>
+        <div><div class="num">6</div><div class="lbl">off-chain services</div></div>
+        <div><div class="num">1k</div><div class="lbl">target TPS</div></div>
+        <div><div class="num">~$0</div><div class="lbl">gas per tx</div></div>
+      </div>
+    </div>
+
+    <!-- Right: animated flow diagram -->
+    <div class="hero-viz">
+      <div class="viz-head">
+        <span>ROUTE · live demo</span>
+        <span class="viz-tick" id="viz-tick">t=0.00s</span>
+      </div>
+      <div class="viz-body">
+        <svg viewBox="0 0 520 420" class="viz-svg" preserveAspectRatio="xMidYMid meet">
+          <!-- grid -->
+          <defs>
+            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#141821" stroke-width="1"/>
+            </pattern>
+            <linearGradient id="flowg" x1="0" x2="1">
+              <stop offset="0" stop-color="#9945ff"/>
+              <stop offset="1" stop-color="#14f195"/>
+            </linearGradient>
+            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2"/>
+              <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <rect width="520" height="420" fill="url(#grid)"/>
+
+          <!-- Connection paths -->
+          <g id="paths" stroke-width="1.5" fill="none">
+            <path id="p1" d="M 100 90 C 180 90, 200 210, 260 210" stroke="#242933"/>
+            <path id="p2" d="M 260 210 C 320 210, 340 90, 420 90" stroke="#242933"/>
+            <path id="p3" d="M 260 210 C 260 260, 260 280, 260 330" stroke="#242933"/>
+            <path id="p4" d="M 100 330 C 180 330, 200 210, 260 210" stroke="#242933"/>
+            <path id="p5" d="M 260 210 C 320 210, 360 330, 420 330" stroke="#242933"/>
+          </g>
+
+          <!-- Animated dot along a full route path -->
+          <g id="routeflow">
+            <path id="routepath" d="M 100 90 C 180 90, 200 210, 260 210 C 320 210, 340 90, 420 90"
+                  stroke="url(#flowg)" stroke-width="2" fill="none" stroke-linecap="round"
+                  stroke-dasharray="6 8" class="flow-line"/>
+          </g>
+
+          <!-- Nodes -->
+          <!-- Payer: SOL -->
+          <g class="node node-in" transform="translate(40,60)">
+            <rect width="120" height="60" rx="6" fill="#0f1115" stroke="#242933"/>
+            <text x="12" y="22" class="n-lbl">PAYER</text>
+            <text x="12" y="42" class="n-val">Alice · SOL</text>
+            <circle cx="108" cy="30" r="3" fill="#14f195"/>
+          </g>
+
+          <!-- Router: SolUPG -->
+          <g class="node node-router" transform="translate(200,180)">
+            <rect width="120" height="60" rx="6" fill="#0f1115" stroke="#9945ff" stroke-width="1.5"/>
+            <text x="12" y="22" class="n-lbl" fill="#9945ff">ROUTER</text>
+            <text x="12" y="42" class="n-val">SolUPG · jup</text>
+            <circle cx="108" cy="30" r="3" fill="#9945ff"/>
+          </g>
+
+          <!-- DEX: Jupiter -->
+          <g class="node" transform="translate(360,60)">
+            <rect width="120" height="60" rx="6" fill="#0f1115" stroke="#242933"/>
+            <text x="12" y="22" class="n-lbl">DEX</text>
+            <text x="12" y="42" class="n-val">Jupiter · swap</text>
+            <circle cx="108" cy="30" r="3" fill="#f2b544"/>
+          </g>
+
+          <!-- Identity -->
+          <g class="node" transform="translate(40,300)">
+            <rect width="120" height="60" rx="6" fill="#0f1115" stroke="#242933"/>
+            <text x="12" y="22" class="n-lbl">IDENTITY</text>
+            <text x="12" y="42" class="n-val">bob@mail.id</text>
+            <circle cx="108" cy="30" r="3" fill="#82aaff"/>
+          </g>
+
+          <!-- Merchant -->
+          <g class="node node-out" transform="translate(360,300)">
+            <rect width="120" height="60" rx="6" fill="#0f1115" stroke="#242933"/>
+            <text x="12" y="22" class="n-lbl">MERCHANT</text>
+            <text x="12" y="42" class="n-val">Bob · USDC</text>
+            <circle cx="108" cy="30" r="3" fill="#14f195"/>
+          </g>
+        </svg>
+
+        <!-- Event log -->
+        <div class="viz-log" id="viz-log">
+          <div class="log-row"><span class="t">0.00</span><span class="ev">$ payment.create({ to: "bob@mail.id", amount: 25, settle: "USDC" })</span></div>
+          <div class="log-row"><span class="t">0.08</span><span class="ev"><span class="accent">→</span> directory.resolve → 7xK…9mP</span></div>
+          <div class="log-row"><span class="t">0.14</span><span class="ev"><span class="accent">→</span> router.quote: 0.167 SOL → 25.00 USDC</span></div>
+          <div class="log-row"><span class="t">0.22</span><span class="ev"><span class="accent">→</span> tx.sign · ed25519</span></div>
+          <div class="log-row"><span class="t">0.41</span><span class="ev"><span class="ok">✓</span> settled · slot 274,391,028 · fee 0.000005 SOL</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .hero {
+    border-top: none;
+  }
+  .hero-inner {
+    max-width: var(--max-w); margin: 0 auto;
+    padding: 72px var(--pad-x) 96px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 64px;
+    align-items: center;
+  }
+  .hero-h1 {
+    font-size: clamp(38px, 5.2vw, 68px);
+    line-height: 1.02;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    margin: 0 0 20px;
+    text-wrap: balance;
+  }
+  .h1-mono { font-family: var(--font-mono); font-weight: 500; letter-spacing: -0.04em; color: var(--fg-2); }
+  .h1-accent {
+    background: linear-gradient(90deg, var(--accent) 0%, var(--ok) 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    font-style: italic; font-weight: 500;
+  }
+  .hero-sub {
+    color: var(--dim); max-width: 54ch; margin: 0 0 28px;
+    font-size: 16px; line-height: 1.6;
+  }
+  .hero-cta { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 48px; }
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding-top: 24px; border-top: 1px dashed var(--line);
+  }
+  .hero-stats .num { font-family: var(--font-mono); font-size: 22px; font-weight: 600; letter-spacing: -0.02em; }
+  .hero-stats .lbl { font-family: var(--font-mono); font-size: 10px; color: var(--dim); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 2px; }
+
+  .hero-viz {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 40px 80px -40px rgba(153,69,255,0.25);
+  }
+  .viz-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono); font-size: 11px; color: var(--dim);
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .viz-head .viz-tick { color: var(--ok); }
+  .viz-body { display: grid; grid-template-rows: 1fr auto; }
+  .viz-svg { width: 100%; display: block; background: var(--bg-2); }
+  .viz-svg .n-lbl { font: 600 9px/1 'JetBrains Mono'; fill: var(--dim); letter-spacing: 0.1em; text-transform: uppercase; }
+  .viz-svg .n-val { font: 500 12px/1 'JetBrains Mono'; fill: var(--fg); }
+  .flow-line {
+    stroke-dashoffset: 0;
+    animation: dash 3s linear infinite;
+    filter: url(#glow);
+  }
+  @keyframes dash {
+    to { stroke-dashoffset: -140; }
+  }
+  .node rect { transition: stroke .3s; }
+  .node.active rect { stroke: #9945ff; }
+
+  .viz-log {
+    padding: 14px 16px;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-mono); font-size: 11.5px; line-height: 1.9;
+    background: var(--bg-2);
+    max-height: 140px; overflow: hidden;
+  }
+  .log-row { display: grid; grid-template-columns: 42px 1fr; opacity: 0; transform: translateY(4px); animation: fadein .4s forwards; }
+  .log-row:nth-child(1) { animation-delay: 0.0s; }
+  .log-row:nth-child(2) { animation-delay: 0.6s; }
+  .log-row:nth-child(3) { animation-delay: 1.2s; }
+  .log-row:nth-child(4) { animation-delay: 1.9s; }
+  .log-row:nth-child(5) { animation-delay: 2.6s; }
+  @keyframes fadein { to { opacity: 1; transform: none; } }
+  .log-row .t { color: var(--dim-2); }
+  .log-row .ev { color: var(--fg-2); }
+
+  @media (max-width: 980px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; padding: 48px var(--pad-x) 64px; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+
+<!-- Logos strip -->
+<section class="section logos">
+  <div class="logos-inner">
+    <div class="u-kicker">built on · integrates with</div>
+    <div class="logos-grid">
+      <div>SOLANA</div>
+      <div>ANCHOR 0.29</div>
+      <div>JUPITER</div>
+      <div>RUST · AXUM</div>
+      <div>POSTGRES</div>
+      <div>REDIS</div>
+      <div>DOCKER</div>
+      <div>PROMETHEUS</div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .logos { border-top: 1px solid var(--line); }
+  .logos-inner {
+    max-width: var(--max-w); margin: 0 auto;
+    padding: 28px var(--pad-x);
+    display: grid; grid-template-columns: 200px 1fr; align-items: center; gap: 24px;
+  }
+  .logos-grid {
+    display: grid; grid-template-columns: repeat(8, 1fr); gap: 20px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--dim);
+    letter-spacing: 0.08em;
+  }
+  .logos-grid > div {
+    border-left: 1px solid var(--line); padding-left: 12px;
+    white-space: nowrap;
+  }
+  @media (max-width: 900px) {
+    .logos-inner { grid-template-columns: 1fr; }
+    .logos-grid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  }
+</style>
+
+<!-- Problem -->
+<section class="section" id="problem">
+  <div class="section-head">
+    <div>
+      <div class="idx">§01 · problem</div>
+    </div>
+    <div>
+      <h2 class="title">Crypto payments are a fragmented mess.</h2>
+      <p class="sub">Every merchant integration re-invents the same five pieces of infrastructure. Tokens don't match, wallets aren't human-readable, and escrow lives off-chain in a spreadsheet.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="problem-grid">
+      <article class="p-card reveal">
+        <div class="p-num">01</div>
+        <h3>Token mismatch</h3>
+        <p>Payer holds SOL. Merchant wants USDC. Someone writes custom swap logic every single time.</p>
+      </article>
+      <article class="p-card reveal">
+        <div class="p-num">02</div>
+        <h3>Unreadable addresses</h3>
+        <p>Sending to <span class="mono">7xKX…9mPq</span> is a UX disaster. One typo, funds gone.</p>
+      </article>
+      <article class="p-card reveal">
+        <div class="p-num">03</div>
+        <h3>No standard escrow</h3>
+        <p>Marketplaces bolt together hacky multisigs. No audit trail. No dispute window.</p>
+      </article>
+      <article class="p-card reveal">
+        <div class="p-num">04</div>
+        <h3>Payouts ≠ atomic</h3>
+        <p>Splitting revenue to 40 contributors = 40 transactions, 40 failure points, 40 bugs.</p>
+      </article>
+      <article class="p-card reveal">
+        <div class="p-num">05</div>
+        <h3>Vendor lock-in</h3>
+        <p>Hosted processors charge 1–3% and hold your funds. Defeats the point of using a chain.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .problem-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    border: 1px solid var(--line);
+    border-radius: 6px; overflow: hidden;
+    background: var(--surface);
+  }
+  .p-card {
+    padding: 28px 22px;
+    border-right: 1px solid var(--line);
+    position: relative;
+    transition: background .2s;
+  }
+  .p-card:last-child { border-right: none; }
+  .p-card:hover { background: var(--surface-2); }
+  .p-num { font-family: var(--font-mono); font-size: 11px; color: var(--dim-2); margin-bottom: 18px; letter-spacing: 0.1em; }
+  .p-card h3 { font-size: 15px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .p-card p { color: var(--dim); font-size: 13px; margin: 0; line-height: 1.55; }
+  @media (max-width: 1000px) {
+    .problem-grid { grid-template-columns: repeat(2, 1fr); }
+    .p-card { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  }
+</style>
+
+<!-- Features (The Six) -->
+<section class="section" id="features">
+  <div class="section-head">
+    <div>
+      <div class="idx">§02 · solution</div>
+    </div>
+    <div>
+      <h2 class="title">Six primitives. One network.</h2>
+      <p class="sub">Each primitive is an on-chain Solana program or an off-chain service — all open-source, all composable, all deployed with a single <span class="mono fg-2">docker compose up</span>.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="feat-grid">
+      <article class="feat reveal">
+        <header>
+          <span class="feat-id mono">F_01</span>
+          <span class="pill dot ok">shipped</span>
+        </header>
+        <h3>Universal Token Routing</h3>
+        <p>Payer sends SOL. Merchant settles in USDC. SolUPG quotes Jupiter, executes atomically, and charges zero spread.</p>
+        <pre class="feat-code">pay({ token: "SOL", settle: "USDC" })</pre>
+      </article>
+
+      <article class="feat reveal">
+        <header>
+          <span class="feat-id mono">F_02</span>
+          <span class="pill dot ok">shipped</span>
+        </header>
+        <h3>Verified Payment Identity</h3>
+        <p>Pay to email, phone, or <span class="mono">.sol</span> domain. OTP-verified directory resolves to the right wallet — no more copy-pasting.</p>
+        <pre class="feat-code">directory.resolve("bob@mail.id")</pre>
+      </article>
+
+      <article class="feat reveal">
+        <header>
+          <span class="feat-id mono">F_03</span>
+          <span class="pill dot ok">shipped</span>
+        </header>
+        <h3>On-Chain Escrow &amp; Splitter</h3>
+        <p>Marketplace escrow with dispute window. Splitter program pays N recipients in a single tx — payroll, royalties, revenue share.</p>
+        <pre class="feat-code">splitter.distribute(recipients)</pre>
+      </article>
+
+      <article class="feat reveal">
+        <header>
+          <span class="feat-id mono">F_04</span>
+          <span class="pill dot ok">shipped</span>
+        </header>
+        <h3>Instant Settlement</h3>
+        <p>Sub-second finality. No batching. No T+2. The merchant dashboard updates the moment the block confirms.</p>
+        <pre class="feat-code">finality: &lt; 800ms · fee: ~$0.0001</pre>
+      </article>
+
+      <article class="feat reveal">
+        <header>
+          <span class="feat-id mono">F_05</span>
+          <span class="pill dot ok">shipped</span>
+        </header>
+        <h3>Self-Hostable</h3>
+        <p>Clone the repo, run one command, get a full stack: 5 services, Postgres, Redis, Grafana. No SaaS, no middleman.</p>
+        <pre class="feat-code">$ docker compose up -d</pre>
+      </article>
+
+      <article class="feat reveal">
+        <header>
+          <span class="feat-id mono">F_06</span>
+          <span class="pill dot ok">shipped</span>
+        </header>
+        <h3>Apache 2.0 · Open Core</h3>
+        <p>Every line of code, on-chain and off, is Apache 2.0. No hosted add-ons. No premium tier. No platform fee — ever.</p>
+        <pre class="feat-code">license: apache-2.0</pre>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .feat-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--line); border-radius: 6px; overflow: hidden;
+  }
+  .feat {
+    padding: 28px 24px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    transition: background .2s;
+  }
+  .feat:hover { background: var(--surface-2); }
+  .feat:nth-child(3n) { border-right: none; }
+  .feat:nth-last-child(-n+3) { border-bottom: none; }
+  .feat header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .feat-id { font-size: 10px; color: var(--dim); letter-spacing: 0.15em; }
+  .feat h3 { font-size: 17px; font-weight: 600; margin: 0 0 8px; letter-spacing: -0.015em; }
+  .feat p { color: var(--dim); font-size: 13.5px; margin: 0 0 16px; line-height: 1.55; }
+  .feat-code {
+    margin: 0; padding: 10px 12px;
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 4px;
+    font-family: var(--font-mono); font-size: 11.5px;
+    color: var(--accent);
+    white-space: pre-wrap; word-break: break-word;
+    overflow-x: auto;
+  }
+  @media (max-width: 1000px) {
+    .feat-grid { grid-template-columns: repeat(2, 1fr); }
+    .feat:nth-child(3n) { border-right: 1px solid var(--line); }
+    .feat:nth-child(2n) { border-right: none; }
+    .feat:nth-last-child(-n+3) { border-bottom: 1px solid var(--line); }
+    .feat:last-child { border-bottom: none; }
+  }
+  @media (max-width: 640px) {
+    .feat-grid { grid-template-columns: 1fr; }
+    .feat { border-right: none !important; }
+  }
+</style>
+
+<!-- Architecture -->
+<section class="section" id="architecture">
+  <div class="section-head">
+    <div>
+      <div class="idx">§03 · architecture</div>
+    </div>
+    <div>
+      <h2 class="title">Five layers. All open.</h2>
+      <p class="sub">A full payment stack — on-chain programs at the base, routing and identity in the middle, compliance and monitoring on top. Hover a node to see what it runs.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="arch">
+      <div class="arch-head">
+        <span class="u-kicker">solupg/architecture.dot</span>
+        <span class="mono" style="color:var(--dim); font-size:11px">rendered · graphviz</span>
+      </div>
+      <div class="arch-canvas">
+        <svg viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet" class="arch-svg">
+          <defs>
+            <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+              <circle cx="2" cy="2" r="1" fill="#1a1d24"/>
+            </pattern>
+            <linearGradient id="l5" x1="0" x2="1"><stop offset="0" stop-color="#9945ff" stop-opacity=".15"/><stop offset="1" stop-color="#14f195" stop-opacity=".05"/></linearGradient>
+          </defs>
+          <rect width="1000" height="520" fill="url(#dots)"/>
+
+          <!-- Layer labels on left -->
+          <g font-family="JetBrains Mono" font-size="10" fill="#565c68" text-anchor="end" letter-spacing="1.5">
+            <text x="90" y="60">LAYER 5</text>
+            <text x="90" y="140">LAYER 4</text>
+            <text x="90" y="220">LAYER 3</text>
+            <text x="90" y="300">LAYER 2</text>
+            <text x="90" y="380">LAYER 1</text>
+            <text x="90" y="460">CHAIN</text>
+          </g>
+
+          <!-- Connectors (drawn first so nodes sit on top) -->
+          <g stroke="#242933" stroke-width="1.2" fill="none" class="arch-conn">
+            <!-- compliance to clearing -->
+            <path d="M 230 70 V 130" />
+            <path d="M 450 70 V 130" />
+            <path d="M 670 70 V 130" />
+            <!-- clearing to directory/routing -->
+            <path d="M 230 150 V 210" />
+            <path d="M 450 150 V 210" />
+            <path d="M 670 150 V 210" />
+            <!-- directory/routing to api gateway -->
+            <path d="M 230 230 V 290" />
+            <path d="M 450 230 V 290" />
+            <path d="M 670 230 V 290" />
+            <!-- api to sdk/programs -->
+            <path d="M 230 310 V 370" />
+            <path d="M 450 310 V 370" />
+            <path d="M 670 310 V 370" />
+            <!-- programs to chain -->
+            <path d="M 230 390 V 450" />
+            <path d="M 450 390 V 450" />
+            <path d="M 670 390 V 450" />
+            <path d="M 850 390 V 450" />
+          </g>
+
+          <!-- LAYER 5: Compliance & Monitoring -->
+          <g class="arch-node" data-info="Fraud detection, audit trail, Prometheus metrics, Grafana dashboards, alerting">
+            <rect x="130" y="40" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="146" y="58" class="a-ttl">FRAUD · RULES</text>
+            <text x="146" y="72" class="a-sub">stride model</text>
+          </g>
+          <g class="arch-node" data-info="Structured JSON logs, 30-day retention, tamper-evident hash chain">
+            <rect x="350" y="40" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="366" y="58" class="a-ttl">AUDIT TRAIL</text>
+            <text x="366" y="72" class="a-sub">append-only</text>
+          </g>
+          <g class="arch-node" data-info="Prometheus scraping, SLO dashboards, PagerDuty hooks">
+            <rect x="570" y="40" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="586" y="58" class="a-ttl">METRICS · ALERTS</text>
+            <text x="586" y="72" class="a-sub">prom · grafana</text>
+          </g>
+
+          <!-- LAYER 4: Clearing & Reconciliation -->
+          <g class="arch-node" data-info="Indexes every SolUPG tx, reconciles on-chain state with off-chain ledger">
+            <rect x="130" y="120" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="146" y="138" class="a-ttl">INDEXER</text>
+            <text x="146" y="152" class="a-sub">slot stream</text>
+          </g>
+          <g class="arch-node" data-info="Double-entry ledger, reconciles every 10s against chain state">
+            <rect x="350" y="120" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="366" y="138" class="a-ttl">OFF-CHAIN LEDGER</text>
+            <text x="366" y="152" class="a-sub">postgres · double-entry</text>
+          </g>
+          <g class="arch-node" data-info="Next.js merchant console — API keys, webhooks, settlements, analytics">
+            <rect x="570" y="120" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="586" y="138" class="a-ttl">MERCHANT DASHBOARD</text>
+            <text x="586" y="152" class="a-sub">next.js</text>
+          </g>
+
+          <!-- LAYER 3: Directory Service -->
+          <g class="arch-node" data-info="Email → wallet, OTP-verified. Rate-limited lookup API.">
+            <rect x="130" y="200" width="200" height="40" rx="4" fill="#0f1115" stroke="#9945ff" stroke-width="1.3"/>
+            <text x="146" y="218" class="a-ttl" fill="#c792ea">EMAIL · RESOLVER</text>
+            <text x="146" y="232" class="a-sub">otp · 6-digit</text>
+          </g>
+          <g class="arch-node" data-info="Phone → wallet via SMS OTP. Country-code aware.">
+            <rect x="350" y="200" width="200" height="40" rx="4" fill="#0f1115" stroke="#9945ff" stroke-width="1.3"/>
+            <text x="366" y="218" class="a-ttl" fill="#c792ea">PHONE · RESOLVER</text>
+            <text x="366" y="232" class="a-sub">sms · twilio</text>
+          </g>
+          <g class="arch-node" data-info=".sol domain lookup via Bonfida name service program">
+            <rect x="570" y="200" width="200" height="40" rx="4" fill="#0f1115" stroke="#9945ff" stroke-width="1.3"/>
+            <text x="586" y="218" class="a-ttl" fill="#c792ea">.SOL · RESOLVER</text>
+            <text x="586" y="232" class="a-sub">bonfida · sns</text>
+          </g>
+
+          <!-- LAYER 2: Routing Engine -->
+          <g class="arch-node" data-info="Quote aggregator — polls Jupiter for best route, caches 400ms">
+            <rect x="130" y="280" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="146" y="298" class="a-ttl">QUOTE AGGREGATOR</text>
+            <text x="146" y="312" class="a-sub">jupiter · 400ms cache</text>
+          </g>
+          <g class="arch-node" data-info="Routes payment through the optimal combination of programs">
+            <rect x="350" y="280" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="366" y="298" class="a-ttl">ROUTER</text>
+            <text x="366" y="312" class="a-sub">rust · axum</text>
+          </g>
+          <g class="arch-node" data-info="SPL token metadata, mint whitelist, decimals lookup">
+            <rect x="570" y="280" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="586" y="298" class="a-ttl">TOKEN REGISTRY</text>
+            <text x="586" y="312" class="a-sub">spl · metaplex</text>
+          </g>
+
+          <!-- LAYER 1: API Gateway / SDK -->
+          <g class="arch-node" data-info="REST + webhook gateway. Auth, rate-limit, idempotency keys.">
+            <rect x="130" y="360" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="146" y="378" class="a-ttl">API GATEWAY</text>
+            <text x="146" y="392" class="a-sub">rust · axum</text>
+          </g>
+          <g class="arch-node" data-info="Node/TypeScript SDK — @solupg/sdk">
+            <rect x="350" y="360" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="366" y="378" class="a-ttl">TYPESCRIPT SDK</text>
+            <text x="366" y="392" class="a-sub">@solupg/sdk · v0.4</text>
+          </g>
+          <g class="arch-node" data-info="Solana Pay QR + deep-link generator">
+            <rect x="570" y="360" width="200" height="40" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="586" y="378" class="a-ttl">SOLANA PAY · QR</text>
+            <text x="586" y="392" class="a-sub">bip-21</text>
+          </g>
+
+          <!-- CHAIN: Anchor Programs -->
+          <g class="arch-node" data-info="Payment program — routes transfer, records event log, anchor 0.29">
+            <rect x="130" y="440" width="160" height="44" rx="4" fill="#0f1115" stroke="#14f195" stroke-width="1.3"/>
+            <text x="146" y="460" class="a-ttl" fill="#14f195">PAYMENT</text>
+            <text x="146" y="474" class="a-sub">anchor · 0.29</text>
+          </g>
+          <g class="arch-node" data-info="Escrow program — hold, release, dispute window">
+            <rect x="310" y="440" width="160" height="44" rx="4" fill="#0f1115" stroke="#14f195" stroke-width="1.3"/>
+            <text x="326" y="460" class="a-ttl" fill="#14f195">ESCROW</text>
+            <text x="326" y="474" class="a-sub">anchor · 0.29</text>
+          </g>
+          <g class="arch-node" data-info="Splitter program — atomic payout to N recipients">
+            <rect x="490" y="440" width="160" height="44" rx="4" fill="#0f1115" stroke="#14f195" stroke-width="1.3"/>
+            <text x="506" y="460" class="a-ttl" fill="#14f195">SPLITTER</text>
+            <text x="506" y="474" class="a-sub">anchor · 0.29</text>
+          </g>
+          <g class="arch-node" data-info="Swap program — Jupiter wrapper with slippage guards">
+            <rect x="670" y="440" width="160" height="44" rx="4" fill="#0f1115" stroke="#14f195" stroke-width="1.3"/>
+            <text x="686" y="460" class="a-ttl" fill="#14f195">SWAP</text>
+            <text x="686" y="474" class="a-sub">jupiter wrapper</text>
+          </g>
+          <g class="arch-node">
+            <rect x="850" y="440" width="100" height="44" rx="4" fill="#0f1115" stroke="#242933"/>
+            <text x="866" y="460" class="a-ttl">SOLANA</text>
+            <text x="866" y="474" class="a-sub">mainnet-beta</text>
+          </g>
+        </svg>
+
+        <!-- Detail readout -->
+        <div class="arch-readout" id="arch-readout">
+          <span class="u-kicker">hover a node</span>
+          <p>Five vertical layers route every payment: compliance at the top, raw SPL program calls at the bottom. Each box is open-source.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .arch { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--surface); }
+  .arch-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  .arch-canvas { display: grid; grid-template-rows: 1fr auto; }
+  .arch-svg { width: 100%; display: block; background: var(--bg-2); }
+  .arch-svg .a-ttl { font: 600 10px/1 'JetBrains Mono'; fill: var(--fg); letter-spacing: 0.08em; }
+  .arch-svg .a-sub { font: 400 9.5px/1 'JetBrains Mono'; fill: var(--dim); letter-spacing: 0.04em; }
+  .arch-node rect { transition: stroke .2s, fill .2s; cursor: pointer; }
+  .arch-node:hover rect { fill: #14171e; stroke: var(--fg); }
+  .arch-readout {
+    padding: 14px 18px;
+    border-top: 1px solid var(--line);
+    background: var(--bg-2);
+    min-height: 52px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--fg-2);
+  }
+  .arch-readout .u-kicker { display: block; margin-bottom: 6px; }
+  .arch-readout p { margin: 0; color: var(--fg-2); line-height: 1.5; }
+</style>
+
+<!-- Use cases -->
+<section class="section" id="use-cases">
+  <div class="section-head">
+    <div><div class="idx">§04 · use cases</div></div>
+    <div>
+      <h2 class="title">Who's it for?</h2>
+      <p class="sub">Five distinct integrations, one API surface. No separate products, no per-vertical pricing.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="uc">
+      <div class="uc-row reveal">
+        <div class="uc-idx"><span class="mono">01</span><span class="pill accent dot">DEV</span></div>
+        <div class="uc-label">Developers</div>
+        <div class="uc-desc">Embed Solana payments in any app. 5 lines of TypeScript — no wallet-adapter boilerplate, no transaction builders.</div>
+        <div class="uc-code mono">sdk.pay({ to, amount, token })</div>
+      </div>
+      <div class="uc-row reveal">
+        <div class="uc-idx"><span class="mono">02</span><span class="pill accent dot">MRCH</span></div>
+        <div class="uc-label">Merchants</div>
+        <div class="uc-desc">Accept crypto like you accept cards. API key, dashboard, webhooks, payouts in the token of your choice.</div>
+        <div class="uc-code mono">POST /v1/payments</div>
+      </div>
+      <div class="uc-row reveal">
+        <div class="uc-idx"><span class="mono">03</span><span class="pill accent dot">MKT</span></div>
+        <div class="uc-label">Marketplaces</div>
+        <div class="uc-desc">On-chain escrow holds buyer funds until the seller delivers. Dispute window, arbiter role, refund path.</div>
+        <div class="uc-code mono">escrow.create(buyer, seller, asset)</div>
+      </div>
+      <div class="uc-row reveal">
+        <div class="uc-idx"><span class="mono">04</span><span class="pill accent dot">DAO</span></div>
+        <div class="uc-label">DAOs &amp; Payroll</div>
+        <div class="uc-desc">Pay 50 contributors in a single atomic transaction. CSV in, split out — with audit trail on-chain.</div>
+        <div class="uc-code mono">splitter.distribute(csv)</div>
+      </div>
+      <div class="uc-row reveal">
+        <div class="uc-idx"><span class="mono">05</span><span class="pill accent dot">COM</span></div>
+        <div class="uc-label">Communities</div>
+        <div class="uc-desc">Accept donations in any SPL token, to an email or phone number. Transparent, trustless, no custody.</div>
+        <div class="uc-code mono">donate("community@sol", 100, "USDC")</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .uc { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--surface); }
+  .uc-row {
+    display: grid;
+    grid-template-columns: 140px 180px 1fr 280px;
+    align-items: center;
+    padding: 22px 24px;
+    border-bottom: 1px solid var(--line);
+    transition: background .2s;
+  }
+  .uc-row:last-child { border-bottom: none; }
+  .uc-row:hover { background: var(--surface-2); }
+  .uc-idx { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: 12px; color: var(--dim); }
+  .uc-label { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .uc-desc { color: var(--dim); font-size: 14px; padding-right: 24px; }
+  .uc-code {
+    justify-self: end; font-size: 12px; color: var(--accent);
+    background: var(--bg-2); padding: 8px 12px; border-radius: 4px; border: 1px solid var(--line);
+  }
+  @media (max-width: 900px) {
+    .uc-row { grid-template-columns: 1fr; gap: 8px; padding: 18px; }
+    .uc-code { justify-self: start; }
+  }
+</style>
+
+<!-- Quick Start -->
+<section class="section" id="quickstart">
+  <div class="section-head">
+    <div><div class="idx">§05 · quickstart</div></div>
+    <div>
+      <h2 class="title">Integrate in 30 seconds.</h2>
+      <p class="sub">Three snippets covering the common patterns. Or skip the code and <a href="demo.html" style="color:var(--accent); border-bottom:1px dashed var(--accent-line)">create a QR code now</a> — no SDK required. Full reference in <a href="quickstart.html" style="color:var(--accent); border-bottom:1px dashed var(--accent-line)">~/quickstart</a>.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="code">
+      <div class="code-head">
+        <div class="code-tabs">
+          <button class="code-tab active" data-tab="simple">simple-payment.ts</button>
+          <button class="code-tab" data-tab="qr">qr-checkout.ts</button>
+          <button class="code-tab" data-tab="route">universal-routing.ts</button>
+        </div>
+        <span class="code-copy" onclick="navigator.clipboard && navigator.clipboard.writeText(this.parentElement.nextElementSibling.innerText)">copy</span>
+      </div>
+
+      <div class="code-body" data-tab-pane="simple">
+        <div class="gutter"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div></div>
+<div class="src"><span class="tco">// Install: npm i @solupg/sdk</span>
+<span class="tkw">import</span> { <span class="tvr">SolUPG</span> } <span class="tkw">from</span> <span class="tst">"@solupg/sdk"</span>;
+
+<span class="tkw">const</span> <span class="tvr">upg</span> = <span class="tkw">new</span> <span class="tfn">SolUPG</span>({ apiKey: <span class="tst">"sk_live_…"</span> });
+
+<span class="tkw">const</span> <span class="tvr">tx</span> = <span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">pay</span>({
+  to: <span class="tst">"alice@example.id"</span>,     <span class="tco">// email · phone · .sol · wallet</span>
+  amount: <span class="tnm">25</span>,
+  settle: <span class="tst">"USDC"</span>,                <span class="tco">// merchant receives USDC, payer sends anything</span>
+});
+
+<span class="tfn">console</span>.<span class="tfn">log</span>(<span class="tvr">tx</span>.<span class="tpr">signature</span>); <span class="tco">// 5YqJk…2vCp9</span></div>
+      </div>
+
+      <div class="code-body hidden" data-tab-pane="qr">
+        <div class="gutter"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div></div>
+<div class="src"><span class="tco">// Generate a Solana Pay QR code for a storefront checkout</span>
+<span class="tkw">import</span> { <span class="tvr">SolUPG</span> } <span class="tkw">from</span> <span class="tst">"@solupg/sdk"</span>;
+
+<span class="tkw">const</span> <span class="tvr">checkout</span> = <span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">qr</span>.<span class="tfn">create</span>({
+  reference: <span class="tst">"order_8821"</span>,
+  amount: <span class="tnm">49.99</span>,
+  token: <span class="tst">"USDC"</span>,
+  label: <span class="tst">"Kopi Kenangan #8821"</span>,
+});
+
+<span class="tco">// checkout.url   → solana:…</span>
+<span class="tco">// checkout.png   → base64 QR, 400×400</span></div>
+      </div>
+
+      <div class="code-body hidden" data-tab-pane="route">
+        <div class="gutter"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div></div>
+<div class="src"><span class="tco">// Universal routing — payer sends SOL, merchant receives USDT</span>
+<span class="tkw">const</span> <span class="tvr">quote</span> = <span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">route</span>.<span class="tfn">quote</span>({
+  from: <span class="tst">"SOL"</span>,
+  to:   <span class="tst">"USDT"</span>,
+  amount: <span class="tnm">0.25</span>,
+});
+
+<span class="tco">// quote.out       → 37.41</span>
+<span class="tco">// quote.priceImpact → 0.02%</span>
+<span class="tco">// quote.route     → [Jupiter → Orca]</span>
+
+<span class="tkw">const</span> <span class="tvr">tx</span> = <span class="tkw">await</span> <span class="tvr">upg</span>.<span class="tfn">route</span>.<span class="tfn">execute</span>(<span class="tvr">quote</span>, { merchant: <span class="tst">"bob@sol"</span> });</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .code-tabs { display: flex; gap: 2px; }
+  .code-tab {
+    font-family: var(--font-mono); font-size: 11px;
+    background: transparent; color: var(--dim);
+    border: none; padding: 4px 10px; border-radius: 3px;
+    cursor: pointer; letter-spacing: 0.02em; text-transform: none;
+  }
+  .code-tab.active { background: var(--surface); color: var(--fg); }
+  .code-tab:hover { color: var(--fg); }
+  .code-copy { cursor: pointer; color: var(--dim); user-select: none; font-size: 11px; }
+  .code-copy:hover { color: var(--fg); }
+  .code-body.hidden { display: none; }
+</style>
+
+<!-- Roadmap -->
+<section class="section" id="roadmap">
+  <div class="section-head">
+    <div><div class="idx">§06 · roadmap</div></div>
+    <div>
+      <h2 class="title">Where we are. Where we're going.</h2>
+      <p class="sub">Six phases. Four shipped, two blocked on funding. No hidden milestones, no unscheduled pivots.</p>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="timeline">
+      <div class="tl-row reveal">
+        <div class="tl-marker ok"><span></span></div>
+        <div class="tl-meta">
+          <span class="tl-date mono">Q3 2025</span>
+          <span class="pill ok dot">shipped</span>
+        </div>
+        <div class="tl-body">
+          <h3>Phase 1 · Core protocol</h3>
+          <p>4 Anchor programs (Payment, Escrow, Splitter, Swap). Devnet deploy. Initial SDK scaffolding.</p>
+        </div>
+      </div>
+      <div class="tl-row reveal">
+        <div class="tl-marker ok"><span></span></div>
+        <div class="tl-meta">
+          <span class="tl-date mono">Q4 2025</span>
+          <span class="pill ok dot">shipped</span>
+        </div>
+        <div class="tl-body">
+          <h3>Phase 2 · Off-chain infrastructure</h3>
+          <p>6 Rust services, Postgres ledger, Redis cache, Prometheus, Grafana. Docker Compose stack.</p>
+        </div>
+      </div>
+      <div class="tl-row reveal">
+        <div class="tl-marker ok"><span></span></div>
+        <div class="tl-meta">
+          <span class="tl-date mono">Q1 2026</span>
+          <span class="pill ok dot">shipped</span>
+        </div>
+        <div class="tl-body">
+          <h3>Phase 3 · Developer experience</h3>
+          <p>TypeScript SDK v0.4. E2E tests. k6 load tests (1k TPS target). 2 runnable examples. CI/CD.</p>
+        </div>
+      </div>
+      <div class="tl-row reveal">
+        <div class="tl-marker ok"><span></span></div>
+        <div class="tl-meta">
+          <span class="tl-date mono">Q1 2026</span>
+          <span class="pill ok dot">shipped</span>
+        </div>
+        <div class="tl-body">
+          <h3>Phase 4 · Security hardening</h3>
+          <p>STRIDE threat model. Audit scope doc. <span class="mono">cargo-audit</span>, <span class="mono">cargo-deny</span>. Fraud detection rules. Tamper-evident audit trail.</p>
+        </div>
+      </div>
+      <div class="tl-row reveal current">
+        <div class="tl-marker warn"><span></span></div>
+        <div class="tl-meta">
+          <span class="tl-date mono">Q2 2026</span>
+          <span class="pill warn dot">blocked · funding</span>
+        </div>
+        <div class="tl-body">
+          <h3>Phase 5 · Professional audit + mainnet</h3>
+          <p>Engage OtterSec / Neodyme / Halborn / Zellic. Remediate findings. Funded keypair + multisig upgrade authority. Mainnet deploy.</p>
+          <a href="funding.html" class="tl-link">→ see funding breakdown</a>
+        </div>
+      </div>
+      <div class="tl-row reveal">
+        <div class="tl-marker"><span></span></div>
+        <div class="tl-meta">
+          <span class="tl-date mono">Q3 2026</span>
+          <span class="pill dot">planned</span>
+        </div>
+        <div class="tl-body">
+          <h3>Phase 6 · Production scale</h3>
+          <p>Grafana dashboards public. 1k+ TPS proof on mainnet. Merchant dashboard v1. Partner integrations.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .timeline {
+    position: relative;
+    border-left: 1px dashed var(--line);
+    margin-left: 20px;
+    padding-left: 0;
+  }
+  .tl-row {
+    display: grid;
+    grid-template-columns: 24px 200px 1fr;
+    gap: 20px;
+    padding: 24px 0 24px 0;
+    border-bottom: 1px dashed var(--line);
+    align-items: start;
+    position: relative;
+    margin-left: -12px;
+  }
+  .tl-row:last-child { border-bottom: none; }
+  .tl-marker {
+    width: 22px; height: 22px; border-radius: 4px;
+    background: var(--bg);
+    border: 1px solid var(--line-2);
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+    margin-left: 0;
+  }
+  .tl-marker span {
+    width: 8px; height: 8px; border-radius: 2px;
+    background: var(--dim-2);
+  }
+  .tl-marker.ok span { background: var(--ok); box-shadow: 0 0 12px var(--ok-soft); }
+  .tl-marker.warn span { background: var(--warn); animation: pulse 2s infinite; }
+  .tl-meta { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+  .tl-date { font-size: 11px; color: var(--dim); letter-spacing: 0.05em; }
+  .tl-body h3 { font-size: 16px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .tl-body p { color: var(--dim); font-size: 14px; margin: 0; }
+  .tl-link {
+    display: inline-block; margin-top: 10px;
+    font-family: var(--font-mono); font-size: 12px;
+    color: var(--accent); border-bottom: 1px dashed var(--accent-line);
+  }
+  .tl-row.current .tl-body h3 { color: var(--warn); }
+  @media (max-width: 800px) {
+    .tl-row { grid-template-columns: 24px 1fr; }
+    .tl-meta { grid-column: 2; flex-direction: row; gap: 12px; align-items: center; }
+  }
+</style>
+
+<!-- CTA -->
+<section class="section" id="cta">
+  <div class="cta-inner">
+    <div class="cta-left">
+      <div class="u-kicker">$ open-source</div>
+      <h2>This project has no investors.<br/><span class="accent">Built with passion, shipped for free.</span></h2>
+      <p>SolUPG is built and maintained by independent developers in Indonesia. Everything is open-source, Apache 2.0, and free to use. If you believe in open payment infrastructure on Solana, consider supporting the project.</p>
+      <div class="cta-actions">
+        <a class="btn btn-accent btn-lg" href="funding.html">Learn about funding</a>
+        <a class="btn btn-lg" href="https://github.com/revengerrr/solupg">View on GitHub</a>
+        <a class="btn btn-lg btn-ghost" href="quickstart.html">Read the docs</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-inner {
+    max-width: var(--max-w); margin: 0 auto;
+    padding: 64px var(--pad-x);
+    border-bottom: 1px solid var(--line);
+  }
+  .cta-left h2 { font-size: clamp(28px, 3.2vw, 40px); font-weight: 600; letter-spacing: -0.02em; margin: 12px 0 16px; line-height: 1.1; }
+  .cta-left p { color: var(--dim); max-width: 52ch; margin: 0 0 24px; }
+  .cta-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  @media (max-width: 900px) { .cta-inner { padding: 48px var(--pad-x); } }
+</style>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="inner">
+    <div>
+      <div class="brand" style="margin-bottom:12px"><span class="brand-mark"></span>SolUPG</div>
+      <p style="color:var(--dim-2); font-size:11px; max-width:28ch; margin:0;">Open payment infrastructure for Solana. Apache 2.0. Built in Indonesia, free for the world.</p>
+    </div>
+    <div>
+      <h5>Project</h5>
+      <ul>
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="quickstart.html">Quick start</a></li>
+        <li><a href="funding.html">Funding</a></li>
+        <li><a href="https://github.com/revengerrr/solupg">GitHub</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Resources</h5>
+      <ul>
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="https://github.com/revengerrr/solupg">Issues</a></li>
+        <li><a href="https://github.com/revengerrr/solupg">Contribute</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="#">hello@solupg.dev</a></li>
+        <li><a href="https://x.com/revengerai">twitter / x</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="legal">
+    <span>© 2026 SolUPG contributors · Apache-2.0</span>
+    <span>commit · <span style="color:var(--fg-2)">a8f3c2e</span> · v0.4.0-rc.2</span>
+    <span>🌏 built in Indonesia</span>
+  </div>
+</footer>
+
+<!-- Tweaks panel -->
+<div class="tweaks" id="tweaks-panel">
+  <h4>Tweaks <span class="mono dim" style="text-transform:none; letter-spacing:0">v0.1</span></h4>
+  <label>accent hue · <span id="tw-hue-v" class="mono">275</span>
+    <input type="range" id="tw-hue" min="0" max="360" step="5" />
+  </label>
+  <label>density
+    <select id="tw-density">
+      <option value="compact">compact</option>
+      <option value="default">default</option>
+      <option value="spacious">spacious</option>
+    </select>
+  </label>
+  <label><input type="checkbox" id="tw-labels" /> show architecture layer labels</label>
+</div>
+
+<script src="shared.js"></script>
+<script>
+// Code tab switching
+document.querySelectorAll('.code-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const name = tab.dataset.tab;
+    document.querySelectorAll('.code-tab').forEach(t => t.classList.toggle('active', t === tab));
+    document.querySelectorAll('[data-tab-pane]').forEach(p => {
+      p.classList.toggle('hidden', p.dataset.tabPane !== name);
+    });
+  });
+});
+
+// Hero viz: tick counter + periodic log refresh
+(() => {
+  const tick = document.getElementById('viz-tick');
+  const log = document.getElementById('viz-log');
+  if (!tick || !log) return;
+  let t = 0;
+  setInterval(() => {
+    t += 0.04;
+    tick.textContent = 't=' + t.toFixed(2) + 's';
+    if (t >= 3.2) {
+      t = 0;
+      // Re-trigger animations on log rows
+      [...log.children].forEach(row => {
+        row.style.animation = 'none';
+        row.offsetHeight;
+        row.style.animation = '';
+      });
+    }
+  }, 40);
+})();
+
+// Architecture node hover
+document.querySelectorAll('.arch-node').forEach(node => {
+  node.addEventListener('mouseenter', () => {
+    const info = node.dataset.info;
+    const readout = document.getElementById('arch-readout');
+    if (info && readout) {
+      const title = node.querySelector('.a-ttl').textContent;
+      readout.innerHTML = `<span class="u-kicker">${title}</span><p>${info}</p>`;
+    }
+  });
+});
+</script>
+
+</body>
+</html>
