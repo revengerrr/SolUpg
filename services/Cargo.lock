@@ -3620,7 +3620,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "axum",
- "borsh 0.10.4",
+ "borsh 1.6.1",
  "bs58",
  "chrono",
  "dotenvy",
@@ -6101,7 +6101,7 @@ name = "solupg-common"
 version = "0.1.0"
 dependencies = [
  "axum",
- "borsh 0.10.4",
+ "borsh 1.6.1",
  "bs58",
  "chrono",
  "config",
